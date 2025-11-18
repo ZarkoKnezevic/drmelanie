@@ -67,7 +67,10 @@ export default async function Home() {
   // Debug: Log the story content to see what component name is being used
   if (process.env.NODE_ENV === 'development') {
     console.log('📄 Story content component:', story.content?.component);
-    console.log('📄 Full story content:', JSON.stringify(story.content, null, 2));
+    console.log('📄 Component name type:', typeof story.content?.component);
+    console.log('📄 Component name value (JSON):', JSON.stringify(story.content?.component));
+    console.log('📄 Story body exists:', !!story.content?.body);
+    console.log('📄 Story body length:', story.content?.body?.length);
   }
 
   return <StoryblokRenderer blok={story.content} />;

@@ -29,14 +29,21 @@ interface StoryblokProviderProps {
 
 export default function StoryblokProvider({ children }: StoryblokProviderProps) {
   useEffect(() => {
-    // Initialize Storyblok on the client side
-    storyblokInit({
-      accessToken: process.env.NEXT_PUBLIC_STORYBLOK_ACCESS_TOKEN || '',
-      use: [apiPlugin],
-      components,
-      enableFallbackComponent: true,
-      customFallbackComponent: FallbackComponent,
-    });
+    // Initialize Storyblok on the client side for visual editor support
+    // This runs after server-side initialization, so it should be idempotent
+    try {
+      storyblokInit({
+        accessToken: process.env.NEXT_PUBLIC_STORYBLOK_ACCESS_TOKEN || '',
+        use: [apiPlugin],
+        components,
+        enableFallbackComponent: true,
+        customFallbackComponent: FallbackComponent,
+      });
+    } catch (error) {
+      // If initialization fails (e.g., already initialized), that's okay
+      // The server-side initialization should handle component resolution
+      console.warn('Client-side Storyblok initialization note:', error);
+    }
   }, []);
 
   return <>{children}</>;
