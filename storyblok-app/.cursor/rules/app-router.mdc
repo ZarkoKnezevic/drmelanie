@@ -1,0 +1,477 @@
+---
+description: Next.js 14 App Router specific patterns and conventions
+globs: ["app/**/*.{tsx,ts}"]
+---
+
+# Next.js 14 App Router Rules
+
+## FILE-SYSTEM ROUTING CONVENTIONS
+
+### Special Files (MANDATORY)
+```
+app/
+├── layout.tsx          # Layout component (required)
+├── page.tsx           # Page component
+├── loading.tsx        # Loading UI
+├── error.tsx          # Error boundary (must be Client Component)
+├── not-found.tsx      # 404 page  
+├── global-error.tsx   # Global error boundary
+├── route.ts           # API route handler
+├── template.tsx       # Re-rendered layout
+└── default.tsx        # Parallel route fallback
+```
+
+### Route Groups and Organization
+```
+app/
+├── (marketing)/       # Route group (doesn't affect URL)
+│   ├── layout.tsx     # Marketing layout
+│   ├── page.tsx       # / (home page)
+│   └── about/
+│       └── page.tsx   # /about
+├── (dashboard)/       # Another route group  
+│   ├── layout.tsx     # Dashboard layout
+│   ├── dashboard/
+│   │   └── page.tsx   # /dashboard
+│   └── settings/
+│       └── page.tsx   # /settings
+└── api/              # API routes
+    └── users/
+        └── route.ts   # /api/users
+```
+
+## SERVER COMPONENT PATTERNS (DEFAULT)
+
+### ✅ ALWAYS: Server Components First
+```tsx
+// Default behavior - no 'use client' needed
+export default async function ProductPage({ 
+  params 
+}: { 
+  params: { id: string } 
+}) {
+  // Direct data fetching in Server Components
+  const product = await getProduct(params.id)
+  const reviews = await getProductReviews(params.id)
+  
+  return (
+    <div className="container mx-auto py-8">
+      <ProductHeader product={product} />
+      <ProductDetails product={product} />
+      <ProductReviews reviews={reviews} />
+      <ProductActions productId={product.id} /> {/* Client Component */}
+    </div>
+  )
+}
+
+// ✅ Server Component for static content
+export function ProductHeader({ product }: { product: Product }) {
+  return (
+    <div className="mb-8">
+      <h1 className="text-3xl font-bold">{product.name}</h1>
+      <p className="text-xl text-muted-foreground">${product.price}</p>
+    </div>
+  )
+}
+```
+
+### ✅ ALWAYS: Parallel Data Fetching
+```tsx
+export default async function UserDashboard({ 
+  params 
+}: { 
+  params: { id: string } 
+}) {
+  // Fetch data in parallel for better performance
+  const [user, posts, stats] = await Promise.all([
+    getUserById(params.id),
+    getUserPosts(params.id),
+    getUserStats(params.id),
+  ])
+  
+  return (
+    <div className="grid gap-8">
+      <UserProfile user={user} />
+      <UserStats stats={stats} />
+      <UserPosts posts={posts} />
+    </div>
+  )
+}
+```
+
+## CLIENT COMPONENT PATTERNS (WHEN NEEDED)
+
+### ✅ Use Client Components ONLY for:
+- State management (useState, useReducer)
+- Event handlers (onClick, onChange) 
+- Browser APIs (localStorage, geolocation)
+- Custom hooks
+- Third-party libraries requiring client-side JS
+
+```tsx
+'use client'
+
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+
+// ✅ Client Component for interactive features
+export function ProductActions({ productId }: { productId: string }) {
+  const [isInCart, setIsInCart] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  
+  const handleAddToCart = async () => {
+    setIsLoading(true)
+    try {
+      await addToCart(productId)
+      setIsInCart(true)
+    } catch (error) {
+      console.error('Failed to add to cart:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  
+  return (
+    <div className="flex gap-4">
+      <Button 
+        onClick={handleAddToCart}
+        disabled={isLoading || isInCart}
+      >
+        {isInCart ? 'In Cart' : 'Add to Cart'}
+      </Button>
+    </div>
+  )
+}
+```
+
+### ❌ NEVER: Unnecessary Client Components
+```tsx
+// ❌ DON'T: Client component for static content
+'use client'
+export function StaticProductInfo({ product }: { product: Product }) {
+  return (
+    <div>
+      <h2>{product.name}</h2>
+      <p>{product.description}</p>
+    </div>
+  )
+}
+
+// ✅ DO: Server Component for static content
+export function StaticProductInfo({ product }: { product: Product }) {
+  return (
+    <div>
+      <h2>{product.name}</h2>
+      <p>{product.description}</p>
+    </div>
+  )
+}
+```
+
+## LAYOUT PATTERNS
+
+### ✅ Root Layout (Required)
+```tsx
+// app/layout.tsx
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({ subsets: ['latin'] })
+
+export const metadata: Metadata = {
+  title: 'My Next.js App',
+  description: 'Built with Next.js 14 and App Router',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body className={inter.className}>
+        <div className="min-h-screen bg-background">
+          <header>
+            <Navigation />
+          </header>
+          <main>{children}</main>
+          <footer>
+            <Footer />
+          </footer>
+        </div>
+      </body>
+    </html>
+  )
+}
+```
+
+### ✅ Nested Layouts
+```tsx
+// app/(dashboard)/layout.tsx
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex min-h-screen">
+      <aside className="w-64 bg-gray-100">
+        <DashboardSidebar />
+      </aside>
+      <div className="flex-1">
+        <nav className="border-b p-4">
+          <DashboardNav />
+        </nav>
+        <main className="p-6">{children}</main>
+      </div>
+    </div>
+  )
+}
+```
+
+## DATA FETCHING PATTERNS
+
+### ✅ Server Component Data Fetching
+```tsx
+// Direct async/await in Server Components
+export default async function PostsPage({
+  searchParams,
+}: {
+  searchParams: { page?: string; limit?: string }
+}) {
+  const page = Number(searchParams.page) || 1
+  const limit = Number(searchParams.limit) || 10
+  
+  const posts = await getPosts({ page, limit })
+  
+  return (
+    <div className="space-y-6">
+      <h1 className="text-3xl font-bold">Posts</h1>
+      <PostsList posts={posts} />
+      <Pagination page={page} totalPages={posts.totalPages} />
+    </div>
+  )
+}
+```
+
+### ✅ Streaming with Suspense
+```tsx
+import { Suspense } from 'react'
+
+export default function Dashboard() {
+  return (
+    <div className="space-y-8">
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      
+      <Suspense fallback={<MetricsSkeleton />}>
+        <DashboardMetrics />
+      </Suspense>
+      
+      <div className="grid gap-8 md:grid-cols-2">
+        <Suspense fallback={<ChartSkeleton />}>
+          <RevenueChart />
+        </Suspense>
+        
+        <Suspense fallback={<ActivitySkeleton />}>
+          <RecentActivity />
+        </Suspense>
+      </div>
+    </div>
+  )
+}
+
+// These components fetch data independently
+async function DashboardMetrics() {
+  const metrics = await getMetrics()
+  return <MetricsCards metrics={metrics} />
+}
+```
+
+## ERROR AND LOADING PATTERNS
+
+### ✅ Error Boundaries (Must be Client Components)
+```tsx
+// app/error.tsx
+'use client'
+
+import { useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
+  useEffect(() => {
+    console.error('Page error:', error)
+  }, [error])
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
+      <h2 className="text-2xl font-bold">Something went wrong!</h2>
+      <p className="text-muted-foreground text-center max-w-md">
+        {error.message || 'An unexpected error occurred.'}
+      </p>
+      <Button onClick={reset}>Try again</Button>
+    </div>
+  )
+}
+```
+
+### ✅ Loading States
+```tsx
+// app/loading.tsx
+export default function Loading() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="space-y-4 text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    </div>
+  )
+}
+
+// app/dashboard/loading.tsx - Route-specific loading
+export default function DashboardLoading() {
+  return (
+    <div className="space-y-6">
+      <div className="h-8 bg-gray-200 rounded animate-pulse" />
+      <div className="grid gap-4 md:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="h-32 bg-gray-200 rounded animate-pulse" />
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+## METADATA AND SEO
+
+### ✅ Static Metadata
+```tsx
+// app/about/page.tsx
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'Learn more about our company',
+  openGraph: {
+    title: 'About Us',
+    description: 'Learn more about our company',
+    images: ['/about-og.jpg'],
+  },
+}
+
+export default function AboutPage() {
+  return <div>About content</div>
+}
+```
+
+### ✅ Dynamic Metadata
+```tsx
+// app/products/[id]/page.tsx
+import type { Metadata } from 'next'
+
+type Props = {
+  params: { id: string }
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const product = await getProduct(params.id)
+  
+  return {
+    title: product.name,
+    description: product.description,
+    openGraph: {
+      title: product.name,
+      description: product.description,
+      images: [product.image],
+    },
+  }
+}
+
+export default async function ProductPage({ params }: Props) {
+  const product = await getProduct(params.id)
+  return <ProductDetails product={product} />
+}
+```
+
+## ROUTE HANDLER PATTERNS
+
+### ✅ API Route Structure
+```tsx
+// app/api/products/route.ts
+import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+
+const CreateProductSchema = z.object({
+  name: z.string().min(1),
+  price: z.number().positive(),
+  description: z.string(),
+})
+
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const page = parseInt(searchParams.get('page') || '1')
+    const limit = parseInt(searchParams.get('limit') || '10')
+    
+    const products = await getProducts({ page, limit })
+    
+    return NextResponse.json({
+      data: products,
+      success: true,
+    })
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Failed to fetch products', success: false },
+      { status: 500 }
+    )
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const validatedData = CreateProductSchema.parse(body)
+    
+    const product = await createProduct(validatedData)
+    
+    return NextResponse.json(
+      { data: product, success: true },
+      { status: 201 }
+    )
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: 'Invalid data', details: error.errors },
+        { status: 400 }
+      )
+    }
+    
+    return NextResponse.json(
+      { error: 'Failed to create product', success: false },
+      { status: 500 }
+    )
+  }
+}
+```
+
+## BEST PRACTICES SUMMARY
+
+1. **Default to Server Components** - Better performance and SEO
+2. **Use Client Components sparingly** - Only when you need interactivity
+3. **Implement proper loading/error states** - For every async operation
+4. **Follow file conventions** - Use standard naming and structure
+5. **Optimize data fetching** - Parallel fetching and streaming
+6. **Generate proper metadata** - For SEO and social sharing
+7. **Handle errors gracefully** - With proper error boundaries
+8. **Type everything properly** - Use TypeScript interfaces
+9. **Test across scenarios** - Loading, error, and success states
+10. **Monitor performance** - Core Web Vitals and user experience

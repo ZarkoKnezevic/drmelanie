@@ -1,0 +1,28 @@
+/**
+ * Storyblok component mapping
+ * Register all Storyblok components here
+ */
+
+// Import Storyblok components
+import Page from '@/components/storyblok/Page';
+import Grid from '@/components/storyblok/Grid';
+import Feature from '@/components/storyblok/Feature';
+import Hero from '@/components/storyblok/Hero';
+import Teaser from '@/components/storyblok/Teaser';
+
+// Register components with multiple name variations to handle case differences
+export const COMPONENTS = {
+  // Lowercase (standard)
+  page: Page,
+  grid: Grid,
+  feature: Feature,
+  hero: Hero,
+  teaser: Teaser,
+  // Capitalized (in case Storyblok sends it this way)
+  Page: Page,
+  Grid: Grid,
+  Feature: Feature,
+  Hero: Hero,
+  Teaser: Teaser,
+} as const;
+

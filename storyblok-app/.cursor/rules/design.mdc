@@ -1,0 +1,704 @@
+---
+description: Design system and UI/UX patterns for Next.js 14 with Tailwind CSS and shadcn/ui
+globs: ["**/*.{tsx,ts,css}", "tailwind.config.{js,ts}", "components/ui/**"]
+---
+
+# Next.js 14 Design System Rules
+
+## TAILWIND CSS FUNDAMENTALS
+
+### ✅ ALWAYS: Mobile-First Responsive Design
+```tsx
+// ✅ Mobile-first breakpoint strategy
+export function ResponsiveCard({ children }: { children: React.ReactNode }) {
+  return (
+    <div className={cn(
+      // Mobile (default)
+      "p-4 rounded-lg border bg-card text-card-foreground shadow-sm",
+      // Tablet (md: 768px+)
+      "md:p-6 md:rounded-xl",
+      // Desktop (lg: 1024px+) 
+      "lg:p-8 lg:shadow-md",
+      // Large desktop (xl: 1280px+)
+      "xl:p-10"
+    )}>
+      {children}
+    </div>
+  )
+}
+
+// ✅ Responsive grid layouts
+export function ProductGrid({ products }: { products: Product[] }) {
+  return (
+    <div className={cn(
+      // Mobile: 1 column
+      "grid gap-4",
+      // Tablet: 2 columns  
+      "md:grid-cols-2 md:gap-6",
+      // Desktop: 3 columns
+      "lg:grid-cols-3",
+      // Large: 4 columns
+      "xl:grid-cols-4"
+    )}>
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  )
+}
+
+// ✅ Responsive typography
+export function HeroSection({ title, subtitle }: HeroProps) {
+  return (
+    <section className="text-center space-y-4">
+      <h1 className={cn(
+        // Mobile
+        "text-3xl font-bold leading-tight",
+        // Tablet
+        "md:text-4xl md:leading-tight", 
+        // Desktop
+        "lg:text-5xl lg:leading-tight",
+        // Large
+        "xl:text-6xl xl:leading-tight"
+      )}>
+        {title}
+      </h1>
+      <p className={cn(
+        "text-muted-foreground max-w-2xl mx-auto",
+        "text-lg md:text-xl lg:text-2xl"
+      )}>
+        {subtitle}
+      </p>
+    </section>
+  )
+}
+```
+
+### ❌ NEVER: Desktop-First or Fixed Sizing
+```tsx
+// ❌ DON'T: Desktop-first breakpoints
+<div className="lg:grid-cols-3 md:grid-cols-2 grid-cols-1"> 
+
+// ❌ DON'T: Fixed pixel values
+<div className="w-[400px] h-[300px]">
+
+// ❌ DON'T: Inconsistent spacing
+<div className="p-3 m-5 gap-7"> 
+
+// ✅ DO: Mobile-first with consistent spacing
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+<div className="w-full max-w-md">
+<div className="p-4 m-4 gap-4">
+```
+
+## SHADCN/UI COMPONENT PATTERNS
+
+### ✅ Proper Component Composition
+```tsx
+// ✅ Card composition with proper variants
+export function UserCard({ user, variant = "default" }: UserCardProps) {
+  return (
+    <Card className={cn(
+      "transition-all duration-200",
+      variant === "hover" && "hover:shadow-lg hover:-translate-y-1",
+      variant === "compact" && "p-3",
+      variant === "detailed" && "p-6"
+    )}>
+      <CardHeader className={cn(
+        variant === "compact" ? "pb-2" : "pb-4"
+      )}>
+        <div className="flex items-center gap-3">
+          <Avatar className={variant === "compact" ? "h-8 w-8" : "h-12 w-12"}>
+            <AvatarImage src={user.avatar} alt={user.name} />
+            <AvatarFallback>
+              {user.name.split(' ').map(n => n[0]).join('')}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <CardTitle className={cn(
+              "truncate",
+              variant === "compact" ? "text-sm" : "text-base"
+            )}>
+              {user.name}
+            </CardTitle>
+            <CardDescription className="truncate">
+              {user.email}
+            </CardDescription>
+          </div>
+        </div>
+      </CardHeader>
+      
+      {variant !== "compact" && (
+        <CardContent>
+          <p className="text-sm text-muted-foreground line-clamp-2">
+            {user.bio || "No bio available"}
+          </p>
+        </CardContent>
+      )}
+      
+      <CardFooter className="flex justify-between">
+        <Badge variant="outline">{user.role}</Badge>
+        <div className="flex gap-2">
+          <Button variant="ghost" size="sm">
+            <MessageCircle className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="sm">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </div>
+      </CardFooter>
+    </Card>
+  )
+}
+
+// ✅ Dialog composition for modals
+export function UserEditDialog({ 
+  user, 
+  open, 
+  onOpenChange, 
+  onSave 
+}: UserEditDialogProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Edit User</DialogTitle>
+          <DialogDescription>
+            Make changes to the user profile. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        
+        <UserForm
+          initialData={user}
+          onSubmit={async (data) => {
+            setIsLoading(true)
+            try {
+              await onSave(data)
+              onOpenChange(false)
+            } finally {
+              setIsLoading(false)
+            }
+          }}
+          isLoading={isLoading}
+        />
+        
+        <DialogFooter className="gap-2">
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={() => onOpenChange(false)}
+          >
+            Cancel
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+```
+
+### ✅ Form Components with Proper Validation UI
+```tsx
+// ✅ Form field with comprehensive error handling
+export function FormFieldWrapper({ 
+  control, 
+  name, 
+  label, 
+  description, 
+  children 
+}: FormFieldWrapperProps) {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field, fieldState }) => (
+        <FormItem>
+          <FormLabel className={cn(
+            fieldState.error && "text-destructive"
+          )}>
+            {label}
+            {control._formState.isRequired && (
+              <span className="text-destructive ml-1">*</span>
+            )}
+          </FormLabel>
+          
+          <FormControl>
+            {children(field)}
+          </FormControl>
+          
+          {description && !fieldState.error && (
+            <FormDescription>{description}</FormDescription>
+          )}
+          
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  )
+}
+
+// ✅ Usage with proper validation states
+export function UserForm({ initialData, onSubmit, isLoading }: UserFormProps) {
+  const form = useForm<UserFormData>({
+    resolver: zodResolver(userSchema),
+    defaultValues: initialData,
+  })
+  
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormFieldWrapper
+          control={form.control}
+          name="name"
+          label="Full Name"
+          description="Your display name visible to other users"
+        >
+          {(field) => (
+            <Input 
+              {...field}
+              placeholder="Enter your full name"
+              className={cn(
+                form.formState.errors.name && "border-destructive"
+              )}
+            />
+          )}
+        </FormFieldWrapper>
+        
+        <FormFieldWrapper
+          control={form.control}
+          name="email"
+          label="Email Address"
+        >
+          {(field) => (
+            <Input 
+              {...field}
+              type="email"
+              placeholder="Enter your email"
+            />
+          )}
+        </FormFieldWrapper>
+        
+        <FormFieldWrapper
+          control={form.control}
+          name="role"
+          label="User Role"
+        >
+          {(field) => (
+            <Select onValueChange={field.onChange} value={field.value}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="user">User</SelectItem>
+                <SelectItem value="moderator">Moderator</SelectItem>
+                <SelectItem value="admin">Admin</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        </FormFieldWrapper>
+        
+        <div className="flex gap-3 pt-4">
+          <Button 
+            type="submit" 
+            disabled={isLoading || !form.formState.isValid}
+            className="flex-1"
+          >
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {isLoading ? 'Saving...' : 'Save Changes'}
+          </Button>
+          <Button type="button" variant="outline">
+            Cancel
+          </Button>
+        </div>
+      </form>
+    </Form>
+  )
+}
+```
+
+## COLOR SYSTEM AND THEMING
+
+### ✅ Consistent Color Usage
+```tsx
+// ✅ Semantic color classes
+export function StatusBadge({ status }: { status: 'active' | 'pending' | 'inactive' }) {
+  const variants = {
+    active: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300",
+    pending: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300", 
+    inactive: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300"
+  }
+  
+  return (
+    <Badge className={cn("capitalize", variants[status])}>
+      {status}
+    </Badge>
+  )
+}
+
+// ✅ Design system color tokens
+export function AlertVariants({ type, children }: AlertProps) {
+  const variants = {
+    default: "border-border",
+    destructive: "border-destructive/50 text-destructive dark:border-destructive",
+    warning: "border-orange-200 text-orange-800 dark:border-orange-900 dark:text-orange-400",
+    success: "border-green-200 text-green-800 dark:border-green-900 dark:text-green-400",
+  }
+  
+  return (
+    <Alert className={cn(variants[type])}>
+      <AlertCircle className="h-4 w-4" />
+      <AlertTitle>Heads up!</AlertTitle>
+      <AlertDescription>{children}</AlertDescription>
+    </Alert>
+  )
+}
+
+// ✅ Custom CSS properties for consistency
+export function CustomThemeProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <div 
+      className="min-h-screen bg-background text-foreground"
+      style={{
+        '--radius': '0.5rem',
+        '--primary-rgb': '147 197 253',
+        '--secondary-rgb': '156 163 175',
+      } as React.CSSProperties}
+    >
+      {children}
+    </div>
+  )
+}
+```
+
+### ❌ NEVER: Hardcoded Colors or Inconsistent Theming
+```tsx
+// ❌ DON'T: Hardcoded hex colors
+<div className="bg-[#3b82f6] text-[#ffffff]">
+
+// ❌ DON'T: Inconsistent color usage  
+<Badge className="bg-red-500"> {/* Use destructive instead */}
+
+// ❌ DON'T: Missing dark mode support
+<div className="bg-white text-black"> {/* No dark mode variants */
+
+// ✅ DO: Semantic color classes
+<div className="bg-primary text-primary-foreground">
+<Badge variant="destructive">
+<div className="bg-background text-foreground">
+```
+
+## LAYOUT AND SPACING PATTERNS
+
+### ✅ Consistent Spacing System
+```tsx
+// ✅ Container and spacing patterns
+export function PageLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-background">
+      <Header />
+      <main className="container mx-auto px-4 py-8 space-y-8">
+        {children}
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+// ✅ Section spacing patterns
+export function ContentSection({ 
+  title, 
+  description, 
+  children 
+}: ContentSectionProps) {
+  return (
+    <section className="space-y-6">
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
+        {description && (
+          <p className="text-muted-foreground">{description}</p>
+        )}
+      </div>
+      <div className="space-y-4">
+        {children}
+      </div>
+    </section>
+  )
+}
+
+// ✅ Grid layouts with proper gaps
+export function DashboardGrid({ children }: { children: React.ReactNode }) {
+  return (
+    <div className={cn(
+      "grid gap-6",
+      "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    )}>
+      {children}
+    </div>
+  )
+}
+
+// ✅ Card grids with consistent spacing
+export function ProductGrid({ products }: { products: Product[] }) {
+  return (
+    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {products.map((product) => (
+        <Card key={product.id} className="flex flex-col">
+          <div className="aspect-square relative overflow-hidden rounded-t-lg">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover transition-transform hover:scale-105"
+            />
+          </div>
+          <CardContent className="flex-1 p-4 space-y-2">
+            <h3 className="font-semibold line-clamp-2">{product.name}</h3>
+            <p className="text-sm text-muted-foreground line-clamp-2">
+              {product.description}
+            </p>
+            <div className="flex items-center justify-between pt-2">
+              <span className="font-bold">${product.price}</span>
+              <Button size="sm">Add to Cart</Button>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  )
+}
+```
+
+## ACCESSIBILITY AND INCLUSIVE DESIGN
+
+### ✅ ALWAYS: Accessibility-First Approach
+```tsx
+// ✅ Proper ARIA labels and keyboard navigation
+export function SearchCombobox({ onSelect }: SearchComboboxProps) {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
+  
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          aria-label="Search users"
+          className="w-full justify-between"
+        >
+          {value || "Search users..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-full p-0" align="start">
+        <Command>
+          <CommandInput 
+            placeholder="Search users..." 
+            aria-label="Search input"
+          />
+          <CommandEmpty>No users found.</CommandEmpty>
+          <CommandGroup>
+            {users.map((user) => (
+              <CommandItem
+                key={user.id}
+                value={user.name}
+                onSelect={() => {
+                  setValue(user.name)
+                  setOpen(false)
+                  onSelect(user)
+                }}
+              >
+                <Check
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    value === user.name ? "opacity-100" : "opacity-0"
+                  )}
+                />
+                {user.name}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  )
+}
+
+// ✅ Focus management and keyboard navigation
+export function ModalDialog({ 
+  isOpen, 
+  onClose, 
+  children, 
+  title 
+}: ModalDialogProps) {
+  const [focusedElement, setFocusedElement] = useState<HTMLElement | null>(null)
+  
+  useEffect(() => {
+    if (isOpen) {
+      setFocusedElement(document.activeElement as HTMLElement)
+    } else if (focusedElement) {
+      focusedElement.focus()
+    }
+  }, [isOpen, focusedElement])
+  
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent 
+        className="sm:max-w-lg"
+        onOpenAutoFocus={(e) => {
+          e.preventDefault()
+          // Focus first interactive element
+          const firstButton = e.currentTarget.querySelector('button')
+          firstButton?.focus()
+        }}
+      >
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+        </DialogHeader>
+        {children}
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+// ✅ Screen reader optimized components
+export function LoadingSpinner({ 
+  size = "default",
+  label = "Loading..." 
+}: LoadingSpinnerProps) {
+  return (
+    <div 
+      className="flex items-center justify-center"
+      role="status"
+      aria-label={label}
+    >
+      <Loader2 
+        className={cn(
+          "animate-spin",
+          size === "sm" && "h-4 w-4",
+          size === "default" && "h-6 w-6", 
+          size === "lg" && "h-8 w-8"
+        )}
+      />
+      <span className="sr-only">{label}</span>
+    </div>
+  )
+}
+```
+
+## ANIMATION AND MICRO-INTERACTIONS
+
+### ✅ Subtle Animations and Transitions
+```tsx
+// ✅ Hover and focus animations
+export function InteractiveCard({ children, onClick }: InteractiveCardProps) {
+  return (
+    <Card 
+      className={cn(
+        "cursor-pointer transition-all duration-200 ease-in-out",
+        "hover:shadow-lg hover:-translate-y-1 hover:scale-[1.02]",
+        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "active:scale-[0.98]"
+      )}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onClick?.()
+        }
+      }}
+    >
+      {children}
+    </Card>
+  )
+}
+
+// ✅ Loading state animations
+export function ButtonWithLoading({ 
+  loading, 
+  children, 
+  ...props 
+}: ButtonWithLoadingProps) {
+  return (
+    <Button 
+      {...props}
+      disabled={loading || props.disabled}
+      className={cn(
+        "transition-all duration-200",
+        loading && "cursor-not-allowed"
+      )}
+    >
+      <div className="flex items-center gap-2">
+        {loading && (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        )}
+        <span className={cn(
+          "transition-opacity duration-200",
+          loading && "opacity-70"
+        )}>
+          {children}
+        </span>
+      </div>
+    </Button>
+  )
+}
+
+// ✅ Accordion animations with proper timing
+export function AnimatedAccordion({ items }: { items: AccordionItem[] }) {
+  return (
+    <Accordion type="single" collapsible className="space-y-2">
+      {items.map((item, index) => (
+        <AccordionItem 
+          key={item.id} 
+          value={item.id}
+          className={cn(
+            "border rounded-lg transition-all duration-200",
+            "data-[state=open]:shadow-sm"
+          )}
+        >
+          <AccordionTrigger className={cn(
+            "px-4 py-3 hover:bg-muted/50 transition-colors",
+            "text-left font-medium"
+          )}>
+            {item.title}
+          </AccordionTrigger>
+          <AccordionContent className="px-4 pb-3">
+            <div className="animate-in slide-in-from-top-2 duration-200">
+              {item.content}
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
+  )
+}
+```
+
+## DESIGN QUALITY CHECKLIST
+
+### NEVER SHIP UI WITHOUT:
+- [ ] **Mobile-first responsive design** tested on all breakpoints
+- [ ] **Dark mode support** with proper color tokens
+- [ ] **Accessibility features** (ARIA labels, keyboard nav, screen readers)
+- [ ] **Loading states** for all async operations
+- [ ] **Error states** with proper user feedback
+- [ ] **Focus management** and keyboard navigation
+- [ ] **Consistent spacing** using design system tokens
+- [ ] **Proper contrast ratios** meeting WCAG guidelines
+
+### ALWAYS ENSURE:
+- [ ] **Component composition** over monolithic components
+- [ ] **Semantic HTML** structure with proper roles
+- [ ] **Performance optimized** images and animations
+- [ ] **Cross-browser compatibility** tested
+- [ ] **Touch-friendly** interaction targets (44px minimum)
+- [ ] **Consistent visual hierarchy** with typography scale
+- [ ] **Smooth animations** with proper easing and duration
+- [ ] **Graceful degradation** when JavaScript is disabled
+
+Remember: **Design is not just how it looks - it's how it works for everyone.**

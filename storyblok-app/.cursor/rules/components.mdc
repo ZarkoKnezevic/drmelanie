@@ -1,0 +1,626 @@
+---
+description: Component development patterns for Next.js 14 with Server/Client component best practices
+globs: ["components/**/*.{tsx,ts}"]
+---
+
+# Next.js 14 Component Development Rules
+
+## SERVER VS CLIENT COMPONENT STRATEGY
+
+### ✅ DEFAULT: Server Components (No 'use client')
+```tsx
+// Server Component - Default behavior, no directive needed
+interface UserProfileProps {
+  userId: string
+}
+
+export async function UserProfile({ userId }: UserProfileProps) {
+  // Direct data fetching in Server Components
+  const user = await getUserById(userId)
+  
+  return (
+    <div className="space-y-6">
+      <UserAvatar user={user} />
+      <UserInfo user={user} />
+      <UserStats userId={userId} />
+      <UserActions userId={userId} /> {/* This will be Client Component */}
+    </div>
+  )
+}
+
+// ✅ Server Component for static display
+export function UserInfo({ user }: { user: User }) {
+  return (
+    <div className="space-y-2">
+      <h2 className="text-2xl font-bold">{user.name}</h2>
+      <p className="text-muted-foreground">{user.email}</p>
+      <p className="text-sm">{user.bio}</p>
+    </div>
+  )
+}
+```
+
+### ✅ CLIENT COMPONENTS: Only When Needed
+```tsx
+'use client'
+
+import { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { useToast } from '@/hooks/use-toast'
+
+// Client Component for interactivity
+export function UserActions({ userId }: { userId: string }) {
+  const [isFollowing, setIsFollowing] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { toast } = useToast()
+  
+  const handleFollow = async () => {
+    setIsLoading(true)
+    try {
+      await fetch(`/api/users/${userId}/follow`, { method: 'POST' })
+      setIsFollowing(!isFollowing)
+      toast({
+        title: isFollowing ? 'Unfollowed' : 'Following',
+        description: 'Successfully updated follow status.',
+      })
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to update follow status.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  
+  return (
+    <div className="flex gap-2">
+      <Button 
+        onClick={handleFollow}
+        disabled={isLoading}
+        variant={isFollowing ? "outline" : "default"}
+      >
+        {isFollowing ? 'Unfollow' : 'Follow'}
+      </Button>
+    </div>
+  )
+}
+```
+
+## COMPONENT COMPOSITION PATTERNS
+
+### ✅ ALWAYS: Build Complex UI from Small Components
+```tsx
+// ✅ Page-level composition (Server Component)
+export default async function ProductPage({ 
+  params 
+}: { 
+  params: { id: string } 
+}) {
+  const product = await getProduct(params.id)
+  
+  return (
+    <div className="container mx-auto py-8">
+      <ProductBreadcrumb product={product} />
+      <div className="grid gap-8 lg:grid-cols-2">
+        <ProductGallery images={product.images} />
+        <div className="space-y-6">
+          <ProductHeader product={product} />
+          <ProductDescription product={product} />
+          <ProductPurchase product={product} />
+        </div>
+      </div>
+      <ProductReviews productId={product.id} />
+    </div>
+  )
+}
+
+// ✅ Focused Server Component (20-80 lines)
+export function ProductHeader({ product }: { product: Product }) {
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <Badge variant="secondary">{product.category}</Badge>
+        {product.isNew && <Badge>New</Badge>}
+      </div>
+      <h1 className="text-3xl font-bold">{product.name}</h1>
+      <div className="flex items-center gap-4">
+        <span className="text-3xl font-bold">${product.price}</span>
+        {product.originalPrice && (
+          <span className="text-lg text-muted-foreground line-through">
+            ${product.originalPrice}
+          </span>
+        )}
+      </div>
+      <ProductRating rating={product.rating} reviewCount={product.reviewCount} />
+    </div>
+  )
+}
+```
+
+### ❌ NEVER: Monolithic Components
+```tsx
+// ❌ DON'T: 300+ line component with mixed concerns
+export default function ProductPage({ params }: { params: { id: string } }) {
+  // 300+ lines mixing:
+  // - Data fetching
+  // - UI rendering  
+  // - State management
+  // - Event handling
+  // - Business logic
+  return <div>{/* Massive JSX with everything */}</div>
+}
+```
+
+## COMPONENT ORGANIZATION STRUCTURE
+
+### UI Components (READ-ONLY)
+```tsx
+// components/ui/ - shadcn/ui components
+// ❌ NEVER modify these directly
+// ✅ Create wrappers in components/common/ instead
+
+// ✅ Wrapper component example
+import { Button, ButtonProps } from '@/components/ui/button'
+import { Loader2 } from 'lucide-react'
+
+interface LoadingButtonProps extends ButtonProps {
+  loading?: boolean
+}
+
+export function LoadingButton({ 
+  loading, 
+  children, 
+  disabled, 
+  ...props 
+}: LoadingButtonProps) {
+  return (
+    <Button disabled={loading || disabled} {...props}>
+      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+      {children}
+    </Button>
+  )
+}
+```
+
+### Common Components (Reusable)
+```tsx
+// components/common/ - Reusable across features
+import Image from 'next/image'
+import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+
+interface UserCardProps {
+  user: {
+    id: string
+    name: string
+    email: string
+    avatar?: string
+    role: string
+  }
+  onEdit?: (userId: string) => void
+  variant?: 'default' | 'compact'
+  className?: string
+}
+
+export function UserCard({ 
+  user, 
+  onEdit, 
+  variant = 'default',
+  className 
+}: UserCardProps) {
+  return (
+    <Card className={cn("hover:shadow-md transition-shadow", className)}>
+      <CardContent className="p-4">
+        <div className="flex items-center gap-3">
+          <Image
+            src={user.avatar || '/default-avatar.png'}
+            alt={`${user.name}'s avatar`}
+            width={variant === 'compact' ? 32 : 48}
+            height={variant === 'compact' ? 32 : 48}
+            className="rounded-full"
+          />
+          <div className="flex-1 min-w-0">
+            <h3 className="font-medium truncate">{user.name}</h3>
+            <p className="text-sm text-muted-foreground truncate">
+              {user.email}
+            </p>
+          </div>
+          <Badge variant="outline">{user.role}</Badge>
+        </div>
+        {onEdit && (
+          <div className="mt-3 pt-3 border-t">
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => onEdit(user.id)}
+            >
+              Edit
+            </Button>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+### Feature Components (Specific)
+```tsx
+// components/features/ - Feature-specific components
+'use client'
+
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
+const commentSchema = z.object({
+  content: z.string().min(1, 'Comment is required').max(500),
+  rating: z.number().min(1).max(5),
+})
+
+type CommentFormData = z.infer<typeof commentSchema>
+
+interface ProductCommentFormProps {
+  productId: string
+  onSuccess: () => void
+}
+
+export function ProductCommentForm({ 
+  productId, 
+  onSuccess 
+}: ProductCommentFormProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  
+  const form = useForm<CommentFormData>({
+    resolver: zodResolver(commentSchema),
+    defaultValues: {
+      content: '',
+      rating: 5,
+    },
+  })
+  
+  const onSubmit = async (data: CommentFormData) => {
+    setIsSubmitting(true)
+    try {
+      await fetch(`/api/products/${productId}/comments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+      form.reset()
+      onSuccess()
+    } catch (error) {
+      console.error('Failed to submit comment:', error)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+  
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <FormField
+          control={form.control}
+          name="content"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Comment</FormLabel>
+              <FormControl>
+                <Textarea 
+                  placeholder="Share your thoughts..."
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="rating"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Rating</FormLabel>
+              <FormControl>
+                <StarRating
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Submit Comment'}
+        </Button>
+      </form>
+    </Form>
+  )
+}
+```
+
+## FORM COMPONENT PATTERNS
+
+### ✅ Comprehensive Form Components
+```tsx
+'use client'
+
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { userSchema } from '@/lib/shared/validations'
+
+type UserFormData = z.infer<typeof userSchema>
+
+interface UserFormProps {
+  initialData?: Partial<User>
+  onSubmit: (data: UserFormData) => Promise<void>
+  isLoading?: boolean
+}
+
+export function UserForm({ initialData, onSubmit, isLoading }: UserFormProps) {
+  const form = useForm<UserFormData>({
+    resolver: zodResolver(userSchema),
+    defaultValues: {
+      name: initialData?.name || '',
+      email: initialData?.email || '',
+    },
+  })
+  
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <Button 
+          type="submit" 
+          disabled={isLoading || form.formState.isSubmitting}
+          className="w-full"
+        >
+          {isLoading ? 'Saving...' : 'Save User'}
+        </Button>
+      </form>
+    </Form>
+  )
+}
+```
+
+## LOADING AND ERROR COMPONENTS
+
+### ✅ Skeleton Components
+```tsx
+// Server Component - No state needed
+export function ProductCardSkeleton() {
+  return (
+    <Card className="p-4">
+      <div className="space-y-3">
+        <Skeleton className="h-48 w-full rounded-md" />
+        <Skeleton className="h-4 w-3/4" />
+        <Skeleton className="h-4 w-1/2" />
+        <div className="flex gap-2">
+          <Skeleton className="h-8 w-16" />
+          <Skeleton className="h-8 w-20" />
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+export function ProductGridSkeleton() {
+  return (
+    <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      {Array.from({ length: 6 }).map((_, i) => (
+        <ProductCardSkeleton key={i} />
+      ))}
+    </div>
+  )
+}
+```
+
+### ✅ Error Display Components
+```tsx
+'use client'
+
+import { AlertTriangle, RefreshCw } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+
+interface ErrorDisplayProps {
+  error: Error
+  reset?: () => void
+  title?: string
+  showDetails?: boolean
+}
+
+export function ErrorDisplay({ 
+  error, 
+  reset, 
+  title = 'Something went wrong',
+  showDetails = false 
+}: ErrorDisplayProps) {
+  return (
+    <div className="flex flex-col items-center justify-center p-8 text-center">
+      <AlertTriangle className="h-12 w-12 text-destructive mb-4" />
+      <h2 className="text-lg font-semibold mb-2">{title}</h2>
+      <p className="text-muted-foreground mb-4 max-w-md">
+        {error.message || 'An unexpected error occurred. Please try again.'}
+      </p>
+      {showDetails && (
+        <details className="mb-4 text-left">
+          <summary className="cursor-pointer text-sm text-muted-foreground">
+            Error Details
+          </summary>
+          <pre className="mt-2 text-xs bg-muted p-2 rounded overflow-auto">
+            {error.stack}
+          </pre>
+        </details>
+      )}
+      {reset && (
+        <Button onClick={reset} variant="outline">
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Try Again
+        </Button>
+      )}
+    </div>
+  )
+}
+```
+
+## LAYOUT COMPONENTS
+
+### ✅ Navigation Components
+```tsx
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/shared/utils'
+
+const navigation = [
+  { name: 'Dashboard', href: '/dashboard' },
+  { name: 'Products', href: '/products' },
+  { name: 'Users', href: '/users' },
+  { name: 'Settings', href: '/settings' },
+]
+
+export function DashboardNav() {
+  const pathname = usePathname()
+  
+  return (
+    <nav className="flex space-x-4">
+      {navigation.map((item) => (
+        <Link
+          key={item.name}
+          href={item.href}
+          className={cn(
+            'px-3 py-2 text-sm font-medium rounded-md transition-colors',
+            pathname === item.href
+              ? 'bg-primary text-primary-foreground'
+              : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+          )}
+        >
+          {item.name}
+        </Link>
+      ))}
+    </nav>
+  )
+}
+```
+
+## TYPESCRIPT PATTERNS
+
+### ✅ Comprehensive Prop Interfaces
+```tsx
+interface ComponentProps {
+  // Required props
+  title: string
+  items: Item[]
+  
+  // Optional props with defaults
+  variant?: 'default' | 'compact' | 'detailed'
+  showActions?: boolean
+  
+  // Event handlers
+  onItemClick?: (item: Item) => void
+  onItemEdit?: (itemId: string) => void
+  
+  // Styling
+  className?: string
+  
+  // Children and composition
+  children?: React.ReactNode
+  
+  // Advanced patterns
+  renderItem?: (item: Item) => React.ReactNode
+  filter?: (item: Item) => boolean
+}
+```
+
+### ✅ Generic Component Types
+```tsx
+interface DataListProps<T> {
+  data: T[]
+  keyExtractor: (item: T) => string
+  renderItem: (item: T) => React.ReactNode
+  emptyMessage?: string
+  loading?: boolean
+}
+
+export function DataList<T>({
+  data,
+  keyExtractor,
+  renderItem,
+  emptyMessage = 'No items found',
+  loading = false,
+}: DataListProps<T>) {
+  if (loading) {
+    return <div>Loading...</div>
+  }
+  
+  if (data.length === 0) {
+    return <div className="text-center text-muted-foreground">{emptyMessage}</div>
+  }
+  
+  return (
+    <div className="space-y-2">
+      {data.map((item) => (
+        <div key={keyExtractor(item)}>
+          {renderItem(item)}
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+## COMPONENT QUALITY CHECKLIST
+
+### NEVER SHIP COMPONENTS WITHOUT:
+- [ ] **Proper TypeScript interfaces** for all props
+- [ ] **Server/Client component** distinction is clear  
+- [ ] **Component under 300 lines** (break into smaller components)
+- [ ] **Single responsibility** - one clear purpose
+- [ ] **Error handling** where appropriate
+- [ ] **Loading states** for async operations
+- [ ] **Responsive design** implemented
+- [ ] **Accessibility features** (ARIA labels, keyboard nav)
+
+### ALWAYS ENSURE:
+- [ ] **Composition over complexity** - build from smaller parts
+- [ ] **Reusable logic** extracted to hooks
+- [ ] **Consistent styling** with design system
+- [ ] **Performance optimized** (memoization if needed)
+- [ ] **Proper imports** organized correctly
+- [ ] **Clean separation** of Server and Client concerns
+
+Remember: **Build components like LEGO blocks - small, focused, and composable.**

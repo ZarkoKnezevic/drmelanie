@@ -1,0 +1,252 @@
+---
+description: Core architecture and quality rules for Next.js 14 + App Router + shadcn/ui template
+globs: ["{app,components,lib,hooks}/**/*.{tsx,ts}", "package.json", "next.config.js", "tailwind.config.ts"]
+alwaysApply: true
+---
+
+# Next.js 14 + App Router + shadcn/ui Template - Core Rules
+
+## CRITICAL ARCHITECTURE RULES
+
+### Component Size & Organization
+- **NEVER** create components over 300 lines
+- **ALWAYS** break down complex components into smaller, focused pieces (20-100 lines)
+- **EXTRACT** reusable logic to custom hooks, not copy-paste
+- **USE** composition patterns - build complex UI from smaller components
+- **DEFAULT** to Server Components - use 'use client' only when necessary
+
+### App Router Structure Requirements
+```
+app/
+├── layout.tsx           # Root layout (required)
+├── page.tsx            # Home page
+├── loading.tsx         # Loading UI
+├── error.tsx           # Error boundaries
+├── not-found.tsx       # 404 page
+├── globals.css         # Global styles
+├── (routes)/           # Route groups
+│   ├── layout.tsx      # Nested layouts
+│   └── page.tsx        # Route pages
+└── api/               # Route handlers
+    └── route.ts       # API endpoints
+
+components/
+├── ui/                # shadcn/ui components (READ-ONLY)
+├── common/            # Reusable components
+├── forms/             # Form components
+├── features/          # Feature-specific components
+└── layout/            # Layout components
+
+lib/
+├── server/            # Server-side utilities
+├── client/            # Client-side utilities
+├── shared/            # Universal utilities
+│   ├── utils.ts       # General utilities (cn function)
+│   ├── types.ts       # Shared TypeScript types
+│   ├── constants.ts   # App constants
+│   └── validations.ts # Zod schemas
+```
+
+### Server vs Client Component Rules
+```tsx
+// ✅ Server Component (default) - No 'use client' needed
+export default async function UserProfile({ userId }: { userId: string }) {
+  const user = await getUserById(userId) // Direct data fetching
+  return <UserCard user={user} />
+}
+
+// ✅ Client Component - Only when you need interactivity
+'use client'
+export function InteractiveButton() {
+  const [count, setCount] = useState(0) // State requires client
+  return <button onClick={() => setCount(count + 1)}>{count}</button>
+}
+```
+
+### Import Organization
+```tsx
+// 1. React imports (for Client Components)
+import React, { useState, useEffect } from 'react'
+
+// 2. Next.js imports
+import Image from 'next/image'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+
+// 3. Third-party libraries
+import { useQuery } from '@tanstack/react-query'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+// 4. UI components
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+
+// 5. Local components
+import { UserCard } from '@/components/common/UserCard'
+
+// 6. Utilities and types
+import { cn } from '@/lib/shared/utils'
+import type { User } from '@/lib/shared/types'
+```
+
+## NEVER CREATE PATTERNS
+
+### ❌ BAD: Monolithic Page Components
+```tsx
+// DON'T: 300+ line page with everything inline
+export default function Dashboard() {
+  // Massive component with mixed concerns
+  return <div>{/* 300+ lines of JSX */}</div>
+}
+```
+
+### ❌ BAD: Unnecessary Client Components
+```tsx
+// DON'T: Use client for static content
+'use client'
+export function StaticContent() {
+  return <div>Static text that doesn't need client</div>
+}
+```
+
+## ALWAYS CREATE PATTERNS
+
+### ✅ GOOD: Composed Page Structure
+```tsx
+// Server Component page composition
+export default async function Dashboard() {
+  const stats = await getDashboardStats()
+  
+  return (
+    <DashboardLayout>
+      <DashboardHeader />
+      <DashboardStats stats={stats} />
+      <DashboardCharts />
+      <DashboardActivity />
+    </DashboardLayout>
+  )
+}
+
+// Each component is focused and under 100 lines
+```
+
+### ✅ GOOD: Smart Component Mixing
+```tsx
+// Server Component wrapper
+export default async function PostPage({ params }: { params: { id: string } }) {
+  const post = await getPost(params.id)
+  
+  return (
+    <article>
+      <PostHeader post={post} /> {/* Server Component */}
+      <PostContent content={post.content} /> {/* Server Component */}
+      <PostActions postId={post.id} /> {/* Client Component for interactions */}
+    </article>
+  )
+}
+```
+
+## TypeScript Quality Standards
+
+### MANDATORY Type Safety
+- **NO** `any` types allowed
+- **USE** strict TypeScript configuration
+- **DEFINE** comprehensive interfaces for props
+- **VALIDATE** data with Zod schemas
+
+```tsx
+// ✅ Proper prop interfaces
+interface UserCardProps {
+  user: {
+    id: string
+    name: string
+    email: string
+    avatar?: string
+  }
+  onEdit?: (userId: string) => void
+  className?: string
+}
+
+// ✅ Server Component with proper typing
+export default async function UsersPage({
+  params,
+  searchParams,
+}: {
+  params: { slug: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  // Implementation
+}
+```
+
+## Performance Requirements
+
+### Next.js 14 Optimizations
+- **USE** Next.js Image for all images
+- **USE** Next.js Font for web fonts
+- **IMPLEMENT** proper loading states
+- **LEVERAGE** Server Components for better performance
+- **OPTIMIZE** bundle size with dynamic imports
+
+```tsx
+// ✅ Optimized image usage
+import Image from 'next/image'
+
+export function ProductCard({ product }: { product: Product }) {
+  return (
+    <Card>
+      <Image
+        src={product.image}
+        alt={product.name}
+        width={300}
+        height={200}
+        priority={false}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      />
+    </Card>
+  )
+}
+```
+
+## Quality Gates - NEVER SHIP WITHOUT
+
+1. **`npm run lint`** passes with 0 errors
+2. **`npm run type-check`** passes with 0 errors  
+3. **`npm run build`** completes successfully
+4. **Components under 300 lines**
+5. **Proper Server/Client component usage**
+6. **Accessibility tested** (keyboard nav, screen readers)
+7. **Mobile responsive** tested on actual devices
+8. **Performance optimized** (Core Web Vitals)
+
+## Error Handling Requirements
+
+```tsx
+// ✅ Proper error boundaries
+'use client'
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen">
+      <h2>Something went wrong!</h2>
+      <button onClick={reset}>Try again</button>
+    </div>
+  )
+}
+
+// ✅ Loading states
+export default function Loading() {
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+    </div>
+  )
+}
+```
+
+Remember: **Quality is not negotiable. Follow these rules to ensure maintainable, performant, and accessible Next.js applications.**
