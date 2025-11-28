@@ -4,6 +4,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface HeroProps {
@@ -19,18 +20,23 @@ interface HeroProps {
     };
     cta_text?: string;
     cta_link?: string;
+    background?: string;
   };
 }
 
 export default function Hero({ blok }: HeroProps) {
   const linkUrl = blok.cta_link || '#';
+  const backgroundClass = getBackgroundClass(blok.background);
 
   console.log(blok);  
 
   return (
     <section
       {...storyblokEditable(blok)}
-      className="relative flex min-h-[80vh] overflow-hidden bg-background"
+      className={cn(
+        'relative flex min-h-[80vh] overflow-hidden',
+        backgroundClass || 'bg-background'
+      )}
     >
       {/* Left Section - Logo and Headline */}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-12 md:px-12 lg:px-16">
@@ -56,7 +62,10 @@ export default function Hero({ blok }: HeroProps) {
 
         {/* Torn Paper Effect - Right Edge */}
         <div
-          className="absolute right-0 top-0 h-full w-16 bg-background"
+          className={cn(
+            'absolute right-0 top-0 h-full w-16',
+            backgroundClass || 'bg-background'
+          )}
           style={{
             clipPath:
               'polygon(0 0, 100% 0, 100% 10%, 96% 15%, 100% 20%, 94% 25%, 100% 30%, 97% 35%, 100% 40%, 95% 45%, 100% 50%, 96% 55%, 100% 60%, 94% 65%, 100% 70%, 97% 75%, 100% 80%, 95% 85%, 100% 90%, 96% 95%, 100% 100%, 0 100%)',

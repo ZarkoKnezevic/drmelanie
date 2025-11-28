@@ -1,5 +1,5 @@
 import { storyblokEditable, StoryblokServerComponent } from '@storyblok/react/rsc';
-import { logger } from '@/utils';
+import { logger, cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface GridProps {
@@ -9,6 +9,7 @@ interface GridProps {
     items?: StoryblokBlok[];
     columns_content?: StoryblokBlok[];
     content?: StoryblokBlok[];
+    background?: string;
   };
 }
 
@@ -58,13 +59,18 @@ export default function Grid({ blok }: GridProps) {
     '12': 'gap-12',
   }[gap] || 'gap-6';
 
+  const backgroundClass = getBackgroundClass(blok.background);
+
   // If no items, show a placeholder or empty state
   if (!items || items.length === 0) {
     if (process.env.NODE_ENV === 'development') {
       return (
         <div
           {...storyblokEditable(blok)}
-          className={`grid ${gridCols} ${gapClass} container mx-auto px-6 py-12 border-2 border-dashed border-gray-300`}
+          className={cn(
+            `grid ${gridCols} ${gapClass} container mx-auto px-6 py-12 border-2 border-dashed border-gray-300`,
+            backgroundClass
+          )}
         >
           <div className="col-span-full text-center text-gray-500 py-8">
             ⚠️ Grid component has no items to display. Add items in Storyblok.
@@ -80,7 +86,10 @@ export default function Grid({ blok }: GridProps) {
   return (
     <div
       {...storyblokEditable(blok)}
-      className={`grid ${gridCols} ${gapClass} container mx-auto px-6 py-12`}
+      className={cn(
+        `grid ${gridCols} ${gapClass} container mx-auto px-6 py-12`,
+        backgroundClass
+      )}
     >
       {items.map((nestedBlok: StoryblokBlok) => (
         <StoryblokServerComponent blok={nestedBlok} key={nestedBlok._uid} />

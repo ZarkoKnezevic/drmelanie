@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* Light mode — Brand based */
-    --background: 30 14% 95%;          /* #F0EFED */
+    --background: #F0EFED;          /* #F0EFED */
     --foreground: 30 4% 41%;           /* #6C6A66 */
 
     --card: 0 0% 100%;
@@ -14,11 +14,14 @@
     --popover: 0 0% 100%;
     --popover-foreground: 30 4% 41%;
 
-    --primary: 188 70% 31%;            /* #167488 teal */
-    --primary-foreground: 0 0% 100%;   /* white */
+    --primary: #ffffff;                /* white */
+    --primary-foreground: #6C6A66;
 
-    --secondary: 340 85% 45%;          /* #CF128A magenta */
-    --secondary-foreground: 0 0% 100%;
+    --secondary: #F5F5F5;              /* light gray */
+    --secondary-foreground: #6C6A66;
+
+    --tertiary: #8A6D7B;               /* mauve */
+    --tertiary-foreground: #FFFFFF;
 
     --muted: 30 20% 85%;               /* soft sand */
     --muted-foreground: 30 4% 41%;
@@ -47,11 +50,14 @@
     --popover: 200 25% 14%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 188 65% 40%;            /* brighter teal for contrast */
-    --primary-foreground: 0 0% 100%;
+    --primary: #ffffff;                /* white */
+    --primary-foreground: #8A6D7B;
 
-    --secondary: 338 35% 45%;          /* muted dark magenta */
-    --secondary-foreground: 0 0% 100%;
+    --secondary: #F5F5F5;              /* light gray */
+    --secondary-foreground: #8A6D7B;
+
+    --tertiary: #8A6D7B;               /* mauve */
+    --tertiary-foreground: #FFFFFF;
 
     --muted: 200 15% 20%;
     --muted-foreground: 0 0% 70%;

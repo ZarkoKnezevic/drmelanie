@@ -2,6 +2,7 @@
 
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
+import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface TeaserProps {
@@ -16,16 +17,21 @@ interface TeaserProps {
       url: string;
       cached_url?: string;
     };
+    background?: string;
   };
 }
 
 export default function Teaser({ blok }: TeaserProps) {
   const linkUrl = blok.link?.cached_url || blok.link?.url || '#';
+  const backgroundClass = getBackgroundClass(blok.background);
 
   return (
     <div
       {...storyblokEditable(blok)}
-      className="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800"
+      className={cn(
+        'group rounded-lg border border-gray-200 p-6 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800',
+        backgroundClass || 'bg-white'
+      )}
     >
       {blok.image?.filename && (
         <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg">

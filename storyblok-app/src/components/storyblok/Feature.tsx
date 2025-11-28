@@ -1,6 +1,7 @@
 'use client';
 
 import { storyblokEditable } from '@storyblok/react/rsc';
+import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface FeatureProps {
@@ -8,14 +9,20 @@ interface FeatureProps {
     name: string;
     description?: string;
     icon?: string;
+    background?: string;
   };
 }
 
 export default function Feature({ blok }: FeatureProps) {
+  const backgroundClass = getBackgroundClass(blok.background);
+
   return (
     <div
       {...storyblokEditable(blok)}
-      className="flex flex-col items-center rounded-lg bg-gray-50 p-6 text-center dark:bg-gray-800"
+      className={cn(
+        'flex flex-col items-center rounded-lg p-6 text-center dark:bg-gray-800',
+        backgroundClass || 'bg-gray-50'
+      )}
     >
       {blok.icon && (
         <div className="mb-4 text-4xl" role="img" aria-label={blok.name}>

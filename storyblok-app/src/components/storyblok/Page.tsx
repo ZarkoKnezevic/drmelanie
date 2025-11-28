@@ -1,10 +1,11 @@
 import { StoryblokServerComponent, storyblokEditable } from '@storyblok/react/rsc';
-import { logger } from '@/utils';
+import { logger, cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface PageProps {
   blok: StoryblokBlok & {
     body?: StoryblokBlok[];
+    background?: string;
   };
 }
 
@@ -17,8 +18,10 @@ export default function Page({ blok }: PageProps) {
     });
   }
 
+  const backgroundClass = getBackgroundClass(blok.background);
+
   return (
-    <main {...storyblokEditable(blok)}>
+    <main {...storyblokEditable(blok)} className={cn(backgroundClass)}>
       {blok.body?.map((nestedBlok: StoryblokBlok) => (
         <StoryblokServerComponent blok={nestedBlok} key={nestedBlok._uid} />
       ))}
