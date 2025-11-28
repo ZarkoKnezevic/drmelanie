@@ -8,14 +8,21 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      sm: '390px',
+      md: '600px',
+      lg: '1024px',
+      xl: '1280px',
+      xxl: '1540px',
+    },
     container: {
       center: true,
       padding: '2rem',
-      screens: {
-        '2xl': '1400px',
-      },
     },
     extend: {
+      fontFamily: {
+        karla: ['var(--font-karla)', 'sans-serif'],
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

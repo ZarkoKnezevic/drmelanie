@@ -2,13 +2,18 @@
 
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import type { StoryblokBlok } from '@/types';
 
 interface HeroProps {
   blok: StoryblokBlok & {
+    logo?: {
+      filename: string;
+      alt?: string;
+    };
     headline: string;
-    subheadline?: string;
-    background_image?: {
+    image?: {
       filename: string;
       alt?: string;
     };
@@ -18,40 +23,68 @@ interface HeroProps {
 }
 
 export default function Hero({ blok }: HeroProps) {
+  const linkUrl = blok.cta_link || '#';
+
+  console.log(blok);  
+
   return (
     <section
       {...storyblokEditable(blok)}
-      className="relative flex min-h-[600px] items-center justify-center overflow-hidden bg-gradient-to-br from-blue-600 to-purple-700"
+      className="relative flex min-h-[80vh] overflow-hidden bg-background"
     >
-      {blok.background_image?.filename && (
-        <div className="absolute inset-0 z-0">
+      {/* Left Section - Logo and Headline */}
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-12 md:px-12 lg:px-16">
+        <div className="w-full max-w-2xl space-y-6 md:space-y-8">
+          {/* Logo */}
+          {blok.logo?.filename && (
+            <div className="relative h-24 w-full md:h-32 lg:h-40">
+              <Image
+                src={blok.logo.filename}
+                alt={blok.logo.alt || 'Logo'}
+                fill
+                className="object-contain object-left"
+                priority
+              />
+            </div>
+          )}
+
+          {/* Headline */}
+          <h1 className="text-3xl font-bold leading-tight text-foreground md:text-4xl lg:text-5xl xl:text-6xl">
+            {blok.headline}
+          </h1>
+        </div>
+
+        {/* Torn Paper Effect - Right Edge */}
+        <div
+          className="absolute right-0 top-0 h-full w-16 bg-background"
+          style={{
+            clipPath:
+              'polygon(0 0, 100% 0, 100% 10%, 96% 15%, 100% 20%, 94% 25%, 100% 30%, 97% 35%, 100% 40%, 95% 45%, 100% 50%, 96% 55%, 100% 60%, 94% 65%, 100% 70%, 97% 75%, 100% 80%, 95% 85%, 100% 90%, 96% 95%, 100% 100%, 0 100%)',
+          }}
+        />
+      </div>
+
+      {/* Right Section - Image */}
+      {blok.image?.filename && (
+        <div className="relative hidden w-full flex-[1] bg-muted md:block">
           <Image
-            src={blok.background_image.filename}
-            alt={blok.background_image.alt || blok.headline}
+            src={blok.image.filename}
+            alt={blok.image.alt || blok.headline}
             fill
-            className="object-cover opacity-30"
+            className="object-cover"
             priority
+            sizes="(max-width: 768px) 0vw, 33vw"
           />
+          {/* CTA Button */}
+          {blok.cta_text && blok.cta_link && (
+            <div className="absolute right-48 top-10 pt-4">
+              <Button asChild variant="secondary" size="lg" className="text-lg">
+                <Link href={linkUrl}>{blok.cta_text}</Link>
+              </Button>
+            </div>
+          )}
         </div>
       )}
-      <div className="relative z-10 mx-auto max-w-4xl px-6 text-center text-white">
-        <h1 className="mb-6 text-5xl font-bold leading-tight md:text-6xl">
-          {blok.headline}
-        </h1>
-        {blok.subheadline && (
-          <p className="mb-8 text-xl text-blue-100 md:text-2xl">
-            {blok.subheadline}
-          </p>
-        )}
-        {blok.cta_text && blok.cta_link && (
-          <a
-            href={blok.cta_link}
-            className="inline-block rounded-lg bg-white px-8 py-4 text-lg font-semibold text-blue-600 transition-transform hover:scale-105"
-          >
-            {blok.cta_text}
-          </a>
-        )}
-      </div>
     </section>
   );
 }

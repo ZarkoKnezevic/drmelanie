@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Karla } from 'next/font/google';
 import './globals.css';
 import StoryblokProvider from '@/components/StoryblokProvider';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -11,9 +11,9 @@ import '@/lib/storyblok-init'; // Initialize Storyblok for server components
 import { APP_CONFIG } from '@/constants';
 import { cn } from '@/utils';
 
-const inter = Inter({
+const karla = Karla({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-karla',
   display: 'swap',
 });
 
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   authors: [{ name: 'Storyblok CMS' }],
   openGraph: {
     type: 'website',
-    locale: 'en_US',
+    locale: 'de_AT',
     url: APP_CONFIG.domain,
     title: APP_CONFIG.name,
     description: APP_CONFIG.description,
@@ -41,8 +41,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={inter.variable}>
-      <body className={cn('min-h-screen bg-background font-sans antialiased')}>
+    <html lang="en" suppressHydrationWarning className={`${karla.variable} font-sans`}>
+      <body className={cn('min-h-screen bg-background font-karla antialiased')}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
             <StoryblokProvider>
