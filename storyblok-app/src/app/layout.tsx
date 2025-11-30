@@ -3,10 +3,10 @@ import { Karla } from 'next/font/google';
 import './globals.css';
 import StoryblokProvider from '@/components/StoryblokProvider';
 import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '@/components/ui/components/toaster';
 import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { TooltipProvider } from '@/components/ui/components/tooltip';
 import '@/lib/storyblok-init'; // Initialize Storyblok for server components
 import { APP_CONFIG } from '@/constants';
 import { cn } from '@/utils';

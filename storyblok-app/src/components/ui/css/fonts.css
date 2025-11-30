@@ -1,0 +1,21 @@
+:root {
+    /* Font Family */
+    --font-karla: var(--font-karla), sans-serif;
+
+    /* Font Sizes - Responsive */
+    /* Base font size */
+    --font-size-base-sm: 14px;
+    --font-size-base-md: 16px;
+    --font-size-base-lg: 16px;
+
+    /* Line Heights */
+    --line-height-none: 1;
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+
+    /* Font Weights */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+}

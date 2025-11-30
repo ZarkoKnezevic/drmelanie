@@ -9,7 +9,7 @@ import type { StoryblokBlok } from '@/types';
 
 interface TextImageProps {
   blok: StoryblokBlok & {
-    text?: any;
+    text?: any; // ISbRichtext - richtext content from Storyblok
     image?: {
       filename?: string;
       alt?: string;
@@ -42,7 +42,7 @@ export default function TextImage({ blok }: TextImageProps) {
       >
         {/* Text Content */}
         {blok.text && (
-          <div className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert overflow-visible', textColorClass)}>
+          <div className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert', textColorClass)}>
             {renderRichText(blok.text)}
           </div>
         )}

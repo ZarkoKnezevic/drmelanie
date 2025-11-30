@@ -3,7 +3,7 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/components/button';
 import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 

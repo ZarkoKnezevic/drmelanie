@@ -4,7 +4,7 @@ import { render } from 'storyblok-rich-text-react-renderer';
 import { prepareImageProps } from './adapters/prepareImageProps';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/components/button';
 import type { StoryblokBlok } from '@/types';
 
 interface RichTextImageProps {
