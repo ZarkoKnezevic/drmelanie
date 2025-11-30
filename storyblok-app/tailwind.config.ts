@@ -8,12 +8,12 @@ export default {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   safelist: [
-    'bg-primary',
-    'bg-secondary',
-    'bg-tertiary',
-    'text-primary-foreground',
-    'text-secondary-foreground',
-    'text-tertiary-foreground',
+    {
+      pattern: /bg-background-(primary|secondary|tertiary|quaternary)/,
+    },
+    {
+      pattern: /text-(primary|secondary|tertiary|quaternary)-foreground/,
+    },
   ],
   theme: {
     screens: {
@@ -35,7 +35,40 @@ export default {
         border: 'var(--border)',
         input: 'var(--input)',
         ring: 'var(--ring)',
-        background: 'var(--background)',
+        background: {
+          DEFAULT: 'var(--background)',
+          primary: 'var(--background-primary)',
+          secondary: 'var(--background-secondary)',
+          tertiary: 'var(--background-tertiary)',
+          quaternary: 'var(--background-quaternary)',
+        },
+        button: {
+          DEFAULT: 'var(--button)',
+          primary: {
+            DEFAULT: 'var(--button-primary)',
+            text: 'var(--button-primary-foreground)',
+            border: 'var(--button-primary-foreground)',
+            hover: 'var(--button-primary-hover)',
+          },
+          secondary: {
+            DEFAULT: 'var(--button-secondary)',
+            text: 'var(--button-secondary-foreground)',
+            border: 'var(--button-secondary-foreground)',
+            hover: 'var(--button-secondary-hover)',
+          },
+          tertiary: {
+            DEFAULT: 'var(--button-tertiary)',
+            text: 'var(--button-tertiary-foreground)',
+            border: 'var(--button-tertiary-foreground)',
+            hover: 'var(--button-tertiary-hover)',
+          },
+          quaternary: {
+            DEFAULT: 'var(--button-quaternary)',
+            text: 'var(--button-quaternary-foreground)',
+            border: 'var(--button-quaternary-foreground)',
+            hover: 'var(--button-quaternary-hover)',
+          },
+        },
         foreground: 'var(--foreground)',
         primary: {
           DEFAULT: 'var(--primary)',
@@ -49,17 +82,9 @@ export default {
           DEFAULT: 'var(--tertiary)',
           foreground: 'var(--tertiary-foreground)',
         },
-        destructive: {
-          DEFAULT: 'var(--destructive)',
-          foreground: 'var(--destructive-foreground)',
-        },
-        muted: {
-          DEFAULT: 'var(--muted)',
-          foreground: 'var(--muted-foreground)',
-        },
-        accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
+        quaternary: {
+          DEFAULT: 'var(--quaternary)',
+          foreground: 'var(--quaternary-foreground)',
         },
         popover: {
           DEFAULT: 'var(--popover)',

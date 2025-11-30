@@ -9,7 +9,7 @@ import type { StoryblokBlok } from '@/types';
 
 interface TextImageProps {
   blok: StoryblokBlok & {
-    text?: any; // ISbRichtext - richtext content from Storyblok
+    text?: any;
     image?: {
       filename?: string;
       alt?: string;
@@ -37,13 +37,12 @@ export default function TextImage({ blok }: TextImageProps) {
       )}
     >
       <div
-        className={`flex flex-col gap-8 md:flex-row md:gap-12 lg:gap-16 ${
-          imageOnLeft ? 'md:flex-row-reverse' : ''
-        }`}
+        className={`flex flex-col gap-8 md:flex-row md:gap-12 lg:gap-16 ${imageOnLeft ? 'md:flex-row-reverse' : ''
+          }`}
       >
         {/* Text Content */}
         {blok.text && (
-          <div className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert', textColorClass)}>
+          <div className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert overflow-visible', textColorClass)}>
             {renderRichText(blok.text)}
           </div>
         )}

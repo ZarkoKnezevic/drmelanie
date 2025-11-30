@@ -4,45 +4,84 @@
 
 @layer base {
   :root {
-    /* Light mode — Brand based */
-    --background: #F0EFED;          /* #F0EFED */
-    --foreground: 30 4% 41%;           /* #6C6A66 */
+    --white: #FFFFFF;
+    --mauve: #8A6D7B;
+    --magenta: #C7017F;
+    --lavander: #9E7E91;
+    --gray: #6C6A66;
+    --teal: #008080;
+    --warm-beige: #BFA9A0;
+    --light-gray: #F5F5F5;
+    --dark-gray: #2B2B2B;
+    --soft-sand: #F0EFED;
+    --brand-text: #303030;
+    --brand-background: #F0EFED;
+
+
+    --background: var(--light-gray);
+    --foreground: var(--mauve);
+    /* background colors */
+    --background-primary: var(--white);
+    --background-secondary: var(--mauve);
+    --background-tertiary: var(--light-gray);
+    --background-quaternary: var(--teal);
+
+    /* button colors */
+    --button-primary: var(--lavander);
+    --button-primary-foreground: var(--white);
+    --button-primary-hover: #7A5D6B;
+    --button-secondary: var(--magenta);
+    --button-secondary-foreground: var(--white);
+    --button-secondary-hover: #B7016F;
+    --button-tertiary: var(--warm-beige);
+    --button-tertiary-foreground: var(--white);
+    --button-tertiary-hover: #AF9990;
+    --button-quaternary: var(--teal);
+    --button-quaternary-foreground: var(--white);
+    --button-quaternary-hover: #006666;
 
     --card: 0 0% 100%;
-    --card-foreground: 30 4% 41%;      /* brand text */
+    --card-foreground: 30 4% 41%;
+    /* brand text */
 
     --popover: 0 0% 100%;
     --popover-foreground: 30 4% 41%;
 
-    --primary: #ffffff;                /* white */
-    --primary-foreground: #6C6A66;
+    --primary: var(--white);
+    --primary-foreground: var(--mauve);
 
-    --secondary: #F5F5F5;              /* light gray */
-    --secondary-foreground: #6C6A66;
+    --secondary: var(--mauve);
+    --secondary-foreground: var(--white);
 
-    --tertiary: #8A6D7B;               /* mauve */
-    --tertiary-foreground: #FFFFFF;
+    --tertiary: var(--dark-gray);
+    --tertiary-foreground: var(--mauve);
 
-    --muted: 30 20% 85%;               /* soft sand */
+    --quaternary: var(--teal);
+    --quaternary-foreground: var(--white);
+
+    --muted: 30 20% 85%;
+    /* soft sand */
     --muted-foreground: 30 4% 41%;
 
-    --accent: 338 11% 50%;             /* #8A747F mauve */
+    --accent: 338 11% 50%;
+    /* #8A747F mauve */
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 20% 75%;              /* leaf-ish beige */
+    --border: 30 20% 75%;
+    /* leaf-ish beige */
     --input: 30 20% 75%;
-    --ring: 188 70% 31%;               /* teal */
+    --ring: 188 70% 31%;
+    /* teal */
 
     --radius: 0.5rem;
   }
 
-  /* DARK MODE — based on brand with darker tones + white text */
   .dark {
-    --background: 200 25% 11%;         /* dark teal-gray */
-    --foreground: 0 0% 100%;           /* white */
+    --background: 200 25% 11%;
+    --foreground: 0 0% 100%;
 
     --card: 200 25% 14%;
     --card-foreground: 0 0% 100%;
@@ -50,19 +89,19 @@
     --popover: 200 25% 14%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: #ffffff;                /* white */
+    --primary: #ffffff;
     --primary-foreground: #8A6D7B;
 
-    --secondary: #F5F5F5;              /* light gray */
+    --secondary: #F5F5F5;
     --secondary-foreground: #8A6D7B;
 
-    --tertiary: #8A6D7B;               /* mauve */
+    --tertiary: #8A6D7B;
     --tertiary-foreground: #FFFFFF;
 
     --muted: 200 15% 20%;
     --muted-foreground: 0 0% 70%;
 
-    --accent: 338 15% 40%;             /* dark mauve */
+    --accent: 338 15% 40%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 70% 40%;
@@ -70,7 +109,7 @@
 
     --border: 200 15% 25%;
     --input: 200 15% 25%;
-    --ring: 188 65% 50%;               /* teal highlight */
+    --ring: 188 65% 50%;
   }
 }
 
@@ -78,6 +117,7 @@
   * {
     @apply border-border;
   }
+
   html {
     @apply text-base md:text-xl xl:text-2xl;
   }

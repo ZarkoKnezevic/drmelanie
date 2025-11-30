@@ -3,6 +3,8 @@ import type { ISbRichtext, SbBlokData } from '@storyblok/react/rsc';
 import { render } from 'storyblok-rich-text-react-renderer';
 import { prepareImageProps } from './adapters/prepareImageProps';
 import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import type { StoryblokBlok } from '@/types';
 
 interface RichTextImageProps {
@@ -72,6 +74,46 @@ export default function renderRichText(data: ISbRichtext) {
               component: 'carousel',
             } as StoryblokBlok}
           />
+        );
+      },
+      button: (props: Record<string, unknown>) => {
+        // Type-safe extraction of props
+        const text = (props.text as string) || 'Button';
+        const variants = props.variants as string | undefined;
+        const variant = (variants || props.variant || 'default') as 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+        const size = (props.size || 'default') as 'default' | 'sm' | 'lg' | 'icon';
+        const disabled = props.disabled as boolean | undefined;
+        const buttonType = (props.type || 'button') as 'button' | 'submit' | 'reset';
+        
+        // Handle link - can be a string (Text field) or Link object
+        const linkProp = props.link;
+        const linkUrl = typeof linkProp === 'string' 
+          ? linkProp 
+          : linkProp && typeof linkProp === 'object'
+          ? ((linkProp as { cached_url?: string; url?: string }).cached_url || (linkProp as { cached_url?: string; url?: string }).url)
+          : undefined;
+        
+        if (linkUrl) {
+          return (
+            <Button
+              asChild
+              variant={variant}
+              size={size}
+            >
+              <Link href={linkUrl}>{text}</Link>
+            </Button>
+          );
+        }
+        
+        return (
+          <Button
+            variant={variant}
+            size={size}
+            disabled={disabled}
+            type={buttonType}
+          >
+            {text}
+          </Button>
         );
       },
     },
