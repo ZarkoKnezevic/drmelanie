@@ -29,6 +29,7 @@ export const colorPreset = {
 
     // Button Colors - CSS Variables
     button: {
+        DEFAULT: 'var(--button-default)',
         primary: {
             DEFAULT: 'var(--button-primary)',
             foreground: 'var(--button-primary-foreground)',

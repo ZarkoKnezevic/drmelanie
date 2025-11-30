@@ -1,10 +1,10 @@
 import type { Config } from 'tailwindcss';
-import { fontStylePreset } from './src/components/ui/presets/fontStylePreset';
-import { colorPreset } from './src/components/ui/presets/colorPreset';
+import tailwindColorPreset from './src/components/ui/presets/tailwindColorPreset';
+import tailwindFontPreset from './src/components/ui/presets/tailwindFontPreset';
 
 export default {
   darkMode: ['class'],
-  presets: [fontStylePreset, colorPreset],
+  presets: [tailwindColorPreset, tailwindFontPreset],
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -33,6 +33,20 @@ export default {
     extend: {
       maxWidth: {
         container: '104rem', //1664px
+      },
+      keyframes: {
+        'accordion-down': {
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' },
+        },
+        'accordion-up': {
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' },
+        },
+      },
+      animation: {
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
     },
   },

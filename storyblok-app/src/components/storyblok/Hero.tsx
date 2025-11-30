@@ -28,7 +28,7 @@ export default function Hero({ blok }: HeroProps) {
   const linkUrl = blok.cta_link || '#';
   const backgroundClass = getBackgroundClass(blok.background);
 
-  console.log(blok);  
+  console.log(blok);
 
   return (
     <section
@@ -55,7 +55,7 @@ export default function Hero({ blok }: HeroProps) {
           )}
 
           {/* Headline */}
-          <h1 className="text-3xl font-bold leading-tight text-foreground md:text-4xl lg:text-5xl xl:text-6xl">
+          <h1 className="h1">
             {blok.headline}
           </h1>
         </div>
@@ -87,7 +87,7 @@ export default function Hero({ blok }: HeroProps) {
           {/* CTA Button */}
           {blok.cta_text && blok.cta_link && (
             <div className="absolute right-48 top-10 pt-4">
-              <Button asChild variant="secondary" size="lg" className="text-lg">
+              <Button asChild variant="secondary">
                 <Link href={linkUrl}>{blok.cta_text}</Link>
               </Button>
             </div>

@@ -10,14 +10,61 @@
   }
 
   html {
-    @apply text-base md:text-xl xl:text-2xl;
+    @apply text-body-sm;
+  }
+
+  body,
+  .body {
+    @apply bg-background text-foreground text-body-sm md:text-body-md lg:text-body-lg;
   }
 
   p {
-    @apply leading-tight;
+    @apply text-body-sm md:text-body-md lg:text-body-lg;
+    font-weight: var(--font-weight-body);
   }
 
-  body {
-    @apply bg-background text-foreground;
+  .button {
+    @apply text-body-sm md:text-body-md lg:text-body-lg;
+    font-weight: var(--font-weight-medium);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: var(--font-weight-heading);
+  }
+
+  h1,
+  .h1 {
+    @apply text-h1 md:text-h1-md lg:text-h1-lg;
+
+  }
+
+  h2,
+  .h2 {
+    @apply text-h2 md:text-h2-md lg:text-h2-lg;
+  }
+
+  h3,
+  .h3 {
+    @apply text-h3 md:text-h3-md lg:text-h3-lg;
+  }
+
+  h4,
+  .h4 {
+    @apply text-h4 md:text-h4-md lg:text-h4-lg;
+  }
+
+  h5,
+  .h5 {
+    @apply text-h5 md:text-h5-md lg:text-h5-lg;
+  }
+
+  h6,
+  .h6 {
+    @apply text-h6 md:text-h6-md lg:text-h6-lg;
   }
 }
