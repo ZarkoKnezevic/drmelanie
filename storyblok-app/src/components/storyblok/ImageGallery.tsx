@@ -9,16 +9,24 @@ import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
 import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
+interface StoryblokImageAsset {
+  filename?: string;
+  alt?: string;
+  asset?: {
+    filename?: string;
+    alt?: string;
+  };
+}
+
 interface ImageGalleryProps {
   blok: StoryblokBlok & {
-    images?: Array<{
-      filename?: string;
-      alt?: string;
-      asset?: {
-        filename?: string;
-        alt?: string;
-      };
-    }>;
+    center_image: StoryblokImageAsset;
+    top_image: StoryblokImageAsset;
+    top_left_image: StoryblokImageAsset;
+    top_right_image: StoryblokImageAsset;
+    bottom_image: StoryblokImageAsset;
+    bottom_left_image: StoryblokImageAsset;
+    bottom_right_image: StoryblokImageAsset;
     background?: string;
   };
 }
@@ -26,7 +34,6 @@ interface ImageGalleryProps {
 export default function ImageGallery({ blok }: ImageGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDesktop, setIsDesktop] = useState(false);
-  const images = blok.images || [];
   const backgroundClass = getBackgroundClass(blok.background);
 
   // Check if screen is md or above (600px)
@@ -40,13 +47,17 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // Dummy data - 7 images from public/gallery
-  const dummyImages = Array.from({ length: 7 }, (_, i) => ({
-    filename: `/gallery/img${i + 1}.jpg`,
-    alt: `Gallery image ${i + 1}`,
-  }));
-
-  const displayImages = images.length > 0 ? images : dummyImages;
+  // Map Storyblok fields to display order
+  // Mobile order: center, top, top_left, top_right, bottom_left, bottom, bottom_right
+  const displayImages = [
+    blok.center_image,      // index 0
+    blok.top_image,         // index 1
+    blok.top_left_image,     // index 2
+    blok.top_right_image,   // index 3
+    blok.bottom_left_image, // index 4
+    blok.bottom_image,      // index 5
+    blok.bottom_right_image, // index 6
+  ];
 
   // Always call hooks - but only use scroll when desktop
   const { scrollYProgress } = useScroll({
@@ -64,19 +75,15 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
   // Scale assignments for each image
   const scales = [scale4, scale5, scale6, scale5, scale6, scale8, scale9];
 
-  if (displayImages.length === 0) {
-    return null;
-  }
-
   // Mobile positioning data
   const mobilePositions = [
-    { width: '45.8666666667vw', height: '31.4666666667vw', left: '50.6666666667vw', top: '42.9333333333vw' }, // top left image
-    { width: '58.4vw', height: '39.2vw', left: '50.6666666667vw', top: '0' }, // top image
-    { width: '33.8666666667vw', height: '51.4666666667vw', left: '12.2666666667vw', top: '22.9333333333vw' },  // top left image
-    { width: '46.4vw', height: '31.4666666667vw', left: '100.5333333333vw', top: '42.9333333333vw' }, // top right image
-    { width: '33.6vw', height: '50.9333333333vw', left: '62.6666666667vw', top: '77.8666666667vw' }, // bottom left image
-    { width: '58.6666666667vw', height: '39.4666666667vw', left: '0', top: '77.8666666667vw' }, // bottom right image
-    { width: '34.1333333333vw', height: '22.6666666667vw', left: '100.5333333333vw', top: '77.8666666667vw' },// bottom left image
+    { width: '45.8666666667vw', height: '31.4666666667vw', left: '50.6666666667vw', top: '42.9333333333vw' }, // center_image
+    { width: '58.4vw', height: '39.2vw', left: '50.6666666667vw', top: '0' }, // top_image
+    { width: '33.8666666667vw', height: '51.4666666667vw', left: '12.2666666667vw', top: '22.9333333333vw' }, // top_left_image
+    { width: '46.4vw', height: '31.4666666667vw', left: '100.5333333333vw', top: '42.9333333333vw' }, // top_right_image
+    { width: '33.6vw', height: '50.9333333333vw', left: '62.6666666667vw', top: '77.8666666667vw' }, // bottom_left_image
+    { width: '58.6666666667vw', height: '39.4666666667vw', left: '0', top: '77.8666666667vw' }, // bottom_image
+    { width: '34.1333333333vw', height: '22.6666666667vw', left: '100.5333333333vw', top: '77.8666666667vw' }, // bottom_right_image
   ];
 
   return (
@@ -92,7 +99,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
         >
           <div className="spacing overflow-x-hidden">
             <div className="relative w-full -ml-[25.6vw]" style={{ minHeight: '128.5333333334vw' }}>
-              {displayImages.slice(0, 7).map((image, index) => {
+              {displayImages.map((image, index) => {
                 const imageProps = prepareImageProps(image);
                 if (!imageProps.src) return null;
 
@@ -137,7 +144,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
         )}
       >
         <div className="sticky top-0 h-screen overflow-hidden">
-          {displayImages.slice(0, 7).map((image, index) => {
+          {displayImages.map((image, index) => {
             const imageProps = prepareImageProps(image);
             if (!imageProps.src) return null;
 
