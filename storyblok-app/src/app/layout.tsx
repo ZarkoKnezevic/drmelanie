@@ -22,20 +22,76 @@ const karla = Karla({
 
 export const metadata: Metadata = {
   title: {
-    default: APP_CONFIG.name,
-    template: `%s | ${APP_CONFIG.name}`,
+    default: 'Dr. Melanie Kollmann Miletic - Frauenheilkunde & Geburtshilfe in Linz',
+    template: `%s | Dr. Melanie Kollmann Miletic`,
   },
-  description: APP_CONFIG.description,
-  keywords: ['Next.js', 'React', 'TypeScript', 'Storyblok', 'CMS'],
-  authors: [{ name: 'Storyblok CMS' }],
+  description:
+    'Willkommen in Ihrer Ordination für Frauenheilkunde & Geburtshilfe in Linz. Dr. Melanie Kollmann Miletic bietet umfassende gynäkologische Betreuung, Schwangerschaftsvorsorge und Geburtshilfe in moderner, vertrauensvoller Atmosphäre.',
+  keywords: [
+    'Gynäkologe Linz',
+    'Frauenarzt Linz',
+    'Geburtshilfe Linz',
+    'Schwangerschaftsvorsorge Linz',
+    'Frauenheilkunde Linz',
+    'Dr. Melanie Kollmann Miletic',
+    'Gynäkologie Oberösterreich',
+    'Frauenarztpraxis Linz',
+    'Gynäkologe Linz Zentrum',
+    'Schwangerschaftsbetreuung Linz',
+    'Geburtsvorbereitung Linz',
+    'Vorsorgeuntersuchung Frauen',
+  ],
+  authors: [{ name: 'Dr. Melanie Kollmann Miletic' }],
+  creator: 'Dr. Melanie Kollmann Miletic',
+  publisher: 'Dr. Melanie Kollmann Miletic',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: '/icons/favicons/favicon.ico' },
+      { url: '/icons/favicons/icon1.png', type: 'image/png' },
+      { url: '/icons/favicons/icon0.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/icons/favicons/apple-icon.png',
+  },
+  manifest: '/icons/favicons/manifest.json',
   openGraph: {
     type: 'website',
     locale: 'de_AT',
     url: APP_CONFIG.domain,
-    title: APP_CONFIG.name,
-    description: APP_CONFIG.description,
-    siteName: APP_CONFIG.name,
+    title: 'Dr. Melanie Kollmann Miletic - Frauenheilkunde & Geburtshilfe in Linz',
+    description:
+      'Willkommen in Ihrer Ordination für Frauenheilkunde & Geburtshilfe in Linz. Umfassende gynäkologische Betreuung, Schwangerschaftsvorsorge und Geburtshilfe.',
+    siteName: 'Dr. Melanie Kollmann Miletic',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Dr. Melanie Kollmann Miletic - Frauenheilkunde & Geburtshilfe Linz',
+      },
+    ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Dr. Melanie Kollmann Miletic - Frauenheilkunde & Geburtshilfe in Linz',
+    description:
+      'Willkommen in Ihrer Ordination für Frauenheilkunde & Geburtshilfe in Linz.',
+    images: ['/og-image.png'],
+  },
+  alternates: {
+    canonical: APP_CONFIG.domain,
+  },
+  category: 'Medizin',
 };
 
 export default function RootLayout({
@@ -44,7 +100,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${karla.variable} font-sans`}>
+    <html lang="de" suppressHydrationWarning className={`${karla.variable} font-sans`}>
       <body className={cn('min-h-screen bg-background font-karla antialiased')}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
