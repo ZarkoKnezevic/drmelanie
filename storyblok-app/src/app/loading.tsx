@@ -1,9 +1,17 @@
+import { LottieAnimation } from '@/components/ui/components/lottie-animation';
+import { getLottiePath } from '@/lib/lottie/animations';
+
 export default function Loading() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="space-y-4 text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto" />
-        <p className="text-muted-foreground">Loading...</p>
+    <div
+      data-loading
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-background transition-opacity duration-300 ease-in-out opacity-100"
+    >
+      <div className="w-64 h-64">
+        <LottieAnimation
+          src={getLottiePath('stork')}
+          className="w-full h-full"
+        />
       </div>
     </div>
   );

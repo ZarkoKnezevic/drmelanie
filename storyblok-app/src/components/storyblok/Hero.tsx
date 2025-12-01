@@ -1,6 +1,7 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
 import * as motion from 'motion/react-client';
+import { BannerAnimated } from './banner-animated';
 import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
@@ -45,38 +46,32 @@ export default function Hero({ blok }: HeroProps) {
           />
           {/* Mobile Logo - Top Left on Image */}
           {blok.logo?.filename && (
-            <div className="absolute top-10 left-4 z-20">
-              <div className="relative h-48 w-48">
-                {/* Background blob image with grow-in animation */}
-                <motion.div
-                  className="blob absolute inset-0"
-                  style={{
-                    backgroundImage: 'url(/blob.png)',
-                    backgroundSize: 'contain',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'right top',
-                  }}
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.6, ease: 'easeOut' }}
-                />
-                {/* Logo at full opacity, appears slightly after blob */}
-                <motion.div
-                  className="absolute inset-0"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.2, ease: 'easeOut' }}
-                >
-                  <Image
-                    src={blok.logo.filename}
-                    alt={blok.logo.alt || 'Logo'}
-                    fill
-                    className="object-contain relative z-10"
-                    priority
+            <BannerAnimated delay={0} animationType="scale" immediate>
+              <div className="absolute top-10 left-4 z-20">
+                <div className="relative h-48 w-48">
+                  {/* Background blob image */}
+                  <div
+                    className="blob absolute inset-0"
+                    style={{
+                      backgroundImage: 'url(/blob.png)',
+                      backgroundSize: 'contain',
+                      backgroundRepeat: 'no-repeat',
+                      backgroundPosition: 'right top',
+                    }}
                   />
-                </motion.div>
+                  {/* Logo */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={blok.logo.filename}
+                      alt={blok.logo.alt || 'Logo'}
+                      fill
+                      className="object-contain relative z-10"
+                      priority
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
+            </BannerAnimated>
           )}
         </div>
       )}
@@ -91,31 +86,25 @@ export default function Hero({ blok }: HeroProps) {
           <div className="w-full md:w-1/2 lg:w-[40%] space-y-0 md:space-y-16 lg:space-y-20">
             {/* Logo - Desktop only, animated */}
             {blok.logo?.filename && (
-              <motion.div
-                className="relative hidden md:block h-24 w-full md:h-40 lg:h-48 xxl:h-64"
-                initial={{ opacity: 0, x: -24, scale: 0.95 }}
-                animate={{ opacity: 1, x: 0, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-              >
-                <Image
-                  src={blok.logo.filename}
-                  alt={blok.logo.alt || 'Logo'}
-                  fill
-                  className="object-contain object-left"
-                  priority
-                />
-              </motion.div>
+              <BannerAnimated delay={100} animationType="fade-up" immediate>
+                <div className="relative hidden md:block h-24 w-full md:h-40 lg:h-48 xxl:h-64">
+                  <Image
+                    src={blok.logo.filename}
+                    alt={blok.logo.alt || 'Logo'}
+                    fill
+                    className="object-contain object-left"
+                    priority
+                  />
+                </div>
+              </BannerAnimated>
             )}
 
             {/* Headline with slide-down animation */}
-            <motion.h1
-              className="h1 sm:mt-0"
-              initial={{ opacity: 0, y: -24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.25, ease: 'easeOut' }}
-            >
-              {blok.headline}
-            </motion.h1>
+            <BannerAnimated delay={250} animationType="fade-up" immediate>
+              <h1 className="h1 sm:mt-0">
+                {blok.headline}
+              </h1>
+            </BannerAnimated>
           </div>
         </div>
       </div>

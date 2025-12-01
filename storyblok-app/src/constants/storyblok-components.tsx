@@ -9,7 +9,6 @@ import Grid from '@/components/storyblok/Grid';
 import Feature from '@/components/storyblok/Feature';
 import Hero from '@/components/storyblok/Hero';
 import Banner from '@/components/storyblok/Banner';
-import Button from '@/components/storyblok/Button';
 import Teaser from '@/components/storyblok/Teaser';
 import TextImage from '@/components/storyblok/TextImage';
 

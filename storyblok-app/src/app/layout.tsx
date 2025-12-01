@@ -4,8 +4,11 @@ import './globals.css';
 import StoryblokProvider from '@/components/StoryblokProvider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/components/toaster';
-import { SiteHeader } from '@/components/layout/site-header';
+import { ConditionalHeader } from '@/components/layout/conditional-header';
+import { InitialLoading } from '@/components/layout/initial-loading';
+import { PageTransition } from '@/components/layout/page-transition';
 import { SiteFooter } from '@/components/layout/site-footer';
+import { LoadingProvider } from '@/contexts/loading-context';
 import { TooltipProvider } from '@/components/ui/components/tooltip';
 import '@/lib/storyblok-init'; // Initialize Storyblok for server components
 import { APP_CONFIG } from '@/constants';
@@ -46,12 +49,17 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
             <StoryblokProvider>
-              <div className="relative flex min-h-screen flex-col">
-                <SiteHeader />
-                <main className="flex-1">{children}</main>
-                <SiteFooter />
-              </div>
-              <Toaster />
+              <LoadingProvider>
+                <InitialLoading />
+                <PageTransition>
+                  <div className="relative flex min-h-screen flex-col">
+                    <ConditionalHeader />
+                    <main className="flex-1">{children}</main>
+                    <SiteFooter />
+                  </div>
+                </PageTransition>
+                <Toaster />
+              </LoadingProvider>
             </StoryblokProvider>
           </TooltipProvider>
         </ThemeProvider>

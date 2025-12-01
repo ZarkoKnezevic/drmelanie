@@ -2,6 +2,9 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import Link from 'next/link';
 import * as motion from 'motion/react-client';
 import { Button } from '@/components/ui/components/button';
+import { LottieAnimation } from '@/components/ui/components/lottie-animation';
+import { BannerAnimated } from './banner-animated';
+import { getLottiePath } from '@/lib/lottie/animations';
 import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
 import { prepareLinkProps } from '@/lib/adapters/prepareLinkProps';
 import type { StoryblokBlok } from '@/types';
@@ -56,34 +59,30 @@ export default function Banner({ blok }: BannerProps) {
             {/* Topline and Headline */}
             <div className="flex flex-col">
               {blok.topline && (
-                <motion.p
-                  className={cn('text-body font-bold', textColorClass)}
-                  initial={{ opacity: 0, y: -16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
-                >
-                  {blok.topline}
-                </motion.p>
+                <BannerAnimated delay={100} animationType="fade-up">
+                  <p className={cn('text-body font-bold', textColorClass)}>
+                    {blok.topline}
+                  </p>
+                </BannerAnimated>
               )}
 
-              <motion.h1
-                className={cn('h1', textColorClass)}
-                initial={{ opacity: 0, y: -24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.25, ease: 'easeOut' }}
-              >
-                {blok.headline}
-              </motion.h1>
+              <BannerAnimated delay={250} animationType="fade-up">
+                <h1 className={cn('h1', textColorClass)}>
+                  {blok.headline}
+                </h1>
+              </BannerAnimated>
+
+              {/* Lottie Animation */}
+              <BannerAnimated delay={400} animationType="scale">
+                <div className="w-48 h-48 mt-4">
+                  <LottieAnimation src={getLottiePath('stork')} className="w-full h-full" />
+                </div>
+              </BannerAnimated>
             </div>
 
             {/* Button */}
             {buttonBlok && (
-              <motion.div
-                className="flex items-start"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.4, ease: 'easeOut' }}
-              >
+              <BannerAnimated delay={400} animationType="fade-down">
                 {buttonHref ? (
                   <Button asChild variant={buttonVariant}>
                     <Link href={buttonHref}>
@@ -95,7 +94,7 @@ export default function Banner({ blok }: BannerProps) {
                     {buttonText}
                   </Button>
                 )}
-              </motion.div>
+              </BannerAnimated>
             )}
           </div>
         </div>

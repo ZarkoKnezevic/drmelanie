@@ -1,7 +1,6 @@
-'use client';
-
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
+import * as motion from 'motion/react-client';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
 import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
@@ -48,20 +47,32 @@ export default function TextImage({ blok }: TextImageProps) {
         >
           {/* Text Content */}
           {blok.text && (
-            <div className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert', textColorClass)}>
+            <motion.div
+              className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert', textColorClass)}
+              initial={{ opacity: 0, y: -24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
               {renderRichText(blok.text)}
-            </div>
+            </motion.div>
           )}
 
           {/* Image */}
           {(blok.image?.filename || blok.image?.asset?.filename) && (
-            <div className="relative aspect-[2/1] w-full flex-1 overflow-hidden">
+            <motion.div
+              className="relative aspect-[2/1] w-full flex-1 overflow-hidden"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+            >
               <Image
                 {...prepareImageProps(blok.image)}
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
-            </div>
+            </motion.div>
           )}
         </div>
       </div>
