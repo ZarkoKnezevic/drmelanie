@@ -24,7 +24,7 @@ export default {
       md: '600px',
       lg: '1024px',
       xl: '1280px',
-      xxl: '1540px',
+      xxl: '1720px',
     },
     container: {
       center: true,

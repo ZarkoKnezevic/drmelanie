@@ -39,7 +39,7 @@ export default function TextImage({ blok }: TextImageProps) {
         backgroundClass
       )}
     >
-      <div className="container mx-auto px-6 py-12 md:py-16 lg:py-20">
+      <div className="container spacing">
         <div
           className={cn(
             'flex flex-col gap-8 md:flex-row md:gap-12 lg:gap-16',
