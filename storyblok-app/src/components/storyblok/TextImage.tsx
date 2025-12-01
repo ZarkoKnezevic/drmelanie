@@ -34,7 +34,7 @@ export default function TextImage({ blok }: TextImageProps) {
     <section
       {...storyblokEditable(blok)}
       className={cn(
-        'text-image',
+        'text-image relative',
         hasTornEdges && 'torn-edge torn-edge-top torn-edge-bottom mb-4',
         backgroundClass
       )}
