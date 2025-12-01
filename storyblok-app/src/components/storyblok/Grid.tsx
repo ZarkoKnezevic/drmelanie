@@ -65,36 +65,38 @@ export default function Grid({ blok }: GridProps) {
   if (!items || items.length === 0) {
     if (process.env.NODE_ENV === 'development') {
       return (
-        <div
+        <section
           {...storyblokEditable(blok)}
-          className={cn(
-            `grid ${gridCols} ${gapClass} container mx-auto px-6 py-12 border-2 border-dashed border-gray-300`,
-            backgroundClass
-          )}
+          className={cn('grid-section', backgroundClass)}
         >
-          <div className="col-span-full text-center text-gray-500 py-8">
-            ⚠️ Grid component has no items to display. Add items in Storyblok.
-            <br />
-            <span className="text-xs">Checked: items, columns, columns_content, content</span>
+          <div className="container mx-auto px-6 py-12">
+            <div className={cn(`grid ${gridCols} ${gapClass} border-2 border-dashed border-gray-300`)}>
+              <div className="col-span-full text-center text-gray-500 py-8">
+                ⚠️ Grid component has no items to display. Add items in Storyblok.
+                <br />
+                <span className="text-xs">Checked: items, columns, columns_content, content</span>
+              </div>
+            </div>
           </div>
-        </div>
+        </section>
       );
     }
     return null;
   }
 
   return (
-    <div
+    <section
       {...storyblokEditable(blok)}
-      className={cn(
-        `grid ${gridCols} ${gapClass} container mx-auto px-6 py-12`,
-        backgroundClass
-      )}
+      className={cn('grid-section', backgroundClass)}
     >
-      {items.map((nestedBlok: StoryblokBlok) => (
-        <StoryblokServerComponent blok={nestedBlok} key={nestedBlok._uid} />
-      ))}
-    </div>
+      <div className="container mx-auto px-6 py-12">
+        <div className={cn(`grid ${gridCols} ${gapClass}`)}>
+          {items.map((nestedBlok: StoryblokBlok) => (
+            <StoryblokServerComponent blok={nestedBlok} key={nestedBlok._uid} />
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 

@@ -28,11 +28,12 @@ export default {
     },
     container: {
       center: true,
-      padding: '2rem',
+      padding: '1.5rem',
+      screens: {}, // Disable responsive max-widths based on breakpoints
     },
     extend: {
       maxWidth: {
-        container: '104rem', //1664px
+        container: '104rem', // 1664px - single max-width for all breakpoints
       },
       keyframes: {
         'accordion-down': {

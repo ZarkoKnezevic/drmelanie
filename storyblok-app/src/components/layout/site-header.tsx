@@ -1,21 +1,15 @@
-import Link from 'next/link';
-import { ModeToggle } from '@/components/mode-toggle';
-import { Button } from '@/components/ui/components/button';
+import { HeaderButton } from './header-button';
 
-export async function SiteHeader() {
+interface SiteHeaderProps {
+  ctaText?: string;
+  ctaLink?: string;
+}
+
+export function SiteHeader({ ctaText, ctaLink }: SiteHeaderProps) {
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="container flex h-16 items-center space-x-4 sm:justify-between sm:space-x-0">
-        <div className="flex gap-6 md:gap-10">
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="inline-block font-bold text-secondary">Dr Melanie Kollmann Miletic</span>
-          </Link>
-        </div>
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-1">
-            <ModeToggle />
-          </nav>
-        </div>
+    <header className="absolute top-0 z-50 w-full bg-transparent">
+      <div className="container flex h-16 lg:h-24 xl:h-32 items-center justify-end">
+        <HeaderButton ctaText="Termin Buchen" ctaLink="/termin_buchen" />
       </div>
     </header>
   );

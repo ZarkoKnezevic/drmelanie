@@ -18,13 +18,17 @@
     @apply bg-background text-foreground text-body-sm md:text-body-md lg:text-body-lg;
   }
 
+  .container {
+    @apply mx-auto px-4 md:px-6 lg:px-8 xl:px-10 max-w-container;
+  }
+
   p {
     @apply text-body-sm md:text-body-md lg:text-body-lg;
     font-weight: var(--font-weight-body);
   }
 
   .button {
-    @apply text-body-sm md:text-body-md lg:text-body-lg;
+    @apply text-body-sm;
     font-weight: var(--font-weight-medium);
   }
 

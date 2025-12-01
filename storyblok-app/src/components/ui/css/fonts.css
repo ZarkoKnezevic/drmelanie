@@ -4,13 +4,13 @@
 
     /* Font Sizes - Responsive */
     /* Body font sizes */
-    --font-size-base-sm: 14px;
-    --font-size-base-md: 14px;
-    --font-size-base-lg: 18px;
+    --font-size-base-sm: 16px;
+    --font-size-base-md: 20px;
+    --font-size-base-lg: 24px;
 
-    --line-height-base-sm: 18px;
-    --line-height-base-md: 18px;
-    --line-height-base-lg: 24px;
+    --line-height-base-sm: 22px;
+    --line-height-base-md: 27px;
+    --line-height-base-lg: 33px;
 
     /* Heading font sizes - Starting from 56px for h1-lg, gradually decreasing */
     --font-size-h1-sm: 36px;

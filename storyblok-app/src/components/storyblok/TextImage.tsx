@@ -20,6 +20,7 @@ interface TextImageProps {
     };
     image_position?: string;
     background?: string;
+    torn_paper_edges?: boolean;
   };
 }
 
@@ -27,36 +28,42 @@ export default function TextImage({ blok }: TextImageProps) {
   const imageOnLeft = blok.image_position?.toLowerCase() === 'left';
   const backgroundClass = getBackgroundClass(blok.background);
   const textColorClass = getTextColorClass(blok.background);
+  const hasTornEdges = blok.torn_paper_edges === true;
 
   return (
     <section
       {...storyblokEditable(blok)}
       className={cn(
-        'container mx-auto px-6 py-12 md:py-16 lg:py-20',
+        'text-image',
+        hasTornEdges && 'torn-edge torn-edge-top torn-edge-bottom mb-4',
         backgroundClass
       )}
     >
-      <div
-        className={`flex flex-col gap-8 md:flex-row md:gap-12 lg:gap-16 ${imageOnLeft ? 'md:flex-row-reverse' : ''
-          }`}
-      >
-        {/* Text Content */}
-        {blok.text && (
-          <div className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert', textColorClass)}>
-            {renderRichText(blok.text)}
-          </div>
-        )}
+      <div className="container mx-auto px-6 py-12 md:py-16 lg:py-20">
+        <div
+          className={cn(
+            'flex flex-col gap-8 md:flex-row md:gap-12 lg:gap-16',
+            imageOnLeft && 'md:flex-row-reverse'
+          )}
+        >
+          {/* Text Content */}
+          {blok.text && (
+            <div className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert', textColorClass)}>
+              {renderRichText(blok.text)}
+            </div>
+          )}
 
-        {/* Image */}
-        {(blok.image?.filename || blok.image?.asset?.filename) && (
-          <div className="relative aspect-[2/1] w-full flex-1 overflow-hidden">
-            <Image
-              {...prepareImageProps(blok.image)}
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </div>
-        )}
+          {/* Image */}
+          {(blok.image?.filename || blok.image?.asset?.filename) && (
+            <div className="relative aspect-[2/1] w-full flex-1 overflow-hidden">
+              <Image
+                {...prepareImageProps(blok.image)}
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );
