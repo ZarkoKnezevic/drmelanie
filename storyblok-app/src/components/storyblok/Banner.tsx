@@ -1,10 +1,7 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Link from 'next/link';
-import * as motion from 'motion/react-client';
 import { Button } from '@/components/ui/components/button';
-import { LottieAnimation } from '@/components/ui/components/lottie-animation';
 import { BannerAnimated } from './banner-animated';
-import { getLottiePath } from '@/lib/lottie/animations';
 import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
 import { prepareLinkProps } from '@/lib/adapters/prepareLinkProps';
 import type { StoryblokBlok } from '@/types';
@@ -72,12 +69,7 @@ export default function Banner({ blok }: BannerProps) {
                 </h1>
               </BannerAnimated>
 
-              {/* Lottie Animation */}
-              <BannerAnimated delay={400} animationType="scale">
-                <div className="w-48 h-48 mt-4">
-                  <LottieAnimation src={getLottiePath('stork')} className="w-full h-full" />
-                </div>
-              </BannerAnimated>
+       
             </div>
 
             {/* Button */}

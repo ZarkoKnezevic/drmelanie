@@ -11,6 +11,7 @@ import Hero from '@/components/storyblok/Hero';
 import Banner from '@/components/storyblok/Banner';
 import Teaser from '@/components/storyblok/Teaser';
 import TextImage from '@/components/storyblok/TextImage';
+import ImageGallery from '@/components/storyblok/ImageGallery';
 
 // Register components with multiple name variations to handle case differences
 export const COMPONENTS = {
@@ -22,6 +23,10 @@ export const COMPONENTS = {
   banner: Banner,
   teaser: Teaser,
   'text_image': TextImage,
+  'image_gallery': ImageGallery,
+  'image_galery': ImageGallery, // Handle typo variation
+  imageGallery: ImageGallery,
+  imageGalery: ImageGallery, // Handle typo variation
   // Capitalized (in case Storyblok sends it this way)
   Page: Page,
   Grid: Grid,
@@ -30,5 +35,7 @@ export const COMPONENTS = {
   Banner: Banner,
   Teaser: Teaser,
   TextImage: TextImage,
+  ImageGallery: ImageGallery,
+  ImageGalery: ImageGallery, // Handle typo variation
 } as const;
 
