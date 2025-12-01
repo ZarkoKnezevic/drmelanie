@@ -1,8 +1,6 @@
-'use client';
-
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
-import { motion } from 'motion/react';
+import * as motion from 'motion/react-client';
 import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
@@ -30,7 +28,7 @@ export default function Hero({ blok }: HeroProps) {
     <section
       {...storyblokEditable(blok)}
       className={cn(
-        'hero relative flex flex-col overflow-hidden md:min-h-[80vh] md:flex-row',
+        'hero relative flex flex-col overflow-hidden md:min-h-[60vh] lg:min-h-[80vh] md:flex-row',
         backgroundClass || 'bg-background'
       )}
     >
@@ -85,11 +83,11 @@ export default function Hero({ blok }: HeroProps) {
 
       {/* Left Section - Logo and Headline (with container) */}
       <div className={cn(
-        'relative z-10 flex flex-1 flex-col items-center justify-center py-12 md:py-0',
+        'relative z-10 flex flex-1 flex-col items-center justify-center pt-8 pb-12 md:pt-0 md:pb-0',
         'torn-edge torn-edge-top md:torn-edge-top-none',
         backgroundClass || 'bg-background'
       )}>
-        <div className="container">
+        <div className="container md:py-12 lg:py-20">
           <div className="w-full md:w-1/2 lg:w-[40%] space-y-0 md:space-y-16 lg:space-y-20">
             {/* Logo - Desktop only, animated */}
             {blok.logo?.filename && (
