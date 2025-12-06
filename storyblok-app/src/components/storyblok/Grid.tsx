@@ -387,21 +387,14 @@ export default function Grid({ blok }: GridProps) {
                       transform: 'rotateY(180deg)',
                       backgroundColor: cardBackground,
                       borderRadius: '24px',
-                      border: '4px solid',
-                      borderColor:
-                        index === 0
-                          ? 'rgba(255, 255, 255, 0.9)'
-                          : index === 1
-                            ? 'rgba(123, 202, 202, 0.6)'
-                            : 'rgba(208, 180, 197, 0.6)',
+                      border: 'none',
                       boxShadow:
                         index === 0
-                          ? '0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8)'
+                          ? '0 0 20px rgba(156, 163, 175, 0.4), 0 0 40px rgba(156, 163, 175, 0.2), 0 0 60px rgba(156, 163, 175, 0.1), 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)'
                           : index === 1
-                            ? '0 8px 24px rgba(123, 202, 202, 0.3), 0 4px 12px rgba(123, 202, 202, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
-                            : '0 8px 24px rgba(208, 180, 197, 0.3), 0 4px 12px rgba(208, 180, 197, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
-                      transition:
-                        'border-radius 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
+                            ? '0 0 20px rgba(0, 206, 209, 0.4), 0 0 40px rgba(64, 224, 208, 0.2), 0 0 60px rgba(0, 206, 209, 0.1), 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
+                            : '0 0 20px rgba(255, 105, 180, 0.4), 0 0 40px rgba(255, 20, 147, 0.2), 0 0 60px rgba(255, 105, 180, 0.1), 0 8px 24px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+                      transition: 'border-radius 0.3s ease, box-shadow 0.3s ease',
                     }}
                   >
                     <span

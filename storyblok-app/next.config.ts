@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
         hostname: '**.storyblok.com',
       },
     ],
+    qualities: [100, 75],
   },
   // Enable React strict mode
   reactStrictMode: true,
