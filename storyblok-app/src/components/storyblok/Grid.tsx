@@ -106,7 +106,9 @@ export default function Grid({ blok }: GridProps) {
 
   // Initialize GSAP ScrollTrigger animations
   useEffect(() => {
-    if (!isMounted || typeof window === 'undefined' || !isDesktop || items.length === 0) {
+    if (!isMounted || typeof window === 'undefined') return;
+
+    if (!isDesktop || items.length === 0) {
       // Cleanup if conditions not met
       if (scrollTriggerRef.current) {
         scrollTriggerRef.current.kill();
@@ -308,7 +310,8 @@ export default function Grid({ blok }: GridProps) {
         <section
           ref={stickyRef}
           {...storyblokEditable(blok)}
-          className={cn('sticky-section relative hidden min-h-[80vh] lg:block', backgroundClass)}
+          className={cn('sticky-section relative hidden lg:block', backgroundClass)}
+          style={{ minHeight: '80vh' }}
         >
           {/* Sticky Header */}
           {blok.title && (
@@ -323,7 +326,7 @@ export default function Grid({ blok }: GridProps) {
           {/* Card Container */}
           <div
             ref={cardContainerRef}
-            className="card-container absolute left-1/2 top-0 flex h-[75vh] w-2/3 -translate-x-1/2 transform items-center justify-center gap-0"
+            className="card-container absolute left-1/2 top-0 flex h-screen w-2/3 -translate-x-1/2 transform items-center justify-center gap-0"
             style={{ perspective: '500px' }}
           >
             {items.slice(0, 3).map((item: StoryblokBlok, index: number) => {
@@ -334,10 +337,6 @@ export default function Grid({ blok }: GridProps) {
               const name = (item as any).name || '';
               const description = (item as any).description || '';
 
-              // Card backgrounds: white, #63cece, #9E7E91
-              const cardBackgrounds = ['#ffffff', '#63cece', '#9E7E91'];
-              const cardBackground = cardBackgrounds[index] || '#ffffff';
-
               return (
                 <div
                   key={item._uid || index}
@@ -346,21 +345,6 @@ export default function Grid({ blok }: GridProps) {
                     transformStyle: 'preserve-3d',
                     aspectRatio: '1',
                     width: '100%',
-                    backgroundColor: cardBackground,
-                    borderRadius: '16px',
-                    boxShadow:
-                      index === 0
-                        ? '0 8px 24px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9), inset 0 -2px 8px rgba(0, 0, 0, 0.06)'
-                        : index === 1
-                          ? '0 8px 24px rgba(99, 206, 206, 0.35), 0 4px 12px rgba(99, 206, 206, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -2px 8px rgba(70, 180, 180, 0.2)'
-                          : '0 8px 24px rgba(158, 126, 145, 0.35), 0 4px 12px rgba(158, 126, 145, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6), inset 0 -2px 8px rgba(130, 100, 120, 0.2)',
-                    border:
-                      index === 0
-                        ? '1px solid rgba(255, 255, 255, 0.8)'
-                        : index === 1
-                          ? '1px solid rgba(255, 255, 255, 0.4)'
-                          : '1px solid rgba(255, 255, 255, 0.4)',
-                    overflow: 'hidden',
                   }}
                 >
                   {/* Card Front */}
@@ -369,14 +353,10 @@ export default function Grid({ blok }: GridProps) {
                     style={{
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
-                      borderRadius: '16px',
                     }}
                   >
                     {imageProps?.src ? (
-                      <div
-                        className="relative h-full w-full overflow-hidden"
-                        style={{ borderRadius: '16px' }}
-                      >
+                      <div className="relative h-full w-full">
                         <Image
                           src={imageProps.src}
                           alt={imageProps.alt || name}
@@ -395,13 +375,11 @@ export default function Grid({ blok }: GridProps) {
 
                   {/* Card Back */}
                   <div
-                    className="card-back absolute flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden p-8 text-center"
+                    className="card-back absolute flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden bg-white p-8 text-center"
                     style={{
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
-                      backgroundColor: cardBackground,
-                      borderRadius: '16px',
                     }}
                   >
                     <span className="text-2xl font-bold text-gray-400">
@@ -434,23 +412,16 @@ export default function Grid({ blok }: GridProps) {
           aria-hidden="true"
         >
           <div className="card-container absolute left-1/2 top-0 flex h-screen w-2/3 -translate-x-1/2 transform items-center justify-center gap-0">
-            {items.slice(0, 3).map((item: StoryblokBlok, index: number) => {
-              const cardBackgrounds = ['#ffffff', '#63cece', '#9E7E91'];
-              const cardBackground = cardBackgrounds[index] || '#ffffff';
-
-              return (
-                <div
-                  key={item._uid || index}
-                  className="relative flex-1"
-                  style={{
-                    aspectRatio: '1',
-                    width: '100%',
-                    backgroundColor: cardBackground,
-                    borderRadius: '16px',
-                  }}
-                />
-              );
-            })}
+            {items.slice(0, 3).map((item: StoryblokBlok, index: number) => (
+              <div
+                key={item._uid || index}
+                className="relative flex-1 bg-gray-200"
+                style={{
+                  aspectRatio: '1',
+                  width: '100%',
+                }}
+              />
+            ))}
           </div>
         </section>
       )}
