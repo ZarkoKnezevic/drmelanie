@@ -337,6 +337,10 @@ export default function Grid({ blok }: GridProps) {
               const name = (item as any).name || '';
               const description = (item as any).description || '';
 
+              // Card backgrounds for back side
+              const cardBackgrounds = ['#ffffff', '#7bcaca', '#d0b4c5'];
+              const cardBackground = cardBackgrounds[index] || '#ffffff';
+
               return (
                 <div
                   key={item._uid || index}
@@ -353,6 +357,7 @@ export default function Grid({ blok }: GridProps) {
                     style={{
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
+                      borderRadius: '0',
                     }}
                   >
                     {imageProps?.src ? (
@@ -375,14 +380,36 @@ export default function Grid({ blok }: GridProps) {
 
                   {/* Card Back */}
                   <div
-                    className="card-back absolute flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden bg-white p-8 text-center"
+                    className="card-back absolute flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden p-8 text-center"
                     style={{
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
                       transform: 'rotateY(180deg)',
+                      backgroundColor: cardBackground,
+                      borderRadius: '24px',
+                      border: '4px solid',
+                      borderColor:
+                        index === 0
+                          ? 'rgba(255, 255, 255, 0.9)'
+                          : index === 1
+                            ? 'rgba(123, 202, 202, 0.6)'
+                            : 'rgba(208, 180, 197, 0.6)',
+                      boxShadow:
+                        index === 0
+                          ? '0 8px 24px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8)'
+                          : index === 1
+                            ? '0 8px 24px rgba(123, 202, 202, 0.3), 0 4px 12px rgba(123, 202, 202, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)'
+                            : '0 8px 24px rgba(208, 180, 197, 0.3), 0 4px 12px rgba(208, 180, 197, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.6)',
+                      transition:
+                        'border-radius 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
                     }}
                   >
-                    <span className="text-2xl font-bold text-gray-400">
+                    <span
+                      className="text-2xl font-bold"
+                      style={{
+                        color: index === 0 ? '#9ca3af' : 'rgba(255, 255, 255, 0.8)',
+                      }}
+                    >
                       ({String(index + 1).padStart(2, '0')})
                     </span>
                     {logoProps?.src && (
@@ -396,8 +423,25 @@ export default function Grid({ blok }: GridProps) {
                         />
                       </div>
                     )}
-                    {name && <p className="text-2xl font-semibold text-gray-900">{name}</p>}
-                    {description && <p className="text-gray-600">{description}</p>}
+                    {name && (
+                      <p
+                        className="text-2xl font-semibold"
+                        style={{
+                          color: index === 0 ? '#111827' : '#ffffff',
+                        }}
+                      >
+                        {name}
+                      </p>
+                    )}
+                    {description && (
+                      <p
+                        style={{
+                          color: index === 0 ? '#4b5563' : 'rgba(255, 255, 255, 0.9)',
+                        }}
+                      >
+                        {description}
+                      </p>
+                    )}
                   </div>
                 </div>
               );
