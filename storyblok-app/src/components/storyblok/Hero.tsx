@@ -29,7 +29,7 @@ export default function Hero({ blok }: HeroProps) {
     <section
       {...storyblokEditable(blok)}
       className={cn(
-        'hero relative flex flex-col overflow-hidden md:min-h-[60vh] lg:min-h-[80vh] md:flex-row',
+        'hero relative flex flex-col overflow-hidden md:min-h-[60vh] md:flex-row lg:min-h-[80vh]',
         backgroundClass || 'bg-background'
       )}
     >
@@ -40,15 +40,15 @@ export default function Hero({ blok }: HeroProps) {
             src={blok.image.filename}
             alt={blok.image.alt || blok.headline}
             fill
-            className="object-cover"
+            className="object-cover object-left md:object-center"
             priority
             sizes="100vw"
           />
           {/* Mobile Logo - Top Left on Image */}
           {blok.logo?.filename && (
             <BannerAnimated delay={0} animationType="scale" immediate>
-              <div className="absolute top-10 left-4 z-20">
-                <div className="relative h-48 w-48">
+              <div className="absolute left-4 top-10 z-20">
+                <div className="relative h-40 w-40">
                   {/* Background blob image */}
                   <div
                     className="blob absolute inset-0"
@@ -65,7 +65,7 @@ export default function Hero({ blok }: HeroProps) {
                       src={blok.logo.filename}
                       alt={blok.logo.alt || 'Logo'}
                       fill
-                      className="object-contain relative z-10"
+                      className="relative z-10 object-contain"
                       priority
                     />
                   </div>
@@ -77,17 +77,19 @@ export default function Hero({ blok }: HeroProps) {
       )}
 
       {/* Left Section - Logo and Headline (with container) */}
-      <div className={cn(
-        'relative z-10 flex flex-1 flex-col items-center justify-center pt-8 pb-12 md:pt-0 md:pb-0',
-        'torn-edge torn-edge-top md:torn-edge-top-none',
-        backgroundClass || 'bg-background'
-      )}>
+      <div
+        className={cn(
+          'relative z-10 flex flex-1 flex-col items-center justify-center pb-12 pt-8 md:pb-0 md:pt-0',
+          'torn-edge torn-edge-top md:torn-edge-top-none',
+          backgroundClass || 'bg-background'
+        )}
+      >
         <div className="container md:py-12 lg:py-20">
-          <div className="w-full md:w-1/2 lg:w-[40%] space-y-0 md:space-y-16 lg:space-y-20">
+          <div className="w-full space-y-0 md:w-1/2 md:space-y-16 lg:w-[40%] lg:space-y-20">
             {/* Logo - Desktop only, animated */}
             {blok.logo?.filename && (
               <BannerAnimated delay={100} animationType="fade-up" immediate>
-                <div className="relative hidden md:block h-24 w-full md:h-40 lg:h-48 xxl:h-64">
+                <div className="relative hidden h-24 w-full md:block md:h-40 lg:h-48 xxl:h-64">
                   <Image
                     src={blok.logo.filename}
                     alt={blok.logo.alt || 'Logo'}
@@ -101,9 +103,7 @@ export default function Hero({ blok }: HeroProps) {
 
             {/* Headline with slide-down animation */}
             <BannerAnimated delay={250} animationType="fade-up" immediate>
-              <h1 className="h1 sm:mt-0">
-                {blok.headline}
-              </h1>
+              <h1 className="h1 sm:mt-0">{blok.headline}</h1>
             </BannerAnimated>
           </div>
         </div>
@@ -111,8 +111,8 @@ export default function Hero({ blok }: HeroProps) {
 
       {/* Right Section - Image (extends to edge, desktop only - flex-row) */}
       {blok.image?.filename && (
-        <div className="absolute right-0 top-0 hidden h-full w-[50%] md:block z-10">
-          <div className="relative h-full w-full torn-edge torn-edge-right-reverse">
+        <div className="absolute right-0 top-0 z-10 hidden h-full w-[50%] md:block">
+          <div className="torn-edge torn-edge-right-reverse relative h-full w-full">
             <Image
               src={blok.image.filename}
               alt={blok.image.alt || blok.headline}
@@ -127,4 +127,3 @@ export default function Hero({ blok }: HeroProps) {
     </section>
   );
 }
-

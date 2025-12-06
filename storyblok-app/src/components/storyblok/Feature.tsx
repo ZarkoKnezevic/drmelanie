@@ -1,41 +1,75 @@
 'use client';
 
 import { storyblokEditable } from '@storyblok/react/rsc';
+import Image from 'next/image';
+import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
 import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
+interface StoryblokImageAsset {
+  filename?: string;
+  alt?: string;
+  asset?: {
+    filename?: string;
+    alt?: string;
+  };
+}
+
 interface FeatureProps {
   blok: StoryblokBlok & {
-    name: string;
+    name?: string;
     description?: string;
-    icon?: string;
+    image?: StoryblokImageAsset;
+    logo?: StoryblokImageAsset;
     background?: string;
   };
 }
 
 export default function Feature({ blok }: FeatureProps) {
   const backgroundClass = getBackgroundClass(blok.background);
+  const imageProps = blok.image ? prepareImageProps(blok.image) : null;
+  const logoProps = blok.logo ? prepareImageProps(blok.logo) : null;
 
   return (
     <div
       {...storyblokEditable(blok)}
       className={cn(
-        'flex flex-col items-center rounded-lg p-6 text-center dark:bg-gray-800',
+        'flex flex-col items-center overflow-hidden rounded-lg dark:bg-gray-800',
         backgroundClass || 'bg-gray-50'
       )}
     >
-      {blok.icon && (
-        <div className="mb-4 text-4xl" role="img" aria-label={blok.name}>
-          {blok.icon}
+      {imageProps?.src && (
+        <div
+          className="relative mb-4 aspect-[16/9] w-full overflow-hidden"
+          role="img"
+          aria-label={blok.name}
+        >
+          <Image
+            src={imageProps.src}
+            alt={imageProps.alt || blok.name || 'Feature image'}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
         </div>
       )}
-      <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">
-        {blok.name}
-      </h3>
-      {blok.description && (
-        <p className="text-gray-600 dark:text-gray-300">{blok.description}</p>
-      )}
+      <div className="flex w-full flex-col items-center p-6 text-center">
+        {logoProps?.src && (
+          <div className="relative mb-4 h-12 w-12" role="img" aria-label={blok.name}>
+            <Image
+              src={logoProps.src}
+              alt={logoProps.alt || blok.name || 'Feature logo'}
+              fill
+              className="object-contain"
+              sizes="48px"
+            />
+          </div>
+        )}
+        {blok.name && (
+          <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">{blok.name}</h3>
+        )}
+        {blok.description && <p className="text-gray-600 dark:text-gray-300">{blok.description}</p>}
+      </div>
     </div>
   );
 }
-
