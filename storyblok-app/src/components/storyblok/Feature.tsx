@@ -20,7 +20,7 @@ interface FeatureProps {
     name?: string;
     description?: string;
     image?: StoryblokImageAsset;
-    logo?: StoryblokImageAsset;
+    icon?: StoryblokImageAsset;
     background?: string;
   };
 }
@@ -28,7 +28,7 @@ interface FeatureProps {
 export default function Feature({ blok }: FeatureProps) {
   const backgroundClass = getBackgroundClass(blok.background);
   const imageProps = blok.image ? prepareImageProps(blok.image) : null;
-  const logoProps = blok.logo ? prepareImageProps(blok.logo) : null;
+  const iconProps = blok.icon ? prepareImageProps(blok.icon) : null;
 
   return (
     <div
@@ -54,17 +54,6 @@ export default function Feature({ blok }: FeatureProps) {
         </div>
       )}
       <div className="flex w-full flex-col items-center p-6 text-center">
-        {logoProps?.src && (
-          <div className="relative mb-4 h-12 w-12" role="img" aria-label={blok.name}>
-            <Image
-              src={logoProps.src}
-              alt={logoProps.alt || blok.name || 'Feature logo'}
-              fill
-              className="object-contain"
-              sizes="48px"
-            />
-          </div>
-        )}
         {blok.name && (
           <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">{blok.name}</h3>
         )}

@@ -22,7 +22,7 @@ export default {
     screens: {
       sm: '390px',
       md: '600px',
-      lg: '1024px',
+      lg: '1025px',
       xl: '1280px',
       xxl: '1720px',
     },
@@ -53,4 +53,3 @@ export default {
   },
   plugins: [require('tailwindcss-animate')],
 } satisfies Config;
-

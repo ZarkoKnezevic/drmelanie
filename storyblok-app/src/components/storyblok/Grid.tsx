@@ -139,6 +139,11 @@ export default function Grid({ blok }: GridProps) {
       const cardElements = stickyRef.current.querySelectorAll('.feature-card');
       const headerElement = stickyHeaderRef.current;
 
+      // Set initial gap to 0 to ensure no spacing between cards
+      if (cardContainerRef.current) {
+        gsap.set(cardContainerRef.current, { gap: '0px' });
+      }
+
       const scrollTrigger = ScrollTrigger.create({
         trigger: stickyRef.current,
         start: 'top top',
@@ -326,14 +331,14 @@ export default function Grid({ blok }: GridProps) {
           {/* Card Container */}
           <div
             ref={cardContainerRef}
-            className="card-container absolute left-1/2 top-0 flex h-screen w-2/3 -translate-x-1/2 transform items-center justify-center gap-0"
-            style={{ perspective: '500px' }}
+            className="card-container absolute left-1/2 top-0 flex h-screen w-2/3 -translate-x-1/2 transform items-center justify-center"
+            style={{ perspective: '500px', gap: 0, margin: 0, padding: 0 }}
           >
             {items.slice(0, 3).map((item: StoryblokBlok, index: number) => {
               const imageAsset = (item as any).image;
-              const logoAsset = (item as any).logo;
+              const iconAsset = (item as any).icon;
               const imageProps = imageAsset ? prepareImageProps(imageAsset) : null;
-              const logoProps = logoAsset ? prepareImageProps(logoAsset) : null;
+              const iconProps = iconAsset ? prepareImageProps(iconAsset) : null;
               const name = (item as any).name || '';
               const description = (item as any).description || '';
 
@@ -349,6 +354,9 @@ export default function Grid({ blok }: GridProps) {
                     transformStyle: 'preserve-3d',
                     aspectRatio: '1',
                     width: '100%',
+                    margin: '0',
+                    marginLeft: index > 0 ? '-1px' : '0',
+                    padding: '0',
                   }}
                 >
                   {/* Card Front */}
@@ -358,10 +366,13 @@ export default function Grid({ blok }: GridProps) {
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
                       borderRadius: '0',
+                      margin: '0',
+                      padding: '0',
+                      outline: 'none',
                     }}
                   >
                     {imageProps?.src ? (
-                      <div className="relative h-full w-full">
+                      <div className="relative h-full w-full" style={{ margin: '0', padding: '0' }}>
                         <Image
                           src={imageProps.src}
                           alt={imageProps.alt || name}
@@ -369,6 +380,7 @@ export default function Grid({ blok }: GridProps) {
                           className="object-cover"
                           sizes="(min-width: 1000px) 33vw, 100vw"
                           quality={100}
+                          style={{ display: 'block', margin: '0', padding: '0', outline: 'none' }}
                         />
                       </div>
                     ) : (
@@ -397,19 +409,11 @@ export default function Grid({ blok }: GridProps) {
                       transition: 'border-radius 0.3s ease, box-shadow 0.3s ease',
                     }}
                   >
-                    <span
-                      className="text-2xl font-bold"
-                      style={{
-                        color: index === 0 ? '#9ca3af' : 'rgba(255, 255, 255, 0.8)',
-                      }}
-                    >
-                      ({String(index + 1).padStart(2, '0')})
-                    </span>
-                    {logoProps?.src && (
+                    {iconProps?.src && (
                       <div className="relative h-16 w-16">
                         <Image
-                          src={logoProps.src}
-                          alt={logoProps.alt || name}
+                          src={iconProps.src}
+                          alt={iconProps.alt || name}
                           fill
                           className="object-contain"
                           sizes="64px"
