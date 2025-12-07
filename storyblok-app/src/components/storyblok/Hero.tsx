@@ -40,7 +40,7 @@ export default function Hero({ blok }: HeroProps) {
             src={blok.image.filename}
             alt={blok.image.alt || blok.headline}
             fill
-            className="object-cover object-left md:object-center"
+            className="object-cover object-center md:object-center"
             priority
             sizes="100vw"
           />

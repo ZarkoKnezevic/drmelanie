@@ -415,16 +415,16 @@ export default function Grid({ blok }: GridProps) {
                           src={iconProps.src}
                           alt={iconProps.alt || name}
                           fill
-                          className="object-contain"
+                          className="shrink-0 object-contain"
                           sizes="64px"
                         />
                       </div>
                     )}
                     {name && (
                       <p
-                        className="text-2xl font-semibold"
+                        className="text-body-md font-semibold"
                         style={{
-                          color: index === 0 ? '#111827' : '#ffffff',
+                          color: index === 0 ? '#8A6D7B' : '#ffffff',
                         }}
                       >
                         {name}
@@ -432,8 +432,9 @@ export default function Grid({ blok }: GridProps) {
                     )}
                     {description && (
                       <p
+                        className="text-body-sm"
                         style={{
-                          color: index === 0 ? '#4b5563' : 'rgba(255, 255, 255, 0.9)',
+                          color: index === 0 ? '#8A6D7B' : 'rgba(255, 255, 255, 0.9)',
                         }}
                       >
                         {description}
@@ -456,7 +457,7 @@ export default function Grid({ blok }: GridProps) {
             {items.slice(0, 3).map((item: StoryblokBlok, index: number) => (
               <div
                 key={item._uid || index}
-                className="relative flex-1 bg-gray-200"
+                className="relative flex-1 bg-white"
                 style={{
                   aspectRatio: '1',
                   width: '100%',
@@ -477,7 +478,7 @@ export default function Grid({ blok }: GridProps) {
             <h2 className="mb-12 text-3xl font-bold md:text-4xl">{blok.title}</h2>
           </div>
         )}
-        <div className="container mx-auto px-6 pb-12">
+        <div className="spacing container mx-auto px-6 pb-12">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {items.map((item: StoryblokBlok) => {
               // Render Feature components directly since Grid is a client component

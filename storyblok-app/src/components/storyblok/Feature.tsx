@@ -34,8 +34,8 @@ export default function Feature({ blok }: FeatureProps) {
     <div
       {...storyblokEditable(blok)}
       className={cn(
-        'flex flex-col items-center overflow-hidden rounded-lg dark:bg-gray-800',
-        backgroundClass || 'bg-gray-50'
+        'flex flex-col items-center overflow-hidden rounded-lg',
+        backgroundClass || 'bg-white'
       )}
     >
       {imageProps?.src && (
@@ -54,10 +54,8 @@ export default function Feature({ blok }: FeatureProps) {
         </div>
       )}
       <div className="flex w-full flex-col items-center p-6 text-center">
-        {blok.name && (
-          <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-white">{blok.name}</h3>
-        )}
-        {blok.description && <p className="text-gray-600 dark:text-gray-300">{blok.description}</p>}
+        {blok.name && <h3 className="text-mauve mb-2 text-xl font-semibold">{blok.name}</h3>}
+        {blok.description && <p className="text-mauve">{blok.description}</p>}
       </div>
     </div>
   );
