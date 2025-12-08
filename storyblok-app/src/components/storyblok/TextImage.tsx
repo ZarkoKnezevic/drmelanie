@@ -38,7 +38,7 @@ export default function TextImage({ blok }: TextImageProps) {
         backgroundClass
       )}
     >
-      <div className="container spacing">
+      <div className="spacing container">
         <div
           className={cn(
             'flex flex-col gap-8 md:flex-row md:gap-12 lg:gap-16',
@@ -48,7 +48,10 @@ export default function TextImage({ blok }: TextImageProps) {
           {/* Text Content */}
           {blok.text && (
             <motion.div
-              className={cn('flex-1 prose prose-lg max-w-none dark:prose-invert', textColorClass)}
+              className={cn(
+                'prose prose-lg dark:prose-invert flex max-w-none flex-1 flex-col items-start justify-center',
+                textColorClass
+              )}
               initial={{ opacity: 0, y: -24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
@@ -79,4 +82,3 @@ export default function TextImage({ blok }: TextImageProps) {
     </section>
   );
 }
-
