@@ -4,10 +4,11 @@ import './globals.css';
 import StoryblokProvider from '@/components/StoryblokProvider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/components/toaster';
-import { ConditionalHeader } from '@/components/layout/conditional-header';
+import { Suspense } from 'react';
+import { ConditionalHeaderWrapper } from '@/components/layout/conditional-header-wrapper';
+import { GlobalFooter } from '@/components/layout/global-footer';
 import { InitialLoading } from '@/components/layout/initial-loading';
 import { PageTransition } from '@/components/layout/page-transition';
-import { SiteFooter } from '@/components/layout/site-footer';
 import { LoadingProvider } from '@/contexts/loading-context';
 import { TooltipProvider } from '@/components/ui/components/tooltip';
 import '@/lib/storyblok-init'; // Initialize Storyblok for server components
@@ -109,9 +110,13 @@ export default function RootLayout({
                 <InitialLoading />
                 <PageTransition>
                   <div className="relative flex min-h-screen flex-col">
-                    <ConditionalHeader />
+                    <Suspense fallback={<div className="h-16 lg:h-24 xl:h-32" />}>
+                      <ConditionalHeaderWrapper />
+                    </Suspense>
                     <main className="flex-1">{children}</main>
-                    <SiteFooter />
+                    <Suspense fallback={<footer className="border-t bg-background h-24" />}>
+                      <GlobalFooter />
+                    </Suspense>
                   </div>
                 </PageTransition>
                 <Toaster />
