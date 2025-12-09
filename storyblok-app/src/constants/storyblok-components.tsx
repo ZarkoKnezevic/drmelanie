@@ -7,6 +7,8 @@
 import Page from '@/components/storyblok/Page';
 import Grid from '@/components/storyblok/Grid';
 import Feature from '@/components/storyblok/Feature';
+import Service from '@/components/storyblok/Service';
+import Services from '@/components/storyblok/Services';
 import Hero from '@/components/storyblok/Hero';
 import Banner from '@/components/storyblok/Banner';
 import Teaser from '@/components/storyblok/Teaser';
@@ -20,6 +22,8 @@ export const COMPONENTS = {
   page: Page,
   grid: Grid,
   feature: Feature,
+  service: Service,
+  services: Services,
   hero: Hero,
   banner: Banner,
   teaser: Teaser,
@@ -34,6 +38,8 @@ export const COMPONENTS = {
   Page: Page,
   Grid: Grid,
   Feature: Feature,
+  Service: Service,
+  Services: Services,
   Hero: Hero,
   Banner: Banner,
   Teaser: Teaser,
