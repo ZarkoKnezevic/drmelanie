@@ -40,6 +40,7 @@ const tailwindColorPreset: Partial<Config> = {
             hover: colorPreset.button.quaternary.hover,
           },
         },
+        darkGray: colorPreset.darkGray,
         foreground: 'var(--foreground)',
         primary: colorPreset.primary,
         secondary: colorPreset.secondary,
@@ -61,4 +62,3 @@ const tailwindColorPreset: Partial<Config> = {
 };
 
 export default tailwindColorPreset;
-

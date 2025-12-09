@@ -12,6 +12,7 @@ interface FooterProps {
     practice?: string;
     address?: string;
     postal_code?: number | string;
+    city?: string;
     email?: string | { linktype?: 'story' | 'url' | 'email'; url?: string; cached_url?: string };
     phone?: string;
     navigation?: string[]; // Multi-option field with page paths/slugs
@@ -33,26 +34,27 @@ export default function Footer({ blok }: FooterProps) {
   const mapImageProps = blok.map_image ? prepareImageProps(blok.map_image) : null;
 
   // Get email link and display text
-  let emailHref = '#';
+  let emailHref = '';
   let emailDisplay = '';
   if (blok.email) {
     if (typeof blok.email === 'string') {
-      emailHref = blok.email.startsWith('mailto:') ? blok.email : `mailto:${blok.email}`;
       emailDisplay = blok.email.replace('mailto:', '');
+      emailHref = `mailto:${emailDisplay}`;
     } else {
       // Extract email from link object
-      const emailUrl = blok.email.url || blok.email.cached_url || '';
-      emailDisplay = emailUrl.replace('mailto:', '');
-      emailHref = emailUrl.startsWith('mailto:') ? emailUrl : `mailto:${emailUrl}`;
+      let emailAddress = '';
 
-      // Fallback to prepareLinkProps if needed
-      if (!emailUrl) {
-        const linkProps = prepareLinkProps({
-          link: blok.email,
-          text: '',
-        });
-        emailHref = linkProps.href !== '#' ? linkProps.href : '#';
-        emailDisplay = emailHref.replace('mailto:', '');
+      if (blok.email.linktype === 'email' && blok.email.url) {
+        emailAddress = blok.email.url;
+      } else if (blok.email.url) {
+        emailAddress = blok.email.url.replace('mailto:', '');
+      } else if (blok.email.cached_url) {
+        emailAddress = blok.email.cached_url.replace('mailto:', '');
+      }
+
+      if (emailAddress) {
+        emailDisplay = emailAddress.replace('mailto:', '');
+        emailHref = `mailto:${emailDisplay}`;
       }
     }
   }
@@ -77,27 +79,30 @@ export default function Footer({ blok }: FooterProps) {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {/* Contact Information */}
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col">
             <h3
               className={cn('text-center text-body-md font-semibold md:text-left', textColorClass)}
             >
               Kontaktieren Sie mich
             </h3>
-            {blok.name && <p className={cn('text-body-sm', textColorClass)}>{blok.name}</p>}
-            {blok.practice && <p className={cn('text-body-sm', textColorClass)}>{blok.practice}</p>}
+            {blok.name && <p className="text-body-sm text-darkGray">{blok.name}</p>}
+            {blok.practice && <p className="text-body-sm text-darkGray">{blok.practice}</p>}
             {(blok.address || blok.postal_code) && (
-              <p className={cn('text-body-sm', textColorClass)}>
-                {blok.address}
-                {blok.address && blok.postal_code && ' '}
+              <p className="text-body-sm text-darkGray">{blok.address}</p>
+            )}
+            {(blok.city || blok.postal_code) && (
+              <p className="text-body-sm text-darkGray">
                 {blok.postal_code}
+                {blok.postal_code && blok.city && ' '}
+                {blok.city}
               </p>
             )}
             {blok.email && emailDisplay && (
-              <a href={emailHref} className={cn('text-body-sm hover:underline', textColorClass)}>
+              <a href={emailHref} className="mt-5 text-body-sm text-darkGray hover:underline">
                 {emailDisplay}
               </a>
             )}
-            {blok.phone && <p className={cn('text-body-sm', textColorClass)}>{blok.phone}</p>}
+            {blok.phone && <p className="text-body-sm text-darkGray">{blok.phone}</p>}
           </div>
 
           {/* Navigation */}
@@ -141,10 +146,7 @@ export default function Footer({ blok }: FooterProps) {
 
                   return (
                     <li key={index}>
-                      <Link
-                        href={href}
-                        className={cn('text-body-sm hover:underline', textColorClass)}
-                      >
+                      <Link href={href} className="text-body-md text-darkGray hover:underline">
                         {displayLabel}
                       </Link>
                     </li>
