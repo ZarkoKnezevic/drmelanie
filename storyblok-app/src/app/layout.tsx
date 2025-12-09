@@ -85,8 +85,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Dr. Melanie Kollmann Miletic - Frauenheilkunde & Geburtshilfe in Linz',
-    description:
-      'Willkommen in Ihrer Ordination für Frauenheilkunde & Geburtshilfe in Linz.',
+    description: 'Willkommen in Ihrer Ordination für Frauenheilkunde & Geburtshilfe in Linz.',
     images: ['/og-image.png'],
   },
   alternates: {
@@ -114,7 +113,7 @@ export default function RootLayout({
                       <ConditionalHeaderWrapper />
                     </Suspense>
                     <main className="flex-1">{children}</main>
-                    <Suspense fallback={<footer className="border-t bg-background h-24" />}>
+                    <Suspense fallback={<footer className="h-24 border-t bg-background" />}>
                       <GlobalFooter />
                     </Suspense>
                   </div>
@@ -128,4 +127,3 @@ export default function RootLayout({
     </html>
   );
 }
-
