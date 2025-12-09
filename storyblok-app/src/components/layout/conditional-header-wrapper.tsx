@@ -1,11 +1,12 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { PathnameHeader } from './pathname-header';
 
-export function ConditionalHeaderWrapper() {
-  const pathname = usePathname();
+interface ConditionalHeaderWrapperProps {
+  children: React.ReactNode;
+}
+
+export function ConditionalHeaderWrapper({ children }: ConditionalHeaderWrapperProps) {
   const [shouldHide, setShouldHide] = useState(false);
 
   useEffect(() => {
@@ -33,12 +34,13 @@ export function ConditionalHeaderWrapper() {
     }
 
     return () => observer.disconnect();
-  }, [pathname]);
+  }, []);
 
   if (shouldHide) {
     return null;
   }
 
-  return <PathnameHeader />;
+  // Render children (Server Component) passed from parent
+  return <>{children}</>;
 }
 

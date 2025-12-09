@@ -81,7 +81,10 @@ export default function Footer({ blok }: FooterProps) {
           {/* Contact Information */}
           <div className="flex flex-col">
             <h3
-              className={cn('text-center text-body-md font-semibold md:text-left', textColorClass)}
+              className={cn(
+                'mb-5text-center text-body-md font-semibold md:text-left',
+                textColorClass
+              )}
             >
               Kontaktieren Sie mich
             </h3>
@@ -107,16 +110,22 @@ export default function Footer({ blok }: FooterProps) {
 
           {/* Navigation */}
           {blok.navigation && blok.navigation.length > 0 && (
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col">
               <h3
                 className={cn(
-                  'text-center text-body-md font-semibold md:text-left',
+                  'mb-5 text-center text-body-md font-semibold md:text-left',
                   textColorClass
                 )}
               >
                 Schnellzugriff
               </h3>
               <ul className="flex flex-col gap-2">
+                {/* Add "Startseite" as first item */}
+                <li>
+                  <Link href="/" className="text-body-md text-darkGray hover:underline">
+                    Startseite
+                  </Link>
+                </li>
                 {blok.navigation.map((slug, index) => {
                   // Map field names to display labels
                   const fieldNameToLabel: Record<string, string> = {
@@ -161,7 +170,7 @@ export default function Footer({ blok }: FooterProps) {
             <div className="flex flex-col gap-4">
               <h3
                 className={cn(
-                  'text-center text-body-md font-semibold md:text-left',
+                  'mb-5 text-center text-body-md font-semibold md:text-left',
                   textColorClass
                 )}
               >

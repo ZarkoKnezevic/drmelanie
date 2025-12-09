@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/components/toaster';
 import { Suspense } from 'react';
 import { ConditionalHeaderWrapper } from '@/components/layout/conditional-header-wrapper';
+import { HeaderServerWrapper } from '@/components/layout/header-server-wrapper';
 import { GlobalFooter } from '@/components/layout/global-footer';
 import { InitialLoading } from '@/components/layout/initial-loading';
 import { PageTransition } from '@/components/layout/page-transition';
@@ -110,7 +111,9 @@ export default function RootLayout({
                 <PageTransition>
                   <div className="relative flex min-h-screen flex-col">
                     <Suspense fallback={<div className="h-16 lg:h-24 xl:h-32" />}>
-                      <ConditionalHeaderWrapper />
+                      <ConditionalHeaderWrapper>
+                        <HeaderServerWrapper />
+                      </ConditionalHeaderWrapper>
                     </Suspense>
                     <main className="flex-1">{children}</main>
                     <Suspense fallback={<footer className="h-24 border-t bg-background" />}>
