@@ -1,5 +1,6 @@
 import { storyblokEditable, StoryblokServerComponent } from '@storyblok/react/rsc';
 import Link from 'next/link';
+import * as motion from 'motion/react-client';
 import { Button } from '@/components/ui/components/button';
 import { prepareLinkProps } from '@/lib/adapters/prepareLinkProps';
 import { cn, getBackgroundClass } from '@/utils';
@@ -78,8 +79,20 @@ export default function Services({ blok }: ServicesProps) {
       <div className="spacing container">
         {/* Services Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {services.map((service: StoryblokBlok) => (
-            <StoryblokServerComponent key={service._uid} blok={service} />
+          {services.map((service: StoryblokBlok, index: number) => (
+            <motion.div
+              key={service._uid}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.1,
+                ease: 'easeOut',
+              }}
+            >
+              <StoryblokServerComponent blok={service} />
+            </motion.div>
           ))}
         </div>
 
