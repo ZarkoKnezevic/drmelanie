@@ -2,9 +2,13 @@ import { MetadataRoute } from 'next';
 import { fetchStories } from '@/lib/storyblok';
 import { env } from '@/utils';
 
+// Enable static generation with ISR - revalidate every hour
+export const revalidate = 3600;
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
-    const { data } = await fetchStories(env.storyblok.version, {
+    // Always use 'published' for sitemap - sitemaps should only include published content
+    const { data } = await fetchStories('published', {
       per_page: 100,
     });
 

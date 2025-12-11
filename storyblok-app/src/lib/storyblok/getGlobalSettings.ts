@@ -4,14 +4,20 @@ import { env, logger } from '@/utils';
 /**
  * Fetch global settings from Storyblok
  * Looks for a story with slug "settings" or "global" and component type "settings"
+ * 
+ * In production, always uses 'published' version to allow static generation.
+ * In development, uses the configured version (usually 'draft').
  */
 export async function getGlobalSettings() {
   try {
+    // Use 'published' in production for static generation, otherwise use configured version
+    const version = env.isProduction ? 'published' : env.storyblok.version;
+    
     // Try "settings" first, then "global"
     const slugs = ['settings', 'global'];
 
     for (const slug of slugs) {
-      const { data } = await fetchStory(env.storyblok.version, [slug]);
+      const { data } = await fetchStory(version, [slug]);
 
       if (data?.story?.content) {
         const content = data.story.content as {
