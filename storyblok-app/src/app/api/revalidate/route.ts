@@ -19,8 +19,8 @@ export async function POST(request: Request) {
   console.log('full_slug', data.full_slug);
   console.log('correctSlug', correctSlug);
 
-  revalidateTag(SB_CACHE_VERSION_TAG);
-  revalidatePath(correctSlug);
+  revalidateTag(SB_CACHE_VERSION_TAG, 'page');
+  revalidatePath(correctSlug, 'page');
 
   if (correctSlug.startsWith('/components/')) {
     const response = await fetch(process.env.VERCEL_REDEPLOY_HOOK_URL!, {
