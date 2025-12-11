@@ -14,6 +14,9 @@ export function InitialLoading() {
   const MIN_DISPLAY_TIME = 2500; // Minimum 2.5 seconds to see the animation
 
   useEffect(() => {
+    let animationReady = false;
+    let pageLoaded = false;
+
     // Hide loading once React has hydrated and page is ready
     const hideLoading = () => {
       const elapsed = Date.now() - startTime;
@@ -31,22 +34,50 @@ export function InitialLoading() {
       }, remainingTime);
     };
 
-    if (typeof window !== 'undefined') {
-      if (document.readyState === 'complete') {
-        // Page already loaded, wait for minimum display time
+    const checkReady = () => {
+      // Wait for both page load and animation ready
+      if (pageLoaded && animationReady) {
         hideLoading();
+      }
+    };
+
+    // Listen for animation ready event
+    const handleAnimationReady = () => {
+      animationReady = true;
+      checkReady();
+    };
+
+    if (typeof window !== 'undefined') {
+      // Listen for animation ready event
+      window.addEventListener('hero-animation-ready', handleAnimationReady, { once: true });
+
+      if (document.readyState === 'complete') {
+        // Page already loaded
+        pageLoaded = true;
+        checkReady();
       } else {
         // Wait for page load event
-        window.addEventListener('load', hideLoading, { once: true });
-        // Safety timeout to prevent stuck loading (max 5 seconds)
-        const timeout = setTimeout(hideLoading, 5000);
+        const handlePageLoad = () => {
+          pageLoaded = true;
+          checkReady();
+        };
+        window.addEventListener('load', handlePageLoad, { once: true });
+        
+        // Safety timeout to prevent stuck loading (max 8 seconds)
+        const timeout = setTimeout(() => {
+          pageLoaded = true;
+          animationReady = true; // Force ready if timeout
+          hideLoading();
+        }, 8000);
+        
         return () => {
-          window.removeEventListener('load', hideLoading);
+          window.removeEventListener('load', handlePageLoad);
+          window.removeEventListener('hero-animation-ready', handleAnimationReady);
           clearTimeout(timeout);
         };
       }
     }
-  }, [startTime]);
+  }, [startTime, setInitialLoadingComplete]);
 
   if (!isLoading) {
     return null;

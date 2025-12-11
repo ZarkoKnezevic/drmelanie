@@ -6,6 +6,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
 import Image from 'next/image';
 
+// Custom event to signal animation is ready
+const ANIMATION_READY_EVENT = 'hero-animation-ready';
+
 interface HeroMediaVideoProps {
   src?: string;
   frameCount?: number;
@@ -83,25 +86,32 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     const currentFrame = (index: number) =>
       `/frames/frame_${(index + 1).toString().padStart(4, '0')}.png`;
 
-    // MOBILE: Only load the last frame
+    // MOBILE: Only load the first frame
     if (currentIsMobile) {
       const loadedImages: HTMLImageElement[] = new Array(frameCount).fill(null);
-      const lastFrameIndex = frameCount - 1;
 
       const img = document.createElement('img');
       img.onload = () => {
         if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-          loadedImages[lastFrameIndex] = img;
+          loadedImages[0] = img;
           imagesRef.current = loadedImages;
           setImages(loadedImages);
           setImagesLoaded(true);
+          // Signal animation is ready (first frame loaded)
+          if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
+          }
         }
       };
       img.onerror = () => {
-        console.error(`Failed to load last frame: ${currentFrame(lastFrameIndex)}`);
+        console.error(`Failed to load first frame: ${currentFrame(0)}`);
         setImagesLoaded(true); // Still mark as loaded to avoid infinite waiting
+        // Signal animation is ready even on error (to prevent stuck loading)
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
+        }
       };
-      img.src = currentFrame(lastFrameIndex);
+      img.src = currentFrame(0);
       return;
     }
 
@@ -152,6 +162,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         try {
           ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
           videoFramesRef.current.frame = 0;
+          // Don't signal here - wait for ScrollTrigger to be ready on desktop
         } catch (error) {
           console.error('Error drawing first frame:', error);
         }
@@ -181,6 +192,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       if (index === 0 && !firstFrameRendered) {
         imagesRef.current = [...loadedImages];
         renderFirstFrame();
+        // Don't signal ready here - wait for renderFirstFrame to complete
       }
 
       // When all requested frames are loaded
@@ -424,7 +436,11 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     setTimeout(() => {
       setupScrollTrigger();
       ScrollTrigger.refresh();
-    }, 100);
+      // Signal animation is fully ready (first frame rendered + ScrollTrigger initialized)
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
+      }
+    }, 150); // Slightly longer delay to ensure ScrollTrigger is fully initialized
 
     const handleResize = () => {
       setCanvasSize();
@@ -444,14 +460,13 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted, imagesLoaded]); // Only run when images are loaded, don't depend on isMobile or frameCount
 
-  // Render last frame on mobile when images are loaded
+  // Render first frame on mobile when images are loaded
   useEffect(() => {
     if (!imagesLoaded || !isMobile || !canvasRef.current) return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const lastFrameIndex = frameCount - 1;
-    const img = imagesRef.current[lastFrameIndex] || images[lastFrameIndex];
+    const img = imagesRef.current[0] || images[0];
 
     if (ctx && img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
       const pixelRatio = window.devicePixelRatio || 1;
@@ -478,26 +493,26 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       }
 
       try {
-        videoFramesRef.current.frame = lastFrameIndex;
+        videoFramesRef.current.frame = 0;
         ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
       } catch (error) {
-        console.error('Error rendering last frame on mobile:', error);
+        console.error('Error rendering first frame on mobile:', error);
       }
     }
   }, [imagesLoaded, isMobile, frameCount, images]);
 
-  // On mobile, show last frame with dashboard on top
+  // On mobile, show first frame with heading on top
   if (isMobile) {
     return (
       <section ref={heroRef} className="hero relative h-screen w-full bg-background">
-        {/* Canvas with last frame */}
+        {/* Canvas with first frame */}
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
-        {/* Dashboard image on top */}
+        {/* Heading image on top */}
         <div className="spacing container relative z-10 h-full w-full py-12 md:py-16 lg:py-20">
           <Image
-            src="/dashboard.png"
-            alt="Dashboard"
+            src="/heading.png"
+            alt="Ursprung des Lebens"
             width={1920}
             height={1080}
             className="h-full w-full object-contain"
