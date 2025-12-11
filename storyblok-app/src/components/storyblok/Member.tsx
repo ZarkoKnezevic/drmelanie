@@ -48,7 +48,7 @@ export default function Member({ blok }: MemberProps) {
       {/* Text Content - Mobile: 1 col, Tablet: 1/2, LG+: 2/3 */}
       <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
         {blok.richtext && (
-          <div className="mb-4 max-w-none text-body-sm" style={{ color: '#2b2b2' }}>
+          <div className="mb-4 max-w-none text-body-sm" style={{ color: '#2b2b2b' }}>
             {renderRichText(blok.richtext)}
           </div>
         )}
