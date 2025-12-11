@@ -51,14 +51,15 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       gsap.registerPlugin(ScrollTrigger);
 
       const lenis = new Lenis({
-        duration: 1.2,
+        duration: 1.0, // Reduced from 1.2 for better performance
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         orientation: 'vertical',
         gestureOrientation: 'vertical',
         smoothWheel: true,
-        wheelMultiplier: 1,
-        touchMultiplier: 2,
+        wheelMultiplier: 0.8, // Reduced from 1 for smoother interaction
+        touchMultiplier: 1.5, // Reduced from 2
         infinite: false,
+        syncTouch: false, // Disable touch sync for better performance
       });
 
       lenisRef.current = lenis;
@@ -74,7 +75,8 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       }
 
       requestAnimationFrame(raf);
-      gsap.ticker.lagSmoothing(0);
+      // Disable lag smoothing for better performance with ScrollTrigger
+      gsap.ticker.lagSmoothing(300, 33);
     };
 
     // Use requestIdleCallback if available, otherwise setTimeout
@@ -280,7 +282,6 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     // Start loading
     loadFirstFrame();
     loadRemainingFrames();
-     
   }, [isMounted, frameCount]);
 
   // Set canvas size and render (only for desktop)
@@ -289,8 +290,16 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     if (!isMounted || !canvasRef.current || !imagesLoaded || isMobile) return;
 
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d', {
+      alpha: false, // Disable alpha for better performance
+      desynchronized: true, // Allow async rendering
+      willReadFrequently: false, // Optimize for write operations
+    });
     if (!context) return;
+
+    // Optimize canvas rendering
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = 'high';
 
     const setCanvasSize = () => {
       const pixelRatio = window.devicePixelRatio || 1;
@@ -308,37 +317,51 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
 
     setCanvasSize();
 
+    // Use RAF for smooth rendering - prevents blocking scroll
+    let rafId: number | null = null;
+    let lastFrame = -1;
+
     const render = () => {
-      const canvasWidth = window.innerWidth;
-      const canvasHeight = window.innerHeight;
+      if (rafId !== null) return; // Already scheduled
 
-      // Clear canvas
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const canvasWidth = window.innerWidth;
+        const canvasHeight = window.innerHeight;
 
-      // Use imagesRef first, fallback to images state
-      const frameIndex = videoFramesRef.current.frame;
-      const img = imagesRef.current[frameIndex] || images[frameIndex];
+        // Use imagesRef first, fallback to images state
+        const frameIndex = videoFramesRef.current.frame;
 
-      // Check if image exists, is complete, and not broken
-      if (img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
-        // Cover strategy: scale to fill entire canvas completely (edge to edge, no gaps)
-        const scaleX = canvasWidth / img.naturalWidth;
-        const scaleY = canvasHeight / img.naturalHeight;
-        // Add small buffer (1%) to ensure image covers entire canvas with no gaps
-        const scale = Math.max(scaleX, scaleY) * 1.2;
+        // Skip if same frame
+        if (frameIndex === lastFrame) return;
+        lastFrame = frameIndex;
 
-        const drawWidth = img.naturalWidth * scale;
-        const drawHeight = img.naturalHeight * scale;
-        // Center the image - it will overflow on both axes to ensure full coverage
-        const drawX = (canvasWidth - drawWidth) / 2;
-        const drawY = (canvasHeight - drawHeight) / 2;
+        const img = imagesRef.current[frameIndex] || images[frameIndex];
 
-        try {
-          context.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-        } catch (error) {
-          console.error('Error drawing frame:', frameIndex, error);
+        // Check if image exists, is complete, and not broken
+        if (img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
+          // Clear canvas
+          context.clearRect(0, 0, canvasWidth, canvasHeight);
+
+          // Cover strategy: scale to fill entire canvas completely (edge to edge, no gaps)
+          const scaleX = canvasWidth / img.naturalWidth;
+          const scaleY = canvasHeight / img.naturalHeight;
+          // Add small buffer (1%) to ensure image covers entire canvas with no gaps
+          const scale = Math.max(scaleX, scaleY) * 1.2;
+
+          const drawWidth = img.naturalWidth * scale;
+          const drawHeight = img.naturalHeight * scale;
+          // Center the image - it will overflow on both axes to ensure full coverage
+          const drawX = (canvasWidth - drawWidth) / 2;
+          const drawY = (canvasHeight - drawHeight) / 2;
+
+          try {
+            context.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+          } catch (error) {
+            console.error('Error drawing frame:', frameIndex, error);
+          }
         }
-      }
+      });
     };
 
     // Setup ScrollTrigger - matches original example exactly
@@ -359,7 +382,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         end: `+=${window.innerHeight * 7}px`,
         pin: true,
         pinSpacing: true,
-        scrub: 1,
+        scrub: 0.5, // Reduce scrub value for smoother animation (was 1)
         anticipatePin: 1, // Prevent scroll jump by anticipating pin
         onUpdate: (self) => {
           const progress = self.progress;
@@ -399,8 +422,12 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
           // Frame animation (0-90%)
           const animationProgress = Math.min(progress / 0.9, 1);
           const targetFrame = Math.round(animationProgress * (frameCount - 1));
-          videoFramesRef.current.frame = targetFrame;
-          render();
+
+          // Only update if frame changed (prevents unnecessary renders)
+          if (videoFramesRef.current.frame !== targetFrame) {
+            videoFramesRef.current.frame = targetFrame;
+            render();
+          }
 
           // Hero image (dashboard) animation (60-100%)
           if (heroImg) {
@@ -485,16 +512,26 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     // Start checking after a short delay to allow frames to start loading
     setTimeout(setupAfterInitialFrames, 200);
 
+    // Throttle resize handler for performance
+    let resizeTimeout: NodeJS.Timeout;
     const handleResize = () => {
-      setCanvasSize();
-      render();
-      ScrollTrigger.refresh();
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setCanvasSize();
+        render();
+        ScrollTrigger.refresh();
+      }, 150); // Throttle to 150ms
     };
 
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+        rafId = null;
+      }
       if (scrollTriggerRef.current) {
         scrollTriggerRef.current.kill();
         scrollTriggerRef.current = null;
