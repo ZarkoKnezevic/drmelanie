@@ -360,6 +360,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         pin: true,
         pinSpacing: true,
         scrub: 1,
+        anticipatePin: 1, // Prevent scroll jump by anticipating pin
         onUpdate: (self) => {
           const progress = self.progress;
 
@@ -447,8 +448,30 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       const initialFramesReady = initialFramesLoadedRef.current >= 20;
 
       if (firstFrameReady && initialFramesReady) {
+        // Store current scroll position before ScrollTrigger setup
+        const scrollBeforeSetup =
+          window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+
         setupScrollTrigger();
         ScrollTrigger.refresh();
+
+        // Reset scroll to top after ScrollTrigger creates pin spacing (prevents jump)
+        requestAnimationFrame(() => {
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
+
+          // Also reset Lenis if it exists
+          if (typeof window !== 'undefined' && (window as any).__lenis__) {
+            (window as any).__lenis__.scrollTo(0, { immediate: true });
+          }
+
+          // Double-check after a frame
+          requestAnimationFrame(() => {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          });
+        });
+
         // Signal animation is fully ready (first 20 frames + ScrollTrigger initialized)
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
