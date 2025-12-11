@@ -31,16 +31,16 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
 
   useEffect(() => {
     setIsMounted(true);
-    // Detect mobile
+    // Detect mobile and tablet (treat tablets same as mobile)
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768); // md breakpoint
+      setIsMobile(window.innerWidth < 1024); // lg breakpoint - includes tablets
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Initialize Lenis smooth scroll (only on desktop)
+  // Initialize Lenis smooth scroll (only on desktop, not mobile/tablet)
   useEffect(() => {
     if (!isMounted || typeof window === 'undefined' || isMobile) return;
     if (lenisRef.current) return;
@@ -82,36 +82,17 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     if (!isMounted || imagesLoadingRef.current) return;
     imagesLoadingRef.current = true;
 
-    const currentIsMobile = window.innerWidth < 768;
+    const currentIsMobile = window.innerWidth < 1024; // lg breakpoint - includes tablets
     const currentFrame = (index: number) =>
       `/frames/frame_${(index + 1).toString().padStart(4, '0')}.png`;
 
-    // MOBILE: Only load the first frame
+    // MOBILE: Signal ready immediately (Next.js Image handles loading)
     if (currentIsMobile) {
-      const loadedImages: HTMLImageElement[] = new Array(frameCount).fill(null);
-
-      const img = document.createElement('img');
-      img.onload = () => {
-        if (img.naturalWidth > 0 && img.naturalHeight > 0) {
-          loadedImages[0] = img;
-          imagesRef.current = loadedImages;
-          setImages(loadedImages);
-          setImagesLoaded(true);
-          // Signal animation is ready (first frame loaded)
-          if (typeof window !== 'undefined') {
-            window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
-          }
-        }
-      };
-      img.onerror = () => {
-        console.error(`Failed to load first frame: ${currentFrame(0)}`);
-        setImagesLoaded(true); // Still mark as loaded to avoid infinite waiting
-        // Signal animation is ready even on error (to prevent stuck loading)
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
-        }
-      };
-      img.src = currentFrame(0);
+      setImagesLoaded(true);
+      // Signal animation is ready immediately for mobile
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
+      }
       return;
     }
 
@@ -320,7 +301,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         const scaleX = canvasWidth / img.naturalWidth;
         const scaleY = canvasHeight / img.naturalHeight;
         // Add small buffer (1%) to ensure image covers entire canvas with no gaps
-        const scale = Math.max(scaleX, scaleY) * 1.01;
+        const scale = Math.max(scaleX, scaleY) * 1.2;
 
         const drawWidth = img.naturalWidth * scale;
         const drawHeight = img.naturalHeight * scale;
@@ -463,49 +444,9 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMounted, imagesLoaded]); // Only run when images are loaded, don't depend on isMobile or frameCount
 
-  // Render first frame on mobile when images are loaded
-  useEffect(() => {
-    if (!imagesLoaded || !isMobile || !canvasRef.current) return;
+  // Mobile doesn't need canvas rendering - using Next.js Image component for better quality
 
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    const img = imagesRef.current[0] || images[0];
-
-    if (ctx && img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
-      const pixelRatio = window.devicePixelRatio || 1;
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      canvas.width = width * pixelRatio;
-      canvas.height = height * pixelRatio;
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-      canvas.style.margin = '0';
-      canvas.style.padding = '0';
-      canvas.style.display = 'block';
-      ctx.scale(pixelRatio, pixelRatio);
-
-      // Cover strategy: scale to fill entire canvas completely (edge to edge, no gaps)
-      const scaleX = window.innerWidth / img.naturalWidth;
-      const scaleY = window.innerHeight / img.naturalHeight;
-      // Add small buffer (1%) to ensure image covers entire canvas with no gaps
-      const scale = Math.max(scaleX, scaleY) * 1.25;
-
-      const drawWidth = img.naturalWidth * scale;
-      const drawHeight = img.naturalHeight * scale;
-      // Center the image - it will overflow on both axes to ensure full coverage
-      const drawX = (window.innerWidth - drawWidth) / 2;
-      const drawY = (window.innerHeight - drawHeight) / 2;
-
-      try {
-        videoFramesRef.current.frame = 0;
-        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-      } catch (error) {
-        console.error('Error rendering first frame on mobile:', error);
-      }
-    }
-  }, [imagesLoaded, isMobile, frameCount, images]);
-
-  // On mobile, show first frame with heading on top
+  // On mobile, show baby image with heading on top (use Next.js Image for better quality)
   if (isMobile) {
     return (
       <div
@@ -513,20 +454,19 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         className="hero relative h-screen w-screen overflow-hidden bg-background"
         style={{ margin: 0, padding: 0, left: 0, right: 0, width: '100vw', height: '100vh' }}
       >
-        {/* Canvas with first frame */}
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 h-full w-full"
-          style={{
-            margin: 0,
-            padding: 0,
-            display: 'block',
-            left: 0,
-            top: 0,
-            width: '100%',
-            height: '100%',
-          }}
-        />
+        {/* Mobile baby image - use Next.js Image for better quality */}
+        <div className="absolute inset-0 h-full w-full">
+          <Image
+            src="/mobile_baby.png"
+            alt="Baby"
+            fill
+            className="object-cover"
+            quality={100}
+            priority
+            unoptimized
+            sizes="100vw"
+          />
+        </div>
 
         {/* Heading image on top */}
         <div className="spacing container relative z-10 h-full w-full py-12 md:py-16 lg:py-20">
