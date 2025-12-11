@@ -19,6 +19,7 @@ import TextImage from '@/components/storyblok/TextImage';
 import ImageGallery from '@/components/storyblok/ImageGallery';
 import TwoImagesText from '@/components/storyblok/TwoImagesText';
 import HeroMedia from '@/components/storyblok/HeroMedia';
+import BabyGrowth from '@/components/storyblok/BabyGrowth';
 
 // Register components with multiple name variations to handle case differences
 export const COMPONENTS = {
@@ -41,6 +42,8 @@ export const COMPONENTS = {
   twoImagesText: TwoImagesText,
   'hero_media': HeroMedia,
   heroMedia: HeroMedia,
+  'baby_growth': BabyGrowth,
+  babyGrowth: BabyGrowth,
   imageGallery: ImageGallery,
   imageGalery: ImageGallery, // Handle typo variation
   // Capitalized (in case Storyblok sends it this way)
@@ -60,5 +63,6 @@ export const COMPONENTS = {
   ImageGalery: ImageGallery, // Handle typo variation
   TwoImagesText: TwoImagesText,
   HeroMedia: HeroMedia,
+  BabyGrowth: BabyGrowth,
 } as const;
 
