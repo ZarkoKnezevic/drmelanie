@@ -2,6 +2,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
 import { cn, getBackgroundClass } from '@/utils';
+import { HeroMediaVideo } from './HeroMediaVideo';
 import type { StoryblokBlok } from '@/types';
 
 interface HeroMediaProps {
@@ -18,6 +19,8 @@ interface HeroMediaProps {
     };
     // Boolean field to enable video from public folder
     video?: boolean;
+    // Number of frames for frame-based animation
+    frame_count?: number;
     background?: string;
   };
 }
@@ -25,23 +28,21 @@ interface HeroMediaProps {
 export default function HeroMedia({ blok }: HeroMediaProps) {
   const backgroundClass = getBackgroundClass(blok.background);
 
-  // Check if video boolean is enabled
+  // Check if video boolean is enabled (for frame-based animation)
   const useVideo = blok.video === true;
+  const frameCount = typeof blok.frame_count === 'number' ? blok.frame_count : 207;
 
-  // If video is enabled, use the public video file
+  // If video is enabled, use frame-based scroll animation
   if (useVideo) {
     return (
       <section
         {...storyblokEditable(blok)}
         className={cn(
-          'hero-media relative h-[60vh] w-full overflow-hidden lg:h-[90vh]',
+          'hero-media relative w-full overflow-hidden',
           backgroundClass || 'bg-background'
         )}
       >
-        <video autoPlay loop muted playsInline className="h-full w-full object-cover">
-          <source src="/videos/video.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        <HeroMediaVideo frameCount={frameCount} />
       </section>
     );
   }
