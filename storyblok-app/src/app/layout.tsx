@@ -104,7 +104,7 @@ export default function RootLayout({
   return (
     <html lang="de" suppressHydrationWarning className={`${karla.variable} font-sans`}>
       <body className={cn('min-h-screen bg-background font-karla antialiased')}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <TooltipProvider>
             <StoryblokProvider>
               <LoadingProvider>
