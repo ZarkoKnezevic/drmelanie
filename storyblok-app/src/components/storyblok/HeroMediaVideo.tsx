@@ -137,30 +137,29 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         }
 
         const pixelRatio = window.devicePixelRatio || 1;
-        canvas.width = window.innerWidth * pixelRatio;
-        canvas.height = window.innerHeight * pixelRatio;
-        canvas.style.width = window.innerWidth + 'px';
-        canvas.style.height = window.innerHeight + 'px';
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        canvas.width = width * pixelRatio;
+        canvas.height = height * pixelRatio;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        canvas.style.margin = '0';
+        canvas.style.padding = '0';
+        canvas.style.display = 'block';
         ctx.scale(pixelRatio, pixelRatio);
 
-        const imageAspect = img.naturalWidth / img.naturalHeight;
-        const canvasAspect = window.innerWidth / window.innerHeight;
+        // Cover strategy: scale to fill entire canvas completely (no gaps)
+        const scaleX = window.innerWidth / img.naturalWidth;
+        const scaleY = window.innerHeight / img.naturalHeight;
+        const scale = Math.max(scaleX, scaleY); // Use larger scale to ensure full coverage
 
-        let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
-        // Fill entire canvas - scale to cover (no black bars)
-        if (imageAspect > canvasAspect) {
-          // Image is wider - scale to height, crop sides
-          drawHeight = window.innerHeight;
-          drawWidth = drawHeight * imageAspect;
-          drawX = (window.innerWidth - drawWidth) / 2;
-          drawY = 0;
-        } else {
-          // Image is taller - scale to width, crop top/bottom
-          drawWidth = window.innerWidth;
-          drawHeight = drawWidth / imageAspect;
-          drawX = 0;
-          drawY = (window.innerHeight - drawHeight) / 2;
-        }
+        const drawWidth = img.naturalWidth * scale;
+        const drawHeight = img.naturalHeight * scale;
+        // Center the image - it will overflow on one axis to ensure full coverage
+        const drawX = (window.innerWidth - drawWidth) / 2;
+        const drawY = (window.innerHeight - drawHeight) / 2;
+
+        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
 
         try {
           ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
@@ -290,10 +289,15 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
 
     const setCanvasSize = () => {
       const pixelRatio = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * pixelRatio;
-      canvas.height = window.innerHeight * pixelRatio;
-      canvas.style.width = window.innerWidth + 'px';
-      canvas.style.height = window.innerHeight + 'px';
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = width * pixelRatio;
+      canvas.height = height * pixelRatio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      canvas.style.margin = '0';
+      canvas.style.padding = '0';
+      canvas.style.display = 'block';
       context.scale(pixelRatio, pixelRatio);
     };
 
@@ -303,6 +307,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       const canvasWidth = window.innerWidth;
       const canvasHeight = window.innerHeight;
 
+      // Clear canvas
       context.clearRect(0, 0, canvasWidth, canvasHeight);
 
       // Use imagesRef first, fallback to images state
@@ -311,24 +316,17 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
 
       // Check if image exists, is complete, and not broken
       if (img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
-        const imageAspect = img.naturalWidth / img.naturalHeight;
-        const canvasAspect = canvasWidth / canvasHeight;
+        // Cover strategy: scale to fill entire canvas completely (edge to edge, no gaps)
+        const scaleX = canvasWidth / img.naturalWidth;
+        const scaleY = canvasHeight / img.naturalHeight;
+        // Add small buffer (1%) to ensure image covers entire canvas with no gaps
+        const scale = Math.max(scaleX, scaleY) * 1.01;
 
-        let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
-        // Fill entire canvas - scale to cover (no black bars)
-        if (imageAspect > canvasAspect) {
-          // Image is wider - scale to height, crop sides
-          drawHeight = canvasHeight;
-          drawWidth = drawHeight * imageAspect;
-          drawX = (canvasWidth - drawWidth) / 2;
-          drawY = 0;
-        } else {
-          // Image is taller - scale to width, crop top/bottom
-          drawWidth = canvasWidth;
-          drawHeight = drawWidth / imageAspect;
-          drawX = 0;
-          drawY = (canvasHeight - drawHeight) / 2;
-        }
+        const drawWidth = img.naturalWidth * scale;
+        const drawHeight = img.naturalHeight * scale;
+        // Center the image - it will overflow on both axes to ensure full coverage
+        const drawX = (canvasWidth - drawWidth) / 2;
+        const drawY = (canvasHeight - drawHeight) / 2;
 
         try {
           context.drawImage(img, drawX, drawY, drawWidth, drawHeight);
@@ -475,30 +473,28 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
 
     if (ctx && img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0) {
       const pixelRatio = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * pixelRatio;
-      canvas.height = window.innerHeight * pixelRatio;
-      canvas.style.width = window.innerWidth + 'px';
-      canvas.style.height = window.innerHeight + 'px';
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      canvas.width = width * pixelRatio;
+      canvas.height = height * pixelRatio;
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+      canvas.style.margin = '0';
+      canvas.style.padding = '0';
+      canvas.style.display = 'block';
       ctx.scale(pixelRatio, pixelRatio);
 
-      const imageAspect = img.naturalWidth / img.naturalHeight;
-      const canvasAspect = window.innerWidth / window.innerHeight;
+      // Cover strategy: scale to fill entire canvas completely (edge to edge, no gaps)
+      const scaleX = window.innerWidth / img.naturalWidth;
+      const scaleY = window.innerHeight / img.naturalHeight;
+      // Add small buffer (1%) to ensure image covers entire canvas with no gaps
+      const scale = Math.max(scaleX, scaleY) * 1.25;
 
-      let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
-      // Fill entire canvas - scale to cover (no black bars)
-      if (imageAspect > canvasAspect) {
-        // Image is wider - scale to height, crop sides
-        drawHeight = window.innerHeight;
-        drawWidth = drawHeight * imageAspect;
-        drawX = (window.innerWidth - drawWidth) / 2;
-        drawY = 0;
-      } else {
-        // Image is taller - scale to width, crop top/bottom
-        drawWidth = window.innerWidth;
-        drawHeight = drawWidth / imageAspect;
-        drawX = 0;
-        drawY = (window.innerHeight - drawHeight) / 2;
-      }
+      const drawWidth = img.naturalWidth * scale;
+      const drawHeight = img.naturalHeight * scale;
+      // Center the image - it will overflow on both axes to ensure full coverage
+      const drawX = (window.innerWidth - drawWidth) / 2;
+      const drawY = (window.innerHeight - drawHeight) / 2;
 
       try {
         videoFramesRef.current.frame = 0;
@@ -512,9 +508,25 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
   // On mobile, show first frame with heading on top
   if (isMobile) {
     return (
-      <div ref={heroRef} className="hero relative h-screen w-full bg-background">
+      <div
+        ref={heroRef}
+        className="hero relative h-screen w-screen overflow-hidden bg-background"
+        style={{ margin: 0, padding: 0, left: 0, right: 0, width: '100vw', height: '100vh' }}
+      >
         {/* Canvas with first frame */}
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 h-full w-full"
+          style={{
+            margin: 0,
+            padding: 0,
+            display: 'block',
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+          }}
+        />
 
         {/* Heading image on top */}
         <div className="spacing container relative z-10 h-full w-full py-12 md:py-16 lg:py-20">
@@ -533,14 +545,30 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
   }
 
   return (
-    <div ref={heroRef} className="hero relative h-screen w-full bg-background">
+    <div
+      ref={heroRef}
+      className="hero relative h-screen w-screen overflow-hidden bg-background"
+      style={{ margin: 0, padding: 0, left: 0, right: 0, width: '100vw', height: '100vh' }}
+    >
       {/* Header element for 3D transform */}
       {/* <div className="header absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
         <h1 className="h1 text-center font-bold text-white">Three pillars with one purpose</h1>
       </div> */}
 
       {/* Canvas for frame animation - full screen */}
-      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full"
+        style={{
+          margin: 0,
+          padding: 0,
+          display: 'block',
+          left: 0,
+          top: 0,
+          width: '100%',
+          height: '100%',
+        }}
+      />
 
       {/* Dashboard image that appears at the end */}
       <div

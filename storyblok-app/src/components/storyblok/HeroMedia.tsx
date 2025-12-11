@@ -41,6 +41,7 @@ export default function HeroMedia({ blok }: HeroMediaProps) {
           'hero-media relative w-full overflow-hidden',
           backgroundClass || 'bg-background'
         )}
+        style={{ margin: 0, padding: 0 }}
       >
         <HeroMediaVideo frameCount={frameCount} />
       </section>
