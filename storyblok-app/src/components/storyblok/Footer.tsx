@@ -80,12 +80,7 @@ export default function Footer({ blok }: FooterProps) {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {/* Contact Information */}
           <div className="flex flex-col">
-            <h3
-              className={cn(
-                'mb-5text-center text-body-md font-semibold md:text-left',
-                textColorClass
-              )}
-            >
+            <h3 className={cn('mb-5 text-left text-body-md font-semibold', textColorClass)}>
               Kontaktieren Sie mich
             </h3>
             {blok.name && <p className="text-body-sm text-darkGray">{blok.name}</p>}
@@ -111,12 +106,7 @@ export default function Footer({ blok }: FooterProps) {
           {/* Navigation */}
           {blok.navigation && blok.navigation.length > 0 && (
             <div className="flex flex-col">
-              <h3
-                className={cn(
-                  'mb-5 text-center text-body-md font-semibold md:text-left',
-                  textColorClass
-                )}
-              >
+              <h3 className={cn('mb-5 text-left text-body-md font-semibold', textColorClass)}>
                 Schnellzugriff
               </h3>
               <ul className="flex flex-col gap-2">
@@ -168,12 +158,7 @@ export default function Footer({ blok }: FooterProps) {
           {/* Map */}
           {mapImageProps?.src && (
             <div className="flex flex-col gap-4">
-              <h3
-                className={cn(
-                  'mb-5 text-center text-body-md font-semibold md:text-left',
-                  textColorClass
-                )}
-              >
+              <h3 className={cn('mb-5 text-left text-body-md font-semibold', textColorClass)}>
                 Hier finden Sie uns
               </h3>
               {mapHref !== '#' ? (
@@ -185,7 +170,7 @@ export default function Footer({ blok }: FooterProps) {
                     src={mapImageProps.src}
                     alt={mapImageProps.alt || 'Map'}
                     fill
-                    className="object-contain object-center md:object-left"
+                    className="object-contain object-left"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </Link>
@@ -206,13 +191,8 @@ export default function Footer({ blok }: FooterProps) {
 
         {/* Copyright */}
         {blok.name && (
-          <div className="flex flex-col items-center justify-between gap-4 pt-8 md:flex-row">
-            <p
-              className={cn(
-                'text-center text-sm text-muted-foreground md:text-left',
-                textColorClass
-              )}
-            >
+          <div className="flex flex-col gap-4 pt-8 md:flex-row md:items-center md:justify-between">
+            <p className={cn('text-left text-sm text-muted-foreground', textColorClass)}>
               ©{new Date().getFullYear()} {blok.name}
             </p>
           </div>
