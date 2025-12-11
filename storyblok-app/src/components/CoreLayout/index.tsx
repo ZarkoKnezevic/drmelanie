@@ -14,11 +14,18 @@ export default async function CoreLayout({
   version,
   allResolvedLinks = [],
 }: ICoreLayoutProps) {
-  const { data } = await fetchStories(version, {
-    by_slugs: 'components/*',
-  });
+  let globalComponentsStories: StoryblokStory[] = [];
 
-  const globalComponentsStories = data?.stories || [];
+  try {
+    const { data } = await fetchStories(version, {
+      by_slugs: 'components/*',
+    });
+    globalComponentsStories = data?.stories || [];
+  } catch (error) {
+    // Log error but don't fail the page render
+    console.error('Error fetching global components:', error);
+    // Continue with empty array - page will still render
+  }
 
   return (
     <DataContextProvider
