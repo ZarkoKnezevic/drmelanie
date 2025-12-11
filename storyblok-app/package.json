@@ -13,7 +13,7 @@
     "format:check": "prettier --check .",
     "type-check": "tsc --noEmit",
     "sb-login": "storyblok login",
-    "pull-schemas": "storyblok pull-components --space [YOUR_SPACE_ID] --rd --file-name production --path src/generated/",
+    "pull-schemas": "storyblok pull-components --space 288494081274159 --rd --file-name production --path src/generated/ || true",
     "gen:types": "npm run pull-schemas && storyblok generate-typescript-typedefs --sourceFilePaths ./src/generated/components.production.json --destinationFilePath src/generated/extracted-types.ts"
   },
   "dependencies": {

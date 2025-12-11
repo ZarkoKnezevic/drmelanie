@@ -280,7 +280,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     // Start loading
     loadFirstFrame();
     loadRemainingFrames();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [isMounted, frameCount]);
 
   // Set canvas size and render (only for desktop)

@@ -3,6 +3,7 @@
 ## 🚀 Quick Deploy to Vercel
 
 ### Step 1: Push to GitHub
+
 ```bash
 git add .
 git commit -m "Prepare for deployment"
@@ -12,6 +13,7 @@ git push origin main
 ### Step 2: Deploy to Vercel
 
 **Option A: Using Vercel Dashboard (Recommended)**
+
 1. Go to [vercel.com](https://vercel.com) and sign in
 2. Click **"Add New Project"**
 3. Import your GitHub repository
@@ -19,6 +21,7 @@ git push origin main
 5. Click **"Deploy"**
 
 **Option B: Using Vercel CLI**
+
 ```bash
 npm i -g vercel
 vercel
@@ -56,6 +59,9 @@ VERCEL_REDEPLOY_HOOK_URL=https://api.vercel.com/v1/integrations/deploy/your-hook
 
 # Live Preview (only if using Storyblok live preview)
 NEXT_PUBLIC_IS_PREVIEW=false
+
+# Skip Storyblok CLI tasks during build (optional - prevents pull-components errors)
+STORYBLOK_SKIP_PULL=true
 ```
 
 ### Step 4: Update Domain in Environment Variables
@@ -73,11 +79,13 @@ After your first deployment completes:
 After updating environment variables, trigger a new deployment:
 
 **Option A: Via Dashboard**
+
 - Go to **Deployments** tab
 - Click the **"..."** menu on the latest deployment
 - Select **"Redeploy"**
 
 **Option B: Via Git Push**
+
 ```bash
 git commit --allow-empty -m "Trigger redeploy with updated env vars"
 git push
@@ -88,6 +96,7 @@ git push
 ### Environment Variable Priorities
 
 Vercel uses different environment variables for different environments:
+
 - **Production**: Used for production deployments
 - **Preview**: Used for preview deployments (PR previews)
 - **Development**: Used when running `vercel dev` locally
@@ -103,6 +112,7 @@ You can set different values for each environment, or use the same values for al
 ### Custom Domain
 
 If you add a custom domain later:
+
 1. Add the domain in Vercel Dashboard → **Settings → Domains**
 2. Update `NEXT_PUBLIC_APP_URL` and `NEXT_PUBLIC_DOMAIN` to your custom domain
 3. Redeploy
@@ -110,6 +120,7 @@ If you add a custom domain later:
 ### Vercel Auto-Environment Variables
 
 Vercel automatically provides these (you don't need to set them):
+
 - `VERCEL_URL` - The deployment URL
 - `VERCEL_ENV` - The environment (production, preview, development)
 - `NODE_ENV` - Automatically set to `production` in production
@@ -119,19 +130,31 @@ You can use `VERCEL_URL` if you want to avoid hardcoding the domain, but note th
 ## 🔍 Troubleshooting
 
 ### Build Fails
+
 - Check that all required environment variables are set
 - Ensure `NEXT_PUBLIC_STORYBLOK_ACCESS_TOKEN` is valid
 - Check build logs in Vercel Dashboard
 
 ### Domain Not Working
+
 - Ensure `NEXT_PUBLIC_APP_URL` matches your Vercel deployment URL
 - Wait a few minutes after updating environment variables
 - Trigger a new deployment after updating env vars
 
 ### Storyblok Content Not Loading
+
 - Verify your access token is correct
 - Check `STORYBLOK_VERSION` (use `published` for production)
 - Ensure Storyblok space is public or token has proper permissions
+
+### Storyblok CLI pull-components Error
+
+If you see an error like "An error occurred when executing the pull-components task":
+
+- This is a non-critical error from the Storyblok CLI dev tool
+- The `pull-components` task is not needed for production builds
+- You can safely ignore this error, or set `STORYBLOK_SKIP_PULL=true` environment variable
+- This tool is only used locally for generating TypeScript types from Storyblok components
 
 ## ✅ Checklist
 
@@ -142,4 +165,3 @@ You can use `VERCEL_URL` if you want to avoid hardcoding the domain, but note th
 - [ ] Redeployed after setting environment variables
 - [ ] Site is accessible and working
 - [ ] Storyblok content is loading correctly
-
