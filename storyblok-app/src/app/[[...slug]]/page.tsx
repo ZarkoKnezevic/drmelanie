@@ -124,7 +124,7 @@ export default async function DynamicPage(props: Props) {
     );
   }
 
-  if (!data?.story) {
+  if (!data?.data?.story) {
     // Show setup instructions if no story found and no token
     const hasToken = !!env.storyblok.accessToken;
 
@@ -199,7 +199,7 @@ export default async function DynamicPage(props: Props) {
     notFound();
   }
 
-  const { story, links } = data;
+  const { story, links } = data.data;
 
   return (
     <CoreLayout version={env.storyblok.version} allResolvedLinks={links}>
