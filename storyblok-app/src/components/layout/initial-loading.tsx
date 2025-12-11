@@ -16,6 +16,7 @@ export function InitialLoading() {
   useEffect(() => {
     let animationReady = false;
     let pageLoaded = false;
+    let animationTimeout: NodeJS.Timeout | null = null;
 
     // Hide loading once React has hydrated and page is ready
     const hideLoading = () => {
@@ -35,20 +36,33 @@ export function InitialLoading() {
     };
 
     const checkReady = () => {
-      // Wait for both page load and animation ready
-      if (pageLoaded && animationReady) {
-        hideLoading();
+      // Wait for page load, and animation ready (if HeroMediaVideo exists)
+      // If no HeroMediaVideo on page, animationReady stays false but we proceed anyway after page load
+      if (pageLoaded) {
+        // If animation hasn't fired after 1.5s, assume no HeroMediaVideo and proceed
+        if (!animationReady && animationTimeout === null) {
+          animationTimeout = setTimeout(() => {
+            animationReady = true; // Mark as ready even without event
+            hideLoading();
+          }, 1500); // Give HeroMediaVideo 1.5s to fire, then proceed
+        } else if (animationReady) {
+          hideLoading();
+        }
       }
     };
 
-    // Listen for animation ready event
+    // Listen for animation ready event (optional - only if HeroMediaVideo exists)
     const handleAnimationReady = () => {
+      if (animationTimeout) {
+        clearTimeout(animationTimeout);
+        animationTimeout = null;
+      }
       animationReady = true;
       checkReady();
     };
 
     if (typeof window !== 'undefined') {
-      // Listen for animation ready event
+      // Listen for animation ready event (optional)
       window.addEventListener('hero-animation-ready', handleAnimationReady, { once: true });
 
       if (document.readyState === 'complete') {
@@ -62,18 +76,20 @@ export function InitialLoading() {
           checkReady();
         };
         window.addEventListener('load', handlePageLoad, { once: true });
-        
-        // Safety timeout to prevent stuck loading (max 8 seconds)
+
+        // Safety timeout to prevent stuck loading (max 5 seconds - reduced from 8)
         const timeout = setTimeout(() => {
           pageLoaded = true;
           animationReady = true; // Force ready if timeout
+          if (animationTimeout) clearTimeout(animationTimeout);
           hideLoading();
-        }, 8000);
-        
+        }, 5000);
+
         return () => {
           window.removeEventListener('load', handlePageLoad);
           window.removeEventListener('hero-animation-ready', handleAnimationReady);
           clearTimeout(timeout);
+          if (animationTimeout) clearTimeout(animationTimeout);
         };
       }
     }
@@ -91,13 +107,9 @@ export function InitialLoading() {
         isFadingOut ? 'opacity-0' : 'opacity-100'
       )}
     >
-      <div className="w-64 h-64">
-        <LottieAnimation
-          src={getLottiePath('stork')}
-          className="w-full h-full"
-        />
+      <div className="h-64 w-64">
+        <LottieAnimation src={getLottiePath('stork')} className="h-full w-full" />
       </div>
     </div>
   );
 }
-
