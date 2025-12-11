@@ -20,6 +20,8 @@ import ImageGallery from '@/components/storyblok/ImageGallery';
 import TwoImagesText from '@/components/storyblok/TwoImagesText';
 import HeroMedia from '@/components/storyblok/HeroMedia';
 import BabyGrowth from '@/components/storyblok/BabyGrowth';
+import Team from '@/components/storyblok/Team';
+import Member from '@/components/storyblok/Member';
 
 // Register components with multiple name variations to handle case differences
 export const COMPONENTS = {
@@ -35,15 +37,18 @@ export const COMPONENTS = {
   hero: Hero,
   banner: Banner,
   teaser: Teaser,
-  'text_image': TextImage,
-  'image_gallery': ImageGallery,
-  'image_galery': ImageGallery, // Handle typo variation
-  'two_images_text': TwoImagesText,
+  text_image: TextImage,
+  image_gallery: ImageGallery,
+  image_galery: ImageGallery, // Handle typo variation
+  two_images_text: TwoImagesText,
   twoImagesText: TwoImagesText,
-  'hero_media': HeroMedia,
+  hero_media: HeroMedia,
   heroMedia: HeroMedia,
-  'baby_growth': BabyGrowth,
+  baby_growth: BabyGrowth,
   babyGrowth: BabyGrowth,
+  team: Team,
+  team_member: Member,
+  member: Member, // Keep for backward compatibility
   imageGallery: ImageGallery,
   imageGalery: ImageGallery, // Handle typo variation
   // Capitalized (in case Storyblok sends it this way)
@@ -64,5 +69,7 @@ export const COMPONENTS = {
   TwoImagesText: TwoImagesText,
   HeroMedia: HeroMedia,
   BabyGrowth: BabyGrowth,
+  Team: Team,
+  TeamMember: Member,
+  Member: Member,
 } as const;
-
