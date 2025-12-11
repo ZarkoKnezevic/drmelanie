@@ -1,6 +1,6 @@
 import type { StoryblokBlok, StoryblokLink } from '@/types';
 
-interface LinkStoryblok {
+export interface LinkStoryblok {
   link?: {
     linktype?: 'story' | 'url' | 'email';
     id?: string;

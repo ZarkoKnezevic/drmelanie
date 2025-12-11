@@ -1,5 +1,4 @@
 import { StoryblokServerComponent } from '@storyblok/react/rsc';
-import type { ISbRichtext, SbBlokData } from '@storyblok/react/rsc';
 import { render } from 'storyblok-rich-text-react-renderer';
 import { prepareImageProps } from './adapters/prepareImageProps';
 import Image from 'next/image';
@@ -14,7 +13,7 @@ interface RichTextImageProps {
   aspectRatio?: string;
 }
 
-export default function renderRichText(data: ISbRichtext) {
+export default function renderRichText(data: any) {
   return render(data, {
     markResolvers: {},
     nodeResolvers: {},
@@ -36,7 +35,7 @@ export default function renderRichText(data: ISbRichtext) {
           </div>
         );
       },
-      cardsGrid: (props: SbBlokData) => {
+      cardsGrid: (props: Record<string, unknown>) => {
         return (
           <StoryblokServerComponent
             blok={{
@@ -46,7 +45,7 @@ export default function renderRichText(data: ISbRichtext) {
           />
         );
       },
-      linksList: (props: SbBlokData) => {
+      linksList: (props: Record<string, unknown>) => {
         return (
           <StoryblokServerComponent
             blok={{
@@ -56,7 +55,7 @@ export default function renderRichText(data: ISbRichtext) {
           />
         );
       },
-      logos: (props: SbBlokData) => {
+      logos: (props: Record<string, unknown>) => {
         return (
           <StoryblokServerComponent
             blok={{
@@ -66,7 +65,7 @@ export default function renderRichText(data: ISbRichtext) {
           />
         );
       },
-      carousel: (props: SbBlokData) => {
+      carousel: (props: Record<string, unknown>) => {
         return (
           <StoryblokServerComponent
             blok={{
@@ -80,8 +79,20 @@ export default function renderRichText(data: ISbRichtext) {
         // Type-safe extraction of props
         const text = (props.text as string) || 'Button';
         const variants = props.variants as string | undefined;
-        const variant = (variants || props.variant || 'default') as 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
-        const size = (props.size || 'default') as 'default' | 'sm' | 'lg' | 'icon';
+        const rawVariant = (variants || props.variant || 'primary') as string;
+        // Map unsupported variants to supported ones
+        const variantMap: Record<string, 'primary' | 'secondary' | 'tertiary' | 'quaternary'> = {
+          default: 'primary',
+          destructive: 'secondary',
+          outline: 'secondary',
+          ghost: 'secondary',
+          link: 'primary',
+          primary: 'primary',
+          secondary: 'secondary',
+          tertiary: 'tertiary',
+          quaternary: 'quaternary',
+        };
+        const variant = variantMap[rawVariant] || 'primary';
         const disabled = props.disabled as boolean | undefined;
         const buttonType = (props.type || 'button') as 'button' | 'submit' | 'reset';
         
@@ -98,7 +109,6 @@ export default function renderRichText(data: ISbRichtext) {
             <Button
               asChild
               variant={variant}
-              size={size}
             >
               <Link href={linkUrl}>{text}</Link>
             </Button>
@@ -108,7 +118,6 @@ export default function renderRichText(data: ISbRichtext) {
         return (
           <Button
             variant={variant}
-            size={size}
             disabled={disabled}
             type={buttonType}
           >

@@ -79,7 +79,7 @@ export async function fetchStories(
   params?: Record<string, string | number | boolean>
 ): Promise<{ data: StoryblokStoriesResponse }> {
   if (!env.storyblok.accessToken) {
-    return { data: { stories: [], links: [] } };
+    return { data: { stories: [] } };
   }
 
   getStoryblokApi();

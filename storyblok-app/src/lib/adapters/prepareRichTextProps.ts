@@ -1,5 +1,4 @@
-import { renderRichText } from '@/lib/renderRichText';
-import type { ISbRichtext } from '@storyblok/react/rsc';
+import renderRichText from '@/lib/renderRichText';
 
 export interface RichTextProps {
   richText: React.ReactNode | null;
@@ -8,7 +7,7 @@ export interface RichTextProps {
 }
 
 interface RichTextStoryblok {
-  content?: ISbRichtext;
+  content?: any; // ISbRichtext - richtext content from Storyblok
   removeInnerMargins?: boolean;
   alignVariant?: 'left' | 'center' | 'right';
 }

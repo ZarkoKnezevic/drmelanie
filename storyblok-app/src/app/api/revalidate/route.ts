@@ -19,7 +19,7 @@ export async function POST(request: Request) {
   console.log('full_slug', data.full_slug);
   console.log('correctSlug', correctSlug);
 
-  revalidateTag(SB_CACHE_VERSION_TAG, 'page');
+  revalidateTag(SB_CACHE_VERSION_TAG, 'max');
   revalidatePath(correctSlug, 'page');
 
   if (correctSlug.startsWith('/components/')) {
@@ -34,4 +34,3 @@ export async function POST(request: Request) {
 
   return Response.json({ revalidated: true, now: Date.now() });
 }
-

@@ -89,7 +89,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
           }
         });
       },
-      { threshold: 0.1, margin: '-100px' }
+      { threshold: 0.1, rootMargin: '-100px' }
     );
 
     observer.observe(textRef.current);
@@ -104,7 +104,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
     if (!hasEnteredView) return;
 
     const selectedText = blok[WEEK_TEXT_FIELDS[selectedWeek]] || '';
-    
+
     if (!selectedText) {
       setDisplayedText('');
       return;
@@ -139,7 +139,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
     <section
       {...storyblokEditable(blok)}
       className={cn(
-        'baby-growth relative min-h-screen bg-white torn-edge torn-edge-top torn-edge-bottom mb-4'
+        'baby-growth torn-edge torn-edge-top torn-edge-bottom relative mb-4 min-h-screen bg-white'
       )}
     >
       <div className="spacing container">
@@ -161,7 +161,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
                     <stop offset="50%" stopColor="#FFD4C4" stopOpacity="0.3" />
                     <stop offset="100%" stopColor="#FFE8DC" stopOpacity="0.35" />
                   </linearGradient>
-                  
+
                   {/* Baby fill gradient - pastel orange */}
                   <linearGradient id="babyFillGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#FFE8DC" stopOpacity="0.95" />
@@ -169,7 +169,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
                     <stop offset="70%" stopColor="#FFC9A8" stopOpacity="0.85" />
                     <stop offset="100%" stopColor="#FFD9B3" stopOpacity="0.8" />
                   </linearGradient>
-                  
+
                   {/* Baby stroke gradient - softer pastel orange */}
                   <linearGradient id="babyStrokeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#FFD4C4" stopOpacity="0.5" />
@@ -267,9 +267,9 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
                   key={week.label}
                   onClick={() => handleWeekClick(index)}
                   className={cn(
-                    'flex h-14 w-14 flex-col items-center justify-center rounded-lg border-2 transition-all duration-200 shadow-sm',
+                    'flex h-14 w-14 flex-col items-center justify-center rounded-lg border-2 shadow-sm transition-all duration-200',
                     selectedWeek === index
-                      ? 'border-[#008080] bg-[#008080] text-white shadow-md scale-105'
+                      ? 'scale-105 border-[#008080] bg-[#008080] text-white shadow-md'
                       : 'border-[#008080]/30 bg-[#e0f2f2] text-gray-700 hover:border-[#008080]/50 hover:bg-[#b3d9d9] hover:shadow-md'
                   )}
                 >
@@ -301,7 +301,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
                       repeat: Infinity,
                       repeatType: 'reverse',
                     }}
-                    className="inline-block ml-1"
+                    className="ml-1 inline-block"
                   >
                     |
                   </motion.span>
@@ -316,4 +316,3 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
     </section>
   );
 }
-

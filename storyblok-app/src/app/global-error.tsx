@@ -19,7 +19,7 @@ export default function GlobalError({
           <p className="text-muted-foreground text-center max-w-md">
             {error.message || 'An unexpected error occurred.'}
           </p>
-          <Button onClick={reset} variant="default">
+          <Button onClick={reset} variant="primary">
             Try again
           </Button>
         </div>
