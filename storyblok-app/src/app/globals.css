@@ -33,34 +33,98 @@ body.is-inner-page .header-storyblok {
 
 @layer base {
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   html {
-    @apply text-body-sm;
+    font-size: var(--font-size-base-sm);
+    line-height: var(--line-height-base-sm);
   }
 
   body,
   .body {
-    @apply bg-background text-body-sm text-foreground md:text-body-md lg:text-body-lg;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: var(--font-size-base-sm);
+    line-height: var(--line-height-base-sm);
+  }
+
+  @media (min-width: 600px) {
+    body,
+    .body {
+      font-size: var(--font-size-base-md);
+      line-height: var(--line-height-base-md);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    body,
+    .body {
+      font-size: var(--font-size-base-lg);
+      line-height: var(--line-height-base-lg);
+    }
   }
 
   .container {
-    @apply mx-auto max-w-container px-4 md:px-6 lg:px-8 xl:px-10;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 104rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 600px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      padding-left: 2.5rem;
+      padding-right: 2.5rem;
+    }
   }
 
   p,
   .text-body {
-    @apply mb-[0.7em] text-body-sm md:text-body-md lg:text-body-lg;
+    margin-bottom: 0.7em;
+    font-size: var(--font-size-base-sm);
+    line-height: var(--line-height-base-sm);
     font-weight: var(--font-weight-body);
   }
 
+  @media (min-width: 600px) {
+    p,
+    .text-body {
+      font-size: var(--font-size-base-md);
+      line-height: var(--line-height-base-md);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    p,
+    .text-body {
+      font-size: var(--font-size-base-lg);
+      line-height: var(--line-height-base-lg);
+    }
+  }
+
   p:last-child {
-    @apply mb-0;
+    margin-bottom: 0;
   }
 
   .button {
-    @apply text-body-sm;
+    font-size: var(--font-size-base-sm);
+    line-height: var(--line-height-base-sm);
     font-weight: var(--font-weight-medium);
   }
 
@@ -70,7 +134,7 @@ body.is-inner-page .header-storyblok {
   h4,
   h5,
   h6 {
-    @apply mb-[0.7em];
+    margin-bottom: 0.7em;
     font-weight: var(--font-weight-heading);
   }
 
@@ -80,49 +144,168 @@ body.is-inner-page .header-storyblok {
   h4:last-child,
   h5:last-child,
   h6:last-child {
-    @apply mb-0;
+    margin-bottom: 0;
   }
 
   h1,
   .h1 {
-    @apply text-h1 md:text-h1-md lg:text-h1-lg;
+    font-size: var(--font-size-h1-sm);
+    line-height: var(--line-height-h1-sm);
+  }
+
+  @media (min-width: 600px) {
+    h1,
+    .h1 {
+      font-size: var(--font-size-h1-md);
+      line-height: var(--line-height-h1-md);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    h1,
+    .h1 {
+      font-size: var(--font-size-h1-lg);
+      line-height: var(--line-height-h1-lg);
+    }
   }
 
   h2,
   .h2 {
-    @apply text-h2 md:text-h2-md lg:text-h2-lg;
+    font-size: var(--font-size-h2-sm);
+    line-height: var(--line-height-h2-sm);
+  }
+
+  @media (min-width: 600px) {
+    h2,
+    .h2 {
+      font-size: var(--font-size-h2-md);
+      line-height: var(--line-height-h2-md);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    h2,
+    .h2 {
+      font-size: var(--font-size-h2-lg);
+      line-height: var(--line-height-h2-lg);
+    }
   }
 
   h3,
   .h3 {
-    @apply text-h3 md:text-h3-md lg:text-h3-lg;
+    font-size: var(--font-size-h3-sm);
+    line-height: var(--line-height-h3-sm);
+  }
+
+  @media (min-width: 600px) {
+    h3,
+    .h3 {
+      font-size: var(--font-size-h3-md);
+      line-height: var(--line-height-h3-md);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    h3,
+    .h3 {
+      font-size: var(--font-size-h3-lg);
+      line-height: var(--line-height-h3-lg);
+    }
   }
 
   h4,
   .h4 {
-    @apply text-h4 md:text-h4-md lg:text-h4-lg;
+    font-size: var(--font-size-h4-sm);
+    line-height: var(--line-height-h4-sm);
+  }
+
+  @media (min-width: 600px) {
+    h4,
+    .h4 {
+      font-size: var(--font-size-h4-md);
+      line-height: var(--line-height-h4-md);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    h4,
+    .h4 {
+      font-size: var(--font-size-h4-lg);
+      line-height: var(--line-height-h4-lg);
+    }
   }
 
   h5,
   .h5 {
-    @apply text-h5 md:text-h5-md lg:text-h5-lg;
+    font-size: var(--font-size-h5-sm);
+    line-height: var(--line-height-h5-sm);
+  }
+
+  @media (min-width: 600px) {
+    h5,
+    .h5 {
+      font-size: var(--font-size-h5-md);
+      line-height: var(--line-height-h5-md);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    h5,
+    .h5 {
+      font-size: var(--font-size-h5-lg);
+      line-height: var(--line-height-h5-lg);
+    }
   }
 
   h6,
   .h6 {
-    @apply text-h6 md:text-h6-md lg:text-h6-lg;
+    font-size: var(--font-size-h6-sm);
+    line-height: var(--line-height-h6-sm);
+  }
+
+  @media (min-width: 600px) {
+    h6,
+    .h6 {
+      font-size: var(--font-size-h6-md);
+      line-height: var(--line-height-h6-md);
+    }
+  }
+
+  @media (min-width: 1025px) {
+    h6,
+    .h6 {
+      font-size: var(--font-size-h6-lg);
+      line-height: var(--line-height-h6-lg);
+    }
   }
 
   .spacing {
-    @apply px-6 py-12 md:py-16 lg:py-20;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  @media (min-width: 600px) {
+    .spacing {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+
+  @media (min-width: 1025px) {
+    .spacing {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
   }
 
   .torn-edge + section {
-    @apply -mt-4;
+    margin-top: -1rem;
   }
 
   .torn-edge-bottom + .torn-edge-top::before {
-    @apply bg-transparent;
+    background-color: transparent;
   }
 
   /* Lenis smooth scroll styles */
