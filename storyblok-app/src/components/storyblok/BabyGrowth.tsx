@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
 import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
+import * as motion from 'motion/react-client';
 
 interface BabyGrowthProps {
   blok: StoryblokBlok & {
@@ -43,7 +44,11 @@ const WEEK_TEXT_FIELDS = [
 
 export default function BabyGrowth({ blok }: BabyGrowthProps) {
   const [selectedWeek, setSelectedWeek] = useState(0);
+  const [displayedText, setDisplayedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const [hasEnteredView, setHasEnteredView] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
   const backgroundClass = getBackgroundClass(blok.background);
   const textColorClass = getTextColorClass(blok.background);
 
@@ -72,11 +77,63 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
     handleProgressChange(WEEKS[selectedWeek].progress);
   }, [selectedWeek]);
 
+  // Detect when text enters viewport
+  useEffect(() => {
+    if (!textRef.current || hasEnteredView) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setHasEnteredView(true);
+          }
+        });
+      },
+      { threshold: 0.1, margin: '-100px' }
+    );
+
+    observer.observe(textRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasEnteredView]);
+
+  // Typing animation effect
+  useEffect(() => {
+    if (!hasEnteredView) return;
+
+    const selectedText = blok[WEEK_TEXT_FIELDS[selectedWeek]] || '';
+    
+    if (!selectedText) {
+      setDisplayedText('');
+      return;
+    }
+
+    setIsTyping(true);
+    setDisplayedText('');
+
+    let currentIndex = 0;
+    const typingSpeed = 30; // milliseconds per character
+
+    const typingInterval = setInterval(() => {
+      if (currentIndex < selectedText.length) {
+        setDisplayedText(selectedText.slice(0, currentIndex + 1));
+        currentIndex++;
+      } else {
+        setIsTyping(false);
+        clearInterval(typingInterval);
+      }
+    }, typingSpeed);
+
+    return () => {
+      clearInterval(typingInterval);
+    };
+  }, [selectedWeek, hasEnteredView, blok]);
+
   const handleWeekClick = (weekIndex: number) => {
     setSelectedWeek(weekIndex);
   };
-
-  const selectedText = blok[WEEK_TEXT_FIELDS[selectedWeek]] || '';
 
   return (
     <section
@@ -224,15 +281,36 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
           </div>
 
           {/* Right Column: Text Content */}
-          <div className={cn('flex flex-col justify-center', textColorClass)}>
-            {selectedText ? (
-              <div className="prose prose-lg max-w-none">
-                <p className="text-lg leading-relaxed">{selectedText}</p>
-              </div>
+          <motion.div
+            ref={textRef}
+            className={cn('flex flex-col justify-center', textColorClass)}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          >
+            {displayedText || blok[WEEK_TEXT_FIELDS[selectedWeek]] ? (
+              <h2 className="text-h2 font-bold leading-tight">
+                {displayedText}
+                {isTyping && (
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [1, 0] }}
+                    transition={{
+                      duration: 0.8,
+                      repeat: Infinity,
+                      repeatType: 'reverse',
+                    }}
+                    className="inline-block ml-1"
+                  >
+                    |
+                  </motion.span>
+                )}
+              </h2>
             ) : (
               <p className="text-muted-foreground">No content available for this week.</p>
             )}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
