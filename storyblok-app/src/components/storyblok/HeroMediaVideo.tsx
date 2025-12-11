@@ -16,7 +16,7 @@ interface HeroMediaVideoProps {
 
 export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const heroRef = useRef<HTMLElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   const heroImgRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement | null>(null);
   const lenisRef = useRef<Lenis | null>(null);
@@ -147,12 +147,15 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         const canvasAspect = window.innerWidth / window.innerHeight;
 
         let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
+        // Fill entire canvas - scale to cover (no black bars)
         if (imageAspect > canvasAspect) {
+          // Image is wider - scale to height, crop sides
           drawHeight = window.innerHeight;
           drawWidth = drawHeight * imageAspect;
           drawX = (window.innerWidth - drawWidth) / 2;
           drawY = 0;
         } else {
+          // Image is taller - scale to width, crop top/bottom
           drawWidth = window.innerWidth;
           drawHeight = drawWidth / imageAspect;
           drawX = 0;
@@ -312,13 +315,15 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         const canvasAspect = canvasWidth / canvasHeight;
 
         let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
-
+        // Fill entire canvas - scale to cover (no black bars)
         if (imageAspect > canvasAspect) {
+          // Image is wider - scale to height, crop sides
           drawHeight = canvasHeight;
           drawWidth = drawHeight * imageAspect;
           drawX = (canvasWidth - drawWidth) / 2;
           drawY = 0;
         } else {
+          // Image is taller - scale to width, crop top/bottom
           drawWidth = canvasWidth;
           drawHeight = drawWidth / imageAspect;
           drawX = 0;
@@ -480,12 +485,15 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       const canvasAspect = window.innerWidth / window.innerHeight;
 
       let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
+      // Fill entire canvas - scale to cover (no black bars)
       if (imageAspect > canvasAspect) {
+        // Image is wider - scale to height, crop sides
         drawHeight = window.innerHeight;
         drawWidth = drawHeight * imageAspect;
         drawX = (window.innerWidth - drawWidth) / 2;
         drawY = 0;
       } else {
+        // Image is taller - scale to width, crop top/bottom
         drawWidth = window.innerWidth;
         drawHeight = drawWidth / imageAspect;
         drawX = 0;
@@ -504,7 +512,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
   // On mobile, show first frame with heading on top
   if (isMobile) {
     return (
-      <section ref={heroRef} className="hero relative h-screen w-full bg-background">
+      <div ref={heroRef} className="hero relative h-screen w-full bg-background">
         {/* Canvas with first frame */}
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
 
@@ -520,12 +528,12 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
             unoptimized
           />
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section ref={heroRef} className="hero relative h-screen w-full bg-background">
+    <div ref={heroRef} className="hero relative h-screen w-full bg-background">
       {/* Header element for 3D transform */}
       {/* <div className="header absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
         <h1 className="h1 text-center font-bold text-white">Three pillars with one purpose</h1>
@@ -552,6 +560,6 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
           />
         </div>
       </div>
-    </section>
+    </div>
   );
 }

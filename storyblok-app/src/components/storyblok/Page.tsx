@@ -21,11 +21,11 @@ export default function Page({ blok }: PageProps) {
   const backgroundClass = getBackgroundClass(blok.background);
 
   return (
-    <main {...storyblokEditable(blok)} className={cn(backgroundClass)}>
+    <div {...storyblokEditable(blok)} className={cn(backgroundClass)}>
       {blok.body?.map((nestedBlok: StoryblokBlok) => (
         <StoryblokServerComponent blok={nestedBlok} key={nestedBlok._uid} />
       ))}
-    </main>
+    </div>
   );
 }
 
