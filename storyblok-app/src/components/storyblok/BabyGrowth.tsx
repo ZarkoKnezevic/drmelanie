@@ -81,7 +81,9 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
   return (
     <section
       {...storyblokEditable(blok)}
-      className={cn('baby-growth relative min-h-screen', backgroundClass)}
+      className={cn(
+        'baby-growth relative min-h-screen bg-white torn-edge torn-edge-top torn-edge-bottom mb-4'
+      )}
     >
       <div className="spacing container">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
@@ -94,54 +96,43 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
                 viewBox="0 0 100 100"
                 id="babyProgression"
                 className="h-full w-full"
-                style={{
-                  filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))',
-                }}
               >
-                {/* Background path */}
-                <path
-                  d="M 36 62.8 C 14 94 45 98 59 98 C 79 98 83 77 83 64 C 80 26 63 4 43 4 C 18 4 14 29 28 47 C 34 55 36.6 59.2 36 60.9 Z"
-                  fill="url(#babyGradient)"
-                  opacity="0.1"
-                />
                 <defs>
-                  <linearGradient id="babyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FFB6C1" stopOpacity="0.3" />
-                    <stop offset="50%" stopColor="#FFC0CB" stopOpacity="0.2" />
-                    <stop offset="100%" stopColor="#FFE4E1" stopOpacity="0.1" />
+                  {/* Womb gradient - pastel orange/pink */}
+                  <linearGradient id="wombGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFE5D9" stopOpacity="0.4" />
+                    <stop offset="50%" stopColor="#FFD4C4" stopOpacity="0.3" />
+                    <stop offset="100%" stopColor="#FFE8DC" stopOpacity="0.35" />
+                  </linearGradient>
+                  
+                  {/* Baby fill gradient - pastel orange */}
+                  <linearGradient id="babyFillGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFE8DC" stopOpacity="0.95" />
+                    <stop offset="30%" stopColor="#FFD4C4" stopOpacity="0.9" />
+                    <stop offset="70%" stopColor="#FFC9A8" stopOpacity="0.85" />
+                    <stop offset="100%" stopColor="#FFD9B3" stopOpacity="0.8" />
+                  </linearGradient>
+                  
+                  {/* Baby stroke gradient - softer pastel orange */}
+                  <linearGradient id="babyStrokeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFD4C4" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#FFC9A8" stopOpacity="0.4" />
                   </linearGradient>
                 </defs>
 
-                {/* Animated paths with pastel colors and gradient shading */}
-                <defs>
-                  <linearGradient id="babyFillGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FFE4E1" stopOpacity="0.9" />
-                    <stop offset="50%" stopColor="#FFB6C1" stopOpacity="0.8" />
-                    <stop offset="100%" stopColor="#FFC0CB" stopOpacity="0.7" />
-                  </linearGradient>
-                  <linearGradient id="babyStrokeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#FFB6C1" stopOpacity="0.6" />
-                    <stop offset="100%" stopColor="#FFC0CB" stopOpacity="0.4" />
-                  </linearGradient>
-                  <filter id="babyShadow">
-                    <feGaussianBlur in="SourceAlpha" stdDeviation="2" />
-                    <feOffset dx="1" dy="2" result="offsetblur" />
-                    <feComponentTransfer>
-                      <feFuncA type="linear" slope="0.3" />
-                    </feComponentTransfer>
-                    <feMerge>
-                      <feMergeNode />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                </defs>
+                {/* Womb background - nice pastel color */}
+                <path
+                  d="M 36 62.8 C 14 94 45 98 59 98 C 79 98 83 77 83 64 C 80 26 63 4 43 4 C 18 4 14 29 28 47 C 34 55 36.6 59.2 36 60.9 Z"
+                  fill="url(#wombGradient)"
+                />
+
+                {/* Animated paths with pastel orange colors */}
                 <g
                   fill="url(#babyFillGradient)"
                   stroke="url(#babyStrokeGradient)"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="0.5"
-                  filter="url(#babyShadow)"
                 >
                   <path className="umbilical" d="">
                     <animate
@@ -221,8 +212,8 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
                   className={cn(
                     'flex h-14 w-14 flex-col items-center justify-center rounded-lg border-2 transition-all duration-200 shadow-sm',
                     selectedWeek === index
-                      ? 'border-primary bg-primary text-primary-foreground shadow-md scale-105'
-                      : 'border-pink-200 bg-white/80 backdrop-blur-sm text-gray-700 hover:border-pink-300 hover:bg-pink-50/50 hover:shadow-md'
+                      ? 'border-[#008080] bg-[#008080] text-white shadow-md scale-105'
+                      : 'border-[#008080]/30 bg-[#e0f2f2] text-gray-700 hover:border-[#008080]/50 hover:bg-[#b3d9d9] hover:shadow-md'
                   )}
                 >
                   <span className="text-xl font-bold leading-none">{week.label}</span>
