@@ -28,6 +28,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
   const videoFramesRef = useRef({ frame: 0 });
   const imagesLoadingRef = useRef(false); // Prevent multiple loads
   const imagesRef = useRef<HTMLImageElement[]>([]); // Store images in ref to avoid re-renders
+  const initialFramesLoadedRef = useRef(0); // Track first 20 frames loaded
 
   useEffect(() => {
     setIsMounted(true);
@@ -61,6 +62,10 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       });
 
       lenisRef.current = lenis;
+      // Store Lenis instance globally for PageTransition to access
+      if (typeof window !== 'undefined') {
+        (window as any).__lenis__ = lenis;
+      }
 
       function raf(time: number) {
         lenis.raf(time);
@@ -81,8 +86,14 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
 
     return () => {
       if (lenisRef.current) {
+        // Reset scroll position before destroying
+        lenisRef.current.scrollTo(0, { immediate: true });
         lenisRef.current.destroy();
         lenisRef.current = null;
+        // Clean up global reference
+        if (typeof window !== 'undefined') {
+          delete (window as any).__lenis__;
+        }
       }
     };
   }, [isMounted, isMobile]);
@@ -106,11 +117,12 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       return;
     }
 
-    // DESKTOP: Progressive loading strategy
+    // DESKTOP: Progressive loading strategy - load first 20 frames for smooth initial animation
     const loadedImages: HTMLImageElement[] = new Array(frameCount).fill(null);
     let loadedCount = 0;
     let firstFrameRendered = false;
     let allFramesRequested = false;
+    initialFramesLoadedRef.current = 0; // Reset counter
 
     const renderFirstFrame = () => {
       if (firstFrameRendered || !canvasRef.current) return;
@@ -140,17 +152,16 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         ctx.scale(pixelRatio, pixelRatio);
 
         // Cover strategy: scale to fill entire canvas completely (no gaps)
+        // Use same scale (1.2) as render() function to prevent visual jump
         const scaleX = window.innerWidth / img.naturalWidth;
         const scaleY = window.innerHeight / img.naturalHeight;
-        const scale = Math.max(scaleX, scaleY); // Use larger scale to ensure full coverage
+        const scale = Math.max(scaleX, scaleY) * 1.2; // Match render() scale
 
         const drawWidth = img.naturalWidth * scale;
         const drawHeight = img.naturalHeight * scale;
-        // Center the image - it will overflow on one axis to ensure full coverage
+        // Center the image - it will overflow on both axes to ensure full coverage
         const drawX = (window.innerWidth - drawWidth) / 2;
         const drawY = (window.innerHeight - drawHeight) / 2;
-
-        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
 
         try {
           ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
@@ -180,11 +191,16 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       loadedImages[index] = img;
       loadedCount++;
 
+      // Track initial frames (first 20) for animation readiness
+      if (index < 20) {
+        initialFramesLoadedRef.current++;
+      }
+
       // Show first frame immediately when it loads
       if (index === 0 && !firstFrameRendered) {
         imagesRef.current = [...loadedImages];
         renderFirstFrame();
-        // Don't signal here - setupAfterFirstFrame will signal when ScrollTrigger is ready
+        // Don't signal here - setupAfterInitialFrames will signal when ready
       }
 
       // When all requested frames are loaded (for smooth scrolling)
@@ -214,13 +230,14 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       loadedImages[0] = img;
     };
 
-    // Load remaining frames progressively in batches (optimized for performance)
+    // Load remaining frames progressively in batches
+    // First 20 frames are critical for initial animation smoothness
     const loadRemainingFrames = () => {
       if (allFramesRequested) return;
       allFramesRequested = true;
 
-      // Load frames 1-30 immediately (critical for initial scroll)
-      for (let i = 1; i <= Math.min(30, frameCount - 1); i++) {
+      // Load frames 1-20 immediately (critical for initial scroll animation)
+      for (let i = 1; i <= Math.min(20, frameCount - 1); i++) {
         const img = document.createElement('img');
         img.onload = (e) => onLoad(e, i);
         img.onerror = (e) => onError(e, i);
@@ -247,11 +264,11 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         }
       };
 
-      // Load frames 31-60 after initial paint
-      loadBatch(31, 60, 100);
+      // Load frames 21-50 after initial paint
+      loadBatch(21, 50, 200);
 
-      // Load frames 61-100 after user interaction or idle
-      loadBatch(61, 100, 500);
+      // Load frames 51-100 after user interaction or idle
+      loadBatch(51, 100, 500);
 
       // Load frames 101-150 after longer delay
       loadBatch(101, 150, 1000);
@@ -423,23 +440,27 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     // Initial render
     render();
 
-    // Setup ScrollTrigger immediately after first frame is ready (don't wait for all frames)
-    const setupAfterFirstFrame = () => {
-      if (imagesRef.current[0] && imagesRef.current[0].complete) {
+    // Setup ScrollTrigger after first 20 frames are loaded (for smooth initial animation)
+    const setupAfterInitialFrames = () => {
+      // Check if first frame is ready and at least 20 frames are loaded
+      const firstFrameReady = imagesRef.current[0] && imagesRef.current[0].complete;
+      const initialFramesReady = initialFramesLoadedRef.current >= 20;
+
+      if (firstFrameReady && initialFramesReady) {
         setupScrollTrigger();
         ScrollTrigger.refresh();
-        // Signal animation is fully ready (first frame rendered + ScrollTrigger initialized)
+        // Signal animation is fully ready (first 20 frames + ScrollTrigger initialized)
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
         }
       } else {
-        // Retry if first frame not ready yet (max 5 retries = 250ms)
-        setTimeout(setupAfterFirstFrame, 50);
+        // Retry if initial frames not ready yet
+        setTimeout(setupAfterInitialFrames, 100);
       }
     };
 
-    // Start setup immediately - first frame should already be loading
-    setupAfterFirstFrame();
+    // Start checking after a short delay to allow frames to start loading
+    setTimeout(setupAfterInitialFrames, 200);
 
     const handleResize = () => {
       setCanvasSize();

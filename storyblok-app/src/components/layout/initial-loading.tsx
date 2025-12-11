@@ -17,6 +17,15 @@ export function InitialLoading() {
     let animationReady = false;
     let pageLoaded = false;
     let animationTimeout: NodeJS.Timeout | null = null;
+    let hasHeroMediaVideo = false;
+
+    // Check if HeroMediaVideo exists on the page
+    const checkForHeroMediaVideo = () => {
+      // Check if there's a hero-media section or HeroMediaVideo component
+      const heroMediaSection = document.querySelector('.hero-media, [class*="hero-media"]');
+      hasHeroMediaVideo = !!heroMediaSection;
+      return hasHeroMediaVideo;
+    };
 
     // Hide loading once React has hydrated and page is ready
     const hideLoading = () => {
@@ -24,6 +33,16 @@ export function InitialLoading() {
       const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed);
 
       setTimeout(() => {
+        // Force scroll to top before showing content
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+
+        // Reset Lenis if it exists
+        if (typeof window !== 'undefined' && (window as any).__lenis__) {
+          (window as any).__lenis__.scrollTo(0, { immediate: true });
+        }
+
         // Notify that initial loading is complete (so Banner can start animating)
         setInitialLoadingComplete();
         // Start fade-out transition
@@ -31,39 +50,52 @@ export function InitialLoading() {
         // Remove from DOM after fade-out completes
         setTimeout(() => {
           setIsLoading(false);
+          // Ensure scroll is still at top after loading screen is gone
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
         }, 500); // Match transition duration
       }, remainingTime);
     };
 
     const checkReady = () => {
-      // Wait for page load, and animation ready (if HeroMediaVideo exists)
-      // If no HeroMediaVideo on page, animationReady stays false but we proceed anyway after page load
-      if (pageLoaded) {
-        // If animation hasn't fired after 1.5s, assume no HeroMediaVideo and proceed
-        if (!animationReady && animationTimeout === null) {
-          animationTimeout = setTimeout(() => {
-            animationReady = true; // Mark as ready even without event
-            hideLoading();
-          }, 1500); // Give HeroMediaVideo 1.5s to fire, then proceed
-        } else if (animationReady) {
+      if (!pageLoaded) return;
+
+      // If HeroMediaVideo exists, wait for animation ready event
+      if (hasHeroMediaVideo) {
+        if (animationReady) {
           hideLoading();
         }
+        // Don't proceed without animation ready if HeroMediaVideo exists
+      } else {
+        // No HeroMediaVideo - proceed after page load
+        hideLoading();
       }
     };
 
-    // Listen for animation ready event (optional - only if HeroMediaVideo exists)
+    // Listen for animation ready event (only fires if HeroMediaVideo exists)
     const handleAnimationReady = () => {
       if (animationTimeout) {
         clearTimeout(animationTimeout);
         animationTimeout = null;
       }
       animationReady = true;
+      hasHeroMediaVideo = true; // Confirm HeroMediaVideo exists
       checkReady();
     };
 
     if (typeof window !== 'undefined') {
-      // Listen for animation ready event (optional)
+      // Listen for animation ready event
       window.addEventListener('hero-animation-ready', handleAnimationReady, { once: true });
+
+      // Check for HeroMediaVideo after a short delay (to allow DOM to render)
+      setTimeout(() => {
+        checkForHeroMediaVideo();
+        // If no HeroMediaVideo found and page is loaded, proceed after 1.5s
+        if (!hasHeroMediaVideo && pageLoaded) {
+          animationTimeout = setTimeout(() => {
+            hideLoading();
+          }, 1500);
+        }
+      }, 100);
 
       if (document.readyState === 'complete') {
         // Page already loaded
@@ -73,17 +105,23 @@ export function InitialLoading() {
         // Wait for page load event
         const handlePageLoad = () => {
           pageLoaded = true;
+          // If no HeroMediaVideo, proceed after short delay
+          if (!hasHeroMediaVideo) {
+            animationTimeout = setTimeout(() => {
+              hideLoading();
+            }, 1500);
+          }
           checkReady();
         };
         window.addEventListener('load', handlePageLoad, { once: true });
 
-        // Safety timeout to prevent stuck loading (max 5 seconds - reduced from 8)
+        // Safety timeout to prevent stuck loading (max 8 seconds)
         const timeout = setTimeout(() => {
           pageLoaded = true;
           animationReady = true; // Force ready if timeout
           if (animationTimeout) clearTimeout(animationTimeout);
           hideLoading();
-        }, 5000);
+        }, 8000);
 
         return () => {
           window.removeEventListener('load', handlePageLoad);
