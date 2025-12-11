@@ -40,34 +40,44 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Initialize Lenis smooth scroll (only on desktop, not mobile/tablet)
+  // Initialize Lenis smooth scroll (only on desktop, not mobile/tablet) - deferred for performance
   useEffect(() => {
     if (!isMounted || typeof window === 'undefined' || isMobile) return;
     if (lenisRef.current) return;
 
-    gsap.registerPlugin(ScrollTrigger);
+    // Defer Lenis initialization until after first paint
+    const initLenis = () => {
+      gsap.registerPlugin(ScrollTrigger);
 
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    });
+      const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        touchMultiplier: 2,
+        infinite: false,
+      });
 
-    lenisRef.current = lenis;
+      lenisRef.current = lenis;
 
-    function raf(time: number) {
-      lenis.raf(time);
-      ScrollTrigger.update();
+      function raf(time: number) {
+        lenis.raf(time);
+        ScrollTrigger.update();
+        requestAnimationFrame(raf);
+      }
+
       requestAnimationFrame(raf);
-    }
+      gsap.ticker.lagSmoothing(0);
+    };
 
-    requestAnimationFrame(raf);
-    gsap.ticker.lagSmoothing(0);
+    // Use requestIdleCallback if available, otherwise setTimeout
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initLenis, { timeout: 100 });
+    } else {
+      setTimeout(initLenis, 0);
+    }
 
     return () => {
       if (lenisRef.current) {
@@ -145,7 +155,6 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         try {
           ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
           videoFramesRef.current.frame = 0;
-          // Don't signal here - wait for ScrollTrigger to be ready on desktop
         } catch (error) {
           console.error('Error drawing first frame:', error);
         }
@@ -175,10 +184,10 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       if (index === 0 && !firstFrameRendered) {
         imagesRef.current = [...loadedImages];
         renderFirstFrame();
-        // Don't signal ready here - wait for renderFirstFrame to complete
+        // Don't signal here - setupAfterFirstFrame will signal when ScrollTrigger is ready
       }
 
-      // When all requested frames are loaded
+      // When all requested frames are loaded (for smooth scrolling)
       if (loadedCount === frameCount) {
         imagesRef.current = [...loadedImages];
         setImages([...loadedImages]);
@@ -205,13 +214,13 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       loadedImages[0] = img;
     };
 
-    // Load remaining frames progressively in batches
+    // Load remaining frames progressively in batches (optimized for performance)
     const loadRemainingFrames = () => {
       if (allFramesRequested) return;
       allFramesRequested = true;
 
-      // Load frames 1-20 immediately (near the start, likely to be scrolled to)
-      for (let i = 1; i <= Math.min(20, frameCount - 1); i++) {
+      // Load frames 1-30 immediately (critical for initial scroll)
+      for (let i = 1; i <= Math.min(30, frameCount - 1); i++) {
         const img = document.createElement('img');
         img.onload = (e) => onLoad(e, i);
         img.onerror = (e) => onError(e, i);
@@ -219,38 +228,36 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
         loadedImages[i] = img;
       }
 
-      // Load frames 21-50 after a short delay
-      setTimeout(() => {
-        for (let i = 21; i <= Math.min(50, frameCount - 1); i++) {
-          const img = document.createElement('img');
-          img.onload = (e) => onLoad(e, i);
-          img.onerror = (e) => onError(e, i);
-          img.src = currentFrame(i);
-          loadedImages[i] = img;
-        }
-      }, 200);
+      // Use requestIdleCallback for non-critical frame loading
+      const loadBatch = (start: number, end: number, delay: number) => {
+        const load = () => {
+          for (let i = start; i <= Math.min(end, frameCount - 1); i++) {
+            const img = document.createElement('img');
+            img.onload = (e) => onLoad(e, i);
+            img.onerror = (e) => onError(e, i);
+            img.src = currentFrame(i);
+            loadedImages[i] = img;
+          }
+        };
 
-      // Load frames 51-100 after another delay
-      setTimeout(() => {
-        for (let i = 51; i <= Math.min(100, frameCount - 1); i++) {
-          const img = document.createElement('img');
-          img.onload = (e) => onLoad(e, i);
-          img.onerror = (e) => onError(e, i);
-          img.src = currentFrame(i);
-          loadedImages[i] = img;
+        if ('requestIdleCallback' in window && delay > 500) {
+          requestIdleCallback(load, { timeout: delay });
+        } else {
+          setTimeout(load, delay);
         }
-      }, 500);
+      };
 
-      // Load remaining frames (101-end) after another delay
-      setTimeout(() => {
-        for (let i = 101; i < frameCount; i++) {
-          const img = document.createElement('img');
-          img.onload = (e) => onLoad(e, i);
-          img.onerror = (e) => onError(e, i);
-          img.src = currentFrame(i);
-          loadedImages[i] = img;
-        }
-      }, 1000);
+      // Load frames 31-60 after initial paint
+      loadBatch(31, 60, 100);
+
+      // Load frames 61-100 after user interaction or idle
+      loadBatch(61, 100, 500);
+
+      // Load frames 101-150 after longer delay
+      loadBatch(101, 150, 1000);
+
+      // Load remaining frames (151-end) lazily
+      loadBatch(151, frameCount - 1, 2000);
     };
 
     // Start loading
@@ -416,15 +423,23 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     // Initial render
     render();
 
-    // Setup ScrollTrigger after a short delay to ensure everything is ready
-    setTimeout(() => {
-      setupScrollTrigger();
-      ScrollTrigger.refresh();
-      // Signal animation is fully ready (first frame rendered + ScrollTrigger initialized)
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
+    // Setup ScrollTrigger immediately after first frame is ready (don't wait for all frames)
+    const setupAfterFirstFrame = () => {
+      if (imagesRef.current[0] && imagesRef.current[0].complete) {
+        setupScrollTrigger();
+        ScrollTrigger.refresh();
+        // Signal animation is fully ready (first frame rendered + ScrollTrigger initialized)
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
+        }
+      } else {
+        // Retry if first frame not ready yet (max 5 retries = 250ms)
+        setTimeout(setupAfterFirstFrame, 50);
       }
-    }, 150); // Slightly longer delay to ensure ScrollTrigger is fully initialized
+    };
+
+    // Start setup immediately - first frame should already be loading
+    setupAfterFirstFrame();
 
     const handleResize = () => {
       setCanvasSize();
