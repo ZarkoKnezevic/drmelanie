@@ -129,7 +129,7 @@ export default function Footer({ blok }: FooterProps) {
                 {blok.navigation.map((slug, index) => {
                   // Map field names to display labels
                   const fieldNameToLabel: Record<string, string> = {
-                    uber_uns: 'Über mich',
+                    uber_uns: 'Über uns',
                     uber_mich: 'Über mich',
                     ursprung_des_lebens: 'Ursprung des Lebens',
                     services: 'Services',

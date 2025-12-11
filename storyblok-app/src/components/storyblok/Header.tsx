@@ -1,7 +1,10 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/components/button';
+import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
 import { prepareLinkProps } from '@/lib/adapters/prepareLinkProps';
+import { logger } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface HeaderProps {
@@ -14,23 +17,39 @@ interface HeaderProps {
         alt?: string;
       };
     };
-    logo_link?: string | { linktype?: string; url?: string; cached_url?: string };
+    logo_link?:
+      | string
+      | { linktype?: 'story' | 'url' | 'email'; id?: string; url?: string; cached_url?: string };
+    blob?: {
+      filename?: string;
+      alt?: string;
+      asset?: {
+        filename?: string;
+        alt?: string;
+      };
+    };
     button?: StoryblokBlok | StoryblokBlok[];
     button_text?: string;
-    button_link?: string | { linktype?: string; url?: string; cached_url?: string };
+    button_link?:
+      | string
+      | { linktype?: 'story' | 'url' | 'email'; id?: string; url?: string; cached_url?: string };
     button_variant?: string;
   };
 }
 
 export default function Header({ blok }: HeaderProps) {
+  // Debug: Log blok data in development
+  if (process.env.NODE_ENV === 'development') {
+    logger.debug('Header blok:', JSON.stringify(blok, null, 2));
+  }
+
   // Handle button - can be a nested component or direct fields
   const buttonBlok = Array.isArray(blok.button) ? blok.button[0] : blok.button;
   const buttonText = buttonBlok?.text || blok.button_text || 'Button';
-  const buttonVariant = (buttonBlok?.variant || buttonBlok?.variants || blok.button_variant || 'secondary') as
-    | 'primary'
-    | 'secondary'
-    | 'tertiary'
-    | 'quaternary';
+  const buttonVariant = (buttonBlok?.variant ||
+    buttonBlok?.variants ||
+    blok.button_variant ||
+    'secondary') as 'primary' | 'secondary' | 'tertiary' | 'quaternary';
 
   // Get button link
   let buttonHref: string | null = null;
@@ -72,26 +91,46 @@ export default function Header({ blok }: HeaderProps) {
     }
   }
 
-  return (
-    <header
-      {...storyblokEditable(blok)}
-      className="absolute top-0 z-50 w-full bg-transparent"
-    >
-      <div className="container flex h-16 lg:h-24 xl:h-32 items-center justify-between">
-        {/* Logo */}
-        {blok.logo?.filename && (
-          <Link href={logoHref} className="flex items-center">
-            <img
-              src={blok.logo.filename}
-              alt={blok.logo.alt || 'Logo'}
-              className="h-8 lg:h-12 xl:h-16 w-auto"
-            />
-          </Link>
-        )}
+  // Prepare image props
+  const logoProps = blok.logo ? prepareImageProps(blok.logo) : null;
+  const blobProps = blok.blob ? prepareImageProps(blok.blob) : null;
 
-        {/* Button */}
+  return (
+    <header {...storyblokEditable(blok)} className="absolute top-0 z-50 w-full bg-transparent">
+      <div className="container flex justify-between ">
+        {/* Logo with Blob on the left */}
+        <Link href={logoHref} className="flex items-center pt-16 lg:pt-8">
+          {logoProps?.src && (
+            <div className="relative h-40 w-40">
+              {/* Background blob image */}
+              {blobProps?.src && (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `url(${blobProps.src})`,
+                    backgroundSize: 'contain',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right top',
+                  }}
+                />
+              )}
+              {/* Logo */}
+              <div className="absolute inset-0">
+                <Image
+                  src={logoProps.src}
+                  alt={logoProps.alt || 'Logo'}
+                  fill
+                  className="relative z-10 object-contain"
+                  priority
+                />
+              </div>
+            </div>
+          )}
+        </Link>
+
+        {/* Button on the right */}
         {(buttonBlok || blok.button_text) && (
-          <div className="flex items-center">
+          <div className="flex h-16 items-center justify-start lg:h-24 xl:h-32">
             {buttonHref ? (
               <Button asChild variant={buttonVariant}>
                 <Link href={buttonHref}>{buttonText}</Link>
@@ -105,4 +144,3 @@ export default function Header({ blok }: HeaderProps) {
     </header>
   );
 }
-

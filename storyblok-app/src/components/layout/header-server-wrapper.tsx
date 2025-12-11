@@ -1,35 +1,41 @@
-import { headers } from 'next/headers';
 import { getGlobalSettings } from '@/lib/storyblok/getGlobalSettings';
 import { StoryblokServerComponent } from '@storyblok/react/rsc';
-import { SiteHeader } from './site-header';
+import { logger } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 export async function HeaderServerWrapper() {
-  // Get pathname from headers set by middleware
-  const headersList = await headers();
-  const pathname = headersList.get('x-pathname') || '/';
-  const isHomePage = pathname === '/' || pathname === '/home';
-
-  // On home page, always use SiteHeader
-  if (isHomePage) {
-    return <SiteHeader />;
-  }
-
-  // On other pages, fetch and use Storyblok header
+  // This component is only called for non-home pages
+  // The Client Component (ConditionalHeaderWrapper) handles pathname detection
+  
   try {
     const settings = await getGlobalSettings();
+
+    if (process.env.NODE_ENV === 'development') {
+      logger.debug('HeaderServerWrapper - settings:', JSON.stringify(settings, null, 2));
+    }
 
     // Validate header blok before rendering
     if (settings.header && settings.header.component && settings.header._uid) {
       return <StoryblokServerComponent blok={settings.header as StoryblokBlok} />;
     }
 
-    // Fallback to default header
-    return <SiteHeader />;
+    // On non-home pages, if no Storyblok header found, render empty header
+    if (process.env.NODE_ENV === 'development') {
+      logger.warn('HeaderServerWrapper - No Storyblok header found, rendering empty header');
+    }
+    return (
+      <header className="absolute top-0 z-50 w-full bg-transparent">
+        <div className="container flex h-16 items-center justify-between lg:h-24 xl:h-32" />
+      </header>
+    );
   } catch (error) {
-    // If there's any error, fallback to default header
-    console.error('Error in HeaderServerWrapper:', error);
-    return <SiteHeader />;
+    // On non-home pages, if there's an error, render empty header
+    logger.error('Error in HeaderServerWrapper:', error);
+    return (
+      <header className="absolute top-0 z-50 w-full bg-transparent">
+        <div className="container flex h-16 items-center justify-between lg:h-24 xl:h-32" />
+      </header>
+    );
   }
 }
 

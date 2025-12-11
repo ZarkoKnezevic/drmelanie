@@ -6,7 +6,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/components/toaster';
 import { Suspense } from 'react';
 import { ConditionalHeaderWrapper } from '@/components/layout/conditional-header-wrapper';
-import { HeaderServerWrapper } from '@/components/layout/header-server-wrapper';
+import { StoryblokHeaderWrapper } from '@/components/layout/storyblok-header-wrapper';
+import { ConditionalFooterWrapper } from '@/components/layout/conditional-footer-wrapper';
 import { GlobalFooter } from '@/components/layout/global-footer';
 import { InitialLoading } from '@/components/layout/initial-loading';
 import { PageTransition } from '@/components/layout/page-transition';
@@ -110,15 +111,13 @@ export default function RootLayout({
                 <InitialLoading />
                 <PageTransition>
                   <div className="relative flex min-h-screen flex-col">
-                    <Suspense fallback={<div className="h-16 lg:h-24 xl:h-32" />}>
-                      <ConditionalHeaderWrapper>
-                        <HeaderServerWrapper />
-                      </ConditionalHeaderWrapper>
-                    </Suspense>
+                    <ConditionalHeaderWrapper storyblokHeader={<StoryblokHeaderWrapper />} />
                     <main className="flex-1">{children}</main>
-                    <Suspense fallback={<footer className="h-24 border-t bg-background" />}>
-                      <GlobalFooter />
-                    </Suspense>
+                    <ConditionalFooterWrapper>
+                      <Suspense fallback={<footer className="h-24 border-t bg-background" />}>
+                        <GlobalFooter />
+                      </Suspense>
+                    </ConditionalFooterWrapper>
                   </div>
                 </PageTransition>
                 <Toaster />

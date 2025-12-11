@@ -4,6 +4,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Header visibility based on page type */
+.header-site-header {
+  display: none;
+}
+
+.header-storyblok {
+  display: block;
+}
+
+/* Show site header on home page */
+body.is-home-page .header-site-header {
+  display: block;
+}
+
+body.is-home-page .header-storyblok {
+  display: none;
+}
+
+/* Show storyblok header on inner pages */
+body.is-inner-page .header-site-header {
+  display: none;
+}
+
+body.is-inner-page .header-storyblok {
+  display: block;
+}
+
 @layer base {
   * {
     @apply border-border;
@@ -15,16 +42,16 @@
 
   body,
   .body {
-    @apply bg-background text-foreground text-body-sm md:text-body-md lg:text-body-lg;
+    @apply bg-background text-body-sm text-foreground md:text-body-md lg:text-body-lg;
   }
 
   .container {
-    @apply mx-auto px-4 md:px-6 lg:px-8 xl:px-10 max-w-container;
+    @apply mx-auto max-w-container px-4 md:px-6 lg:px-8 xl:px-10;
   }
 
   p,
   .text-body {
-    @apply text-body-sm md:text-body-md lg:text-body-lg mb-[0.7em];
+    @apply mb-[0.7em] text-body-sm md:text-body-md lg:text-body-lg;
     font-weight: var(--font-weight-body);
   }
 
@@ -59,7 +86,6 @@
   h1,
   .h1 {
     @apply text-h1 md:text-h1-md lg:text-h1-lg;
-
   }
 
   h2,
@@ -95,28 +121,28 @@
     @apply -mt-4;
   }
 
-          .torn-edge-bottom + .torn-edge-top::before {
-            @apply bg-transparent;
-          }
+  .torn-edge-bottom + .torn-edge-top::before {
+    @apply bg-transparent;
+  }
 
-          /* Lenis smooth scroll styles */
-          html.lenis {
-            height: auto;
-          }
+  /* Lenis smooth scroll styles */
+  html.lenis {
+    height: auto;
+  }
 
-          .lenis.lenis-smooth {
-            scroll-behavior: auto !important;
-          }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
 
-          .lenis.lenis-smooth [data-lenis-prevent] {
-            overscroll-behavior: contain;
-          }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
 
-          .lenis.lenis-stopped {
-            overflow: hidden;
-          }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
 
-          .lenis.lenis-smooth iframe {
-            pointer-events: none;
-          }
-        }
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
+  }
+}

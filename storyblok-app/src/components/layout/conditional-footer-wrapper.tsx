@@ -1,21 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { HeaderWrapper } from './header-wrapper';
 
-interface ConditionalHeaderWrapperProps {
-  storyblokHeader: React.ReactNode;
+interface ConditionalFooterWrapperProps {
+  children: React.ReactNode;
 }
 
-export function ConditionalHeaderWrapper({ storyblokHeader }: ConditionalHeaderWrapperProps) {
+export function ConditionalFooterWrapper({ children }: ConditionalFooterWrapperProps) {
   const [shouldHide, setShouldHide] = useState(false);
 
   useEffect(() => {
     // Use MutationObserver to watch for data attributes on the body or main element
     const checkForSpecialPages = () => {
       const isNotFound = document.querySelector('[data-not-found]') !== null;
-      const isLoading = document.querySelector('[data-loading]') !== null;
-      setShouldHide(isNotFound || isLoading);
+      setShouldHide(isNotFound);
     };
 
     // Check immediately
@@ -23,14 +21,14 @@ export function ConditionalHeaderWrapper({ storyblokHeader }: ConditionalHeaderW
 
     // Watch for changes in the DOM
     const observer = new MutationObserver(checkForSpecialPages);
-
+    
     // Observe the body for changes
     if (typeof document !== 'undefined') {
       observer.observe(document.body, {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['data-not-found', 'data-loading'],
+        attributeFilter: ['data-not-found'],
       });
     }
 
@@ -41,5 +39,6 @@ export function ConditionalHeaderWrapper({ storyblokHeader }: ConditionalHeaderW
     return null;
   }
 
-  return <HeaderWrapper storyblokHeader={storyblokHeader} />;
+  return <>{children}</>;
 }
+
