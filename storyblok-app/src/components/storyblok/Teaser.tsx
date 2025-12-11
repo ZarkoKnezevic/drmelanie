@@ -1,65 +1,41 @@
-'use client';
-
 import { storyblokEditable } from '@storyblok/react/rsc';
-import Image from 'next/image';
-import { cn, getBackgroundClass } from '@/utils';
+import * as motion from 'motion/react-client';
+import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface TeaserProps {
   blok: StoryblokBlok & {
     headline: string;
-    description?: string;
-    image?: {
-      filename: string;
-      alt?: string;
-    };
-    link?: {
-      url: string;
-      cached_url?: string;
-    };
     background?: string;
+    torn_paper_edges?: boolean;
   };
 }
 
 export default function Teaser({ blok }: TeaserProps) {
-  const linkUrl = blok.link?.cached_url || blok.link?.url || '#';
   const backgroundClass = getBackgroundClass(blok.background);
+  const textColorClass = getTextColorClass(blok.background);
+  const hasTornEdges = blok.torn_paper_edges === true;
 
   return (
-    <div
+    <section
       {...storyblokEditable(blok)}
       className={cn(
-        'group rounded-lg border border-gray-200 p-6 shadow-sm transition-shadow hover:shadow-lg dark:border-gray-700 dark:bg-gray-800',
-        backgroundClass || 'bg-white'
+        'teaser relative',
+        hasTornEdges && 'torn-edge torn-edge-top torn-edge-bottom mb-4',
+        backgroundClass
       )}
     >
-      {blok.image?.filename && (
-        <div className="relative mb-4 aspect-video w-full overflow-hidden rounded-lg">
-          <Image
-            src={blok.image.filename}
-            alt={blok.image.alt || blok.headline}
-            fill
-            className="object-cover transition-transform group-hover:scale-105"
-          />
-        </div>
-      )}
-      <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-        {blok.headline}
-      </h2>
-      {blok.description && (
-        <p className="mb-4 text-gray-600 dark:text-gray-300">
-          {blok.description}
-        </p>
-      )}
-      {blok.link && (
-        <a
-          href={linkUrl}
-          className="inline-block font-semibold text-blue-600 transition-colors hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+      <div className="spacing container">
+        <motion.div
+          className={cn('flex flex-col items-center justify-center text-center', textColorClass)}
+          initial={{ opacity: 0, y: -24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          Read more →
-        </a>
-      )}
-    </div>
+          {blok.headline && <h2 className="h2">{blok.headline}</h2>}
+        </motion.div>
+      </div>
+    </section>
   );
 }
-
