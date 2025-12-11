@@ -16,7 +16,10 @@ const nextConfig: NextConfig = {
   },
   // Enable React strict mode
   reactStrictMode: true,
+  // Ensure CSS is properly processed in production
+  experimental: {
+    optimizePackageImports: ['@radix-ui/react-icons'],
+  },
 };
 
 export default nextConfig;
-
