@@ -1,89 +1,89 @@
 :root {
-    /* Base Colors */
-    --white: #FFFFFF;
-    --mauve: #8A6D7B;
-    --magenta: #C7017F;
-    --lavander: #9E7E91;
-    --gray: #6C6A66;
-    --teal: #008080;
-    --warm-beige: #BFA9A0;
-    --light-gray: #F5F5F5;
-    --dark-gray: #2B2B2B;
-    --soft-sand: #F0EFED;
-    --brand-text: #303030;
-    --brand-background: #F0EFED;
+  /* Base Colors */
+  --white: #ffffff;
+  --mauve: #dfa0be;
+  --magenta: #c7017f;
+  --lavander: #9e7e91;
+  --gray: #6c6a66;
+  --teal: #008080;
+  --warm-beige: #bfa9a0;
+  --light-gray: #f5f5f5;
+  --dark-gray: #2b2b2b;
+  --soft-sand: #f0efed;
+  --brand-text: #303030;
+  --brand-background: #f0efed;
 
-    /* Background Colors */
-    --background: var(--light-gray);
-    --foreground: var(--mauve);
-    --background-primary: var(--white);
-    --background-secondary: var(--mauve);
-    --background-tertiary: var(--light-gray);
-    --background-quaternary: var(--teal);
+  /* Background Colors */
+  --background: var(--light-gray);
+  --foreground: var(--mauve);
+  --background-primary: var(--white);
+  --background-secondary: var(--mauve);
+  --background-tertiary: var(--light-gray);
+  --background-quaternary: var(--teal);
 
-    /* Button Colors */
-    --button-primary: var(--lavander);
-    --button-primary-foreground: var(--white);
-    --button-primary-hover: #7A5D6B;
-    --button-secondary: var(--magenta);
-    --button-secondary-foreground: var(--white);
-    --button-secondary-hover: #B7016F;
-    --button-tertiary: var(--warm-beige);
-    --button-tertiary-foreground: var(--white);
-    --button-tertiary-hover: #AF9990;
-    --button-quaternary: var(--teal);
-    --button-quaternary-foreground: var(--white);
-    --button-quaternary-hover: #006666;
+  /* Button Colors */
+  --button-primary: var(--lavander);
+  --button-primary-foreground: var(--white);
+  --button-primary-hover: #7a5d6b;
+  --button-secondary: var(--magenta);
+  --button-secondary-foreground: var(--white);
+  --button-secondary-hover: #b7016f;
+  --button-tertiary: var(--warm-beige);
+  --button-tertiary-foreground: var(--white);
+  --button-tertiary-hover: #af9990;
+  --button-quaternary: var(--teal);
+  --button-quaternary-foreground: var(--white);
+  --button-quaternary-hover: #006666;
 
-    /* Semantic Colors */
-    --primary: var(--white);
-    --primary-foreground: var(--mauve);
-    --secondary: var(--mauve);
-    --secondary-foreground: var(--white);
-    --tertiary: var(--dark-gray);
-    --tertiary-foreground: var(--mauve);
-    --quaternary: var(--teal);
-    --quaternary-foreground: var(--white);
+  /* Semantic Colors */
+  --primary: var(--white);
+  --primary-foreground: var(--mauve);
+  --secondary: var(--mauve);
+  --secondary-foreground: var(--white);
+  --tertiary: var(--dark-gray);
+  --tertiary-foreground: var(--mauve);
+  --quaternary: var(--teal);
+  --quaternary-foreground: var(--white);
 
-    /* UI Colors */
-    --card: 0 0% 100%;
-    --card-foreground: 30 4% 41%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 30 4% 41%;
-    --muted: 30 20% 85%;
-    --muted-foreground: 30 4% 41%;
-    --accent: 338 11% 50%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 30 20% 75%;
-    --input: 30 20% 75%;
-    --ring: 188 70% 31%;
+  /* UI Colors */
+  --card: 0 0% 100%;
+  --card-foreground: 30 4% 41%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 30 4% 41%;
+  --muted: 30 20% 85%;
+  --muted-foreground: 30 4% 41%;
+  --accent: 338 11% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 30 20% 75%;
+  --input: 30 20% 75%;
+  --ring: 188 70% 31%;
 
-    /* Radius */
-    --radius: 0.5rem;
+  /* Radius */
+  --radius: 0.5rem;
 }
 
 .dark {
-    --background: 200 25% 11%;
-    --foreground: 0 0% 100%;
-    --card: 200 25% 14%;
-    --card-foreground: 0 0% 100%;
-    --popover: 200 25% 14%;
-    --popover-foreground: 0 0% 100%;
-    --primary: #ffffff;
-    --primary-foreground: #8A6D7B;
-    --secondary: #F5F5F5;
-    --secondary-foreground: #8A6D7B;
-    --tertiary: #8A6D7B;
-    --tertiary-foreground: #FFFFFF;
-    --muted: 200 15% 20%;
-    --muted-foreground: 0 0% 70%;
-    --accent: 338 15% 40%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 70% 40%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 200 15% 25%;
-    --input: 200 15% 25%;
-    --ring: 188 65% 50%;
+  --background: 200 25% 11%;
+  --foreground: 0 0% 100%;
+  --card: 200 25% 14%;
+  --card-foreground: 0 0% 100%;
+  --popover: 200 25% 14%;
+  --popover-foreground: 0 0% 100%;
+  --primary: #ffffff;
+  --primary-foreground: #8a6d7b;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #8a6d7b;
+  --tertiary: #8a6d7b;
+  --tertiary-foreground: #ffffff;
+  --muted: 200 15% 20%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 338 15% 40%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 70% 40%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 200 15% 25%;
+  --input: 200 15% 25%;
+  --ring: 188 65% 50%;
 }

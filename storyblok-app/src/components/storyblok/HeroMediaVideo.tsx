@@ -74,187 +74,195 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     };
   }, [isMounted, isMobile]);
 
-  // Load all frame images (only once)
+  // Load frame images (optimized: mobile = last frame only, desktop = progressive loading)
   useEffect(() => {
     if (!isMounted || imagesLoadingRef.current) return;
     imagesLoadingRef.current = true;
 
-    const loadImages = async () => {
-      const loadedImages: HTMLImageElement[] = [];
-      let loadedCount = 0;
-      let firstFrameRendered = false;
-      const currentIsMobile = window.innerWidth < 768;
+    const currentIsMobile = window.innerWidth < 768;
+    const currentFrame = (index: number) =>
+      `/frames/frame_${(index + 1).toString().padStart(4, '0')}.png`;
 
-      const currentFrame = (index: number) =>
-        `/frames/frame_${(index + 1).toString().padStart(4, '0')}.png`;
+    // MOBILE: Only load the last frame
+    if (currentIsMobile) {
+      const loadedImages: HTMLImageElement[] = new Array(frameCount).fill(null);
+      const lastFrameIndex = frameCount - 1;
 
-      const renderFirstFrame = () => {
-        if (firstFrameRendered || !canvasRef.current) return;
-        firstFrameRendered = true;
-
-        const tryRender = () => {
-          const canvas = canvasRef.current;
-          if (!canvas) return;
-          const ctx = canvas.getContext('2d');
-          const img = loadedImages[0];
-
-          // Check if image exists, is complete, and not broken
-          if (!ctx || !img || !img.complete || img.naturalWidth === 0 || img.naturalHeight === 0) {
-            // Retry after a short delay if image isn't ready
-            setTimeout(tryRender, 50);
-            return;
-          }
-
-          const pixelRatio = window.devicePixelRatio || 1;
-          canvas.width = window.innerWidth * pixelRatio;
-          canvas.height = window.innerHeight * pixelRatio;
-          canvas.style.width = window.innerWidth + 'px';
-          canvas.style.height = window.innerHeight + 'px';
-          ctx.scale(pixelRatio, pixelRatio);
-
-          const imageAspect = img.naturalWidth / img.naturalHeight;
-          const canvasAspect = window.innerWidth / window.innerHeight;
-
-          let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
-          if (imageAspect > canvasAspect) {
-            drawHeight = window.innerHeight;
-            drawWidth = drawHeight * imageAspect;
-            drawX = (window.innerWidth - drawWidth) / 2;
-            drawY = 0;
-          } else {
-            drawWidth = window.innerWidth;
-            drawHeight = drawWidth / imageAspect;
-            drawX = 0;
-            drawY = (window.innerHeight - drawHeight) / 2;
-          }
-
-          try {
-            ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-            videoFramesRef.current.frame = 0;
-          } catch (error) {
-            console.error('Error drawing first frame:', error);
-          }
-        };
-
-        setTimeout(tryRender, 50);
+      const img = document.createElement('img');
+      img.onload = () => {
+        if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+          loadedImages[lastFrameIndex] = img;
+          imagesRef.current = loadedImages;
+          setImages(loadedImages);
+          setImagesLoaded(true);
+        }
       };
-
-      const renderLastFrame = () => {
-        if (!canvasRef.current) return;
-
-        const tryRender = () => {
-          const canvas = canvasRef.current;
-          if (!canvas) return;
-          const ctx = canvas.getContext('2d');
-          const lastFrameIndex = frameCount - 1;
-          const img = loadedImages[lastFrameIndex];
-
-          // Check if image exists, is complete, and not broken
-          if (!ctx || !img || !img.complete || img.naturalWidth === 0 || img.naturalHeight === 0) {
-            // Retry after a short delay if image isn't ready
-            setTimeout(tryRender, 50);
-            return;
-          }
-
-          const pixelRatio = window.devicePixelRatio || 1;
-          canvas.width = window.innerWidth * pixelRatio;
-          canvas.height = window.innerHeight * pixelRatio;
-          canvas.style.width = window.innerWidth + 'px';
-          canvas.style.height = window.innerHeight + 'px';
-          ctx.scale(pixelRatio, pixelRatio);
-
-          const imageAspect = img.naturalWidth / img.naturalHeight;
-          const canvasAspect = window.innerWidth / window.innerHeight;
-
-          let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
-          if (imageAspect > canvasAspect) {
-            drawHeight = window.innerHeight;
-            drawWidth = drawHeight * imageAspect;
-            drawX = (window.innerWidth - drawWidth) / 2;
-            drawY = 0;
-          } else {
-            drawWidth = window.innerWidth;
-            drawHeight = drawWidth / imageAspect;
-            drawX = 0;
-            drawY = (window.innerHeight - drawHeight) / 2;
-          }
-
-          try {
-            // Set the frame index to last frame so it doesn't get overwritten
-            videoFramesRef.current.frame = lastFrameIndex;
-            ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
-          } catch (error) {
-            console.error('Error drawing last frame:', error);
-          }
-        };
-
-        setTimeout(tryRender, 50);
+      img.onerror = () => {
+        console.error(`Failed to load last frame: ${currentFrame(lastFrameIndex)}`);
+        setImagesLoaded(true); // Still mark as loaded to avoid infinite waiting
       };
+      img.src = currentFrame(lastFrameIndex);
+      return;
+    }
 
-      const onLoad = (event: Event) => {
-        const img = event.target as HTMLImageElement;
+    // DESKTOP: Progressive loading strategy
+    const loadedImages: HTMLImageElement[] = new Array(frameCount).fill(null);
+    let loadedCount = 0;
+    let firstFrameRendered = false;
+    let allFramesRequested = false;
 
-        // Check if image loaded successfully (not broken)
-        if (img.naturalWidth === 0 || img.naturalHeight === 0) {
-          console.warn(`Image failed to load: ${img.src}`);
-          // Still count it to avoid infinite waiting
-          loadedCount++;
-          if (loadedCount === frameCount) {
-            imagesRef.current = [...loadedImages];
-            setImages([...loadedImages]);
-            setImagesLoaded(true);
-          }
+    const renderFirstFrame = () => {
+      if (firstFrameRendered || !canvasRef.current) return;
+      firstFrameRendered = true;
+
+      const tryRender = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const img = loadedImages[0];
+
+        if (!ctx || !img || !img.complete || img.naturalWidth === 0 || img.naturalHeight === 0) {
+          setTimeout(tryRender, 50);
           return;
         }
 
-        loadedCount++;
+        const pixelRatio = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * pixelRatio;
+        canvas.height = window.innerHeight * pixelRatio;
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+        ctx.scale(pixelRatio, pixelRatio);
 
-        // Show first frame immediately (desktop only) - only if image is valid
-        if (loadedCount === 1 && !currentIsMobile && img.naturalWidth > 0) {
-          imagesRef.current = [...loadedImages];
-          renderFirstFrame();
+        const imageAspect = img.naturalWidth / img.naturalHeight;
+        const canvasAspect = window.innerWidth / window.innerHeight;
+
+        let drawWidth: number, drawHeight: number, drawX: number, drawY: number;
+        if (imageAspect > canvasAspect) {
+          drawHeight = window.innerHeight;
+          drawWidth = drawHeight * imageAspect;
+          drawX = (window.innerWidth - drawWidth) / 2;
+          drawY = 0;
+        } else {
+          drawWidth = window.innerWidth;
+          drawHeight = drawWidth / imageAspect;
+          drawX = 0;
+          drawY = (window.innerHeight - drawHeight) / 2;
         }
 
-        // When all images are loaded, set state ONCE
+        try {
+          ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+          videoFramesRef.current.frame = 0;
+        } catch (error) {
+          console.error('Error drawing first frame:', error);
+        }
+      };
+
+      setTimeout(tryRender, 50);
+    };
+
+    const onLoad = (event: Event, index: number) => {
+      const img = event.target as HTMLImageElement;
+
+      if (img.naturalWidth === 0 || img.naturalHeight === 0) {
+        console.warn(`Image failed to load: ${img.src}`);
+        loadedCount++;
         if (loadedCount === frameCount) {
           imagesRef.current = [...loadedImages];
           setImages([...loadedImages]);
           setImagesLoaded(true);
-
-          // On mobile, render last frame
-          if (currentIsMobile) {
-            renderLastFrame();
-          }
         }
-      };
+        return;
+      }
 
-      const onError = (event: Event | string) => {
-        const img =
-          (typeof event === 'string' ? null : (event.target as HTMLImageElement)) ||
-          loadedImages[loadedCount];
-        const src = img?.src || 'unknown';
-        console.error(`Failed to load image: ${src}`);
-        loadedCount++;
-        // Still mark as loaded to avoid infinite waiting
-        if (loadedCount === frameCount) {
-          imagesRef.current = [...loadedImages];
-          setImages([...loadedImages]);
-          setImagesLoaded(true);
-        }
-      };
+      loadedImages[index] = img;
+      loadedCount++;
 
-      for (let i = 0; i < frameCount; i++) {
-        const img = document.createElement('img');
-        img.onload = onLoad;
-        img.onerror = onError;
-        img.src = currentFrame(i);
-        loadedImages.push(img);
+      // Show first frame immediately when it loads
+      if (index === 0 && !firstFrameRendered) {
+        imagesRef.current = [...loadedImages];
+        renderFirstFrame();
+      }
+
+      // When all requested frames are loaded
+      if (loadedCount === frameCount) {
+        imagesRef.current = [...loadedImages];
+        setImages([...loadedImages]);
+        setImagesLoaded(true);
       }
     };
 
-    loadImages();
+    const onError = (event: Event | string, index: number) => {
+      console.error(`Failed to load frame ${index + 1}`);
+      loadedCount++;
+      if (loadedCount === frameCount) {
+        imagesRef.current = [...loadedImages];
+        setImages([...loadedImages]);
+        setImagesLoaded(true);
+      }
+    };
+
+    // Load first frame immediately (critical for initial render)
+    const loadFirstFrame = () => {
+      const img = document.createElement('img');
+      img.onload = (e) => onLoad(e, 0);
+      img.onerror = (e) => onError(e, 0);
+      img.src = currentFrame(0);
+      loadedImages[0] = img;
+    };
+
+    // Load remaining frames progressively in batches
+    const loadRemainingFrames = () => {
+      if (allFramesRequested) return;
+      allFramesRequested = true;
+
+      // Load frames 1-20 immediately (near the start, likely to be scrolled to)
+      for (let i = 1; i <= Math.min(20, frameCount - 1); i++) {
+        const img = document.createElement('img');
+        img.onload = (e) => onLoad(e, i);
+        img.onerror = (e) => onError(e, i);
+        img.src = currentFrame(i);
+        loadedImages[i] = img;
+      }
+
+      // Load frames 21-50 after a short delay
+      setTimeout(() => {
+        for (let i = 21; i <= Math.min(50, frameCount - 1); i++) {
+          const img = document.createElement('img');
+          img.onload = (e) => onLoad(e, i);
+          img.onerror = (e) => onError(e, i);
+          img.src = currentFrame(i);
+          loadedImages[i] = img;
+        }
+      }, 200);
+
+      // Load frames 51-100 after another delay
+      setTimeout(() => {
+        for (let i = 51; i <= Math.min(100, frameCount - 1); i++) {
+          const img = document.createElement('img');
+          img.onload = (e) => onLoad(e, i);
+          img.onerror = (e) => onError(e, i);
+          img.src = currentFrame(i);
+          loadedImages[i] = img;
+        }
+      }, 500);
+
+      // Load remaining frames (101-end) after another delay
+      setTimeout(() => {
+        for (let i = 101; i < frameCount; i++) {
+          const img = document.createElement('img');
+          img.onload = (e) => onLoad(e, i);
+          img.onerror = (e) => onError(e, i);
+          img.src = currentFrame(i);
+          loadedImages[i] = img;
+        }
+      }, 1000);
+    };
+
+    // Start loading
+    loadFirstFrame();
+    loadRemainingFrames();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMounted, frameCount]); // Only run once when mounted, don't depend on imagesLoaded
+  }, [isMounted, frameCount]);
 
   // Set canvas size and render (only for desktop)
   useEffect(() => {
@@ -504,9 +512,9 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
   return (
     <section ref={heroRef} className="hero relative h-screen w-full bg-background">
       {/* Header element for 3D transform */}
-      <div className="header absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-        <h1 className="h1 text-center">Three pillars with one purpose</h1>
-      </div>
+      {/* <div className="header absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
+        <h1 className="h1 text-center font-bold text-white">Three pillars with one purpose</h1>
+      </div> */}
 
       {/* Canvas for frame animation - full screen */}
       <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
@@ -519,8 +527,8 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
       >
         <div className="container relative h-full w-full">
           <Image
-            src="/dashboard.png"
-            alt="Dashboard"
+            src="/heading.png"
+            alt="Ursprung des Lebens"
             width={1920}
             height={1080}
             className="h-full w-full object-contain"
