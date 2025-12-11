@@ -33,7 +33,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     setIsMounted(true);
     // Detect mobile and tablet (treat tablets same as mobile)
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // lg breakpoint - includes tablets
+      setIsMobile(window.innerWidth < 1025); // lg breakpoint (1025px) - includes tablets
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -82,7 +82,7 @@ export function HeroMediaVideo({ frameCount = 207 }: HeroMediaVideoProps) {
     if (!isMounted || imagesLoadingRef.current) return;
     imagesLoadingRef.current = true;
 
-    const currentIsMobile = window.innerWidth < 1024; // lg breakpoint - includes tablets
+    const currentIsMobile = window.innerWidth < 1025; // lg breakpoint (1025px) - includes tablets
     const currentFrame = (index: number) =>
       `/frames/frame_${(index + 1).toString().padStart(4, '0')}.png`;
 
