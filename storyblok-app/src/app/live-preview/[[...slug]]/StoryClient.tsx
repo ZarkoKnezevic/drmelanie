@@ -9,17 +9,11 @@ import { useEffect, useState, useRef } from 'react';
  * Only the content updates, not the entire page
  * This prevents scroll resets
  */
-export default function StoryClient({
-  initialStory,
-  links,
-}: {
-  initialStory: any;
-  links?: any[];
-}) {
+export default function StoryClient({ initialStory, links }: { initialStory: any; links?: any[] }) {
   const [globalComponents, setGlobalComponents] = useState<any[]>([]);
   const scrollPositionRef = useRef<number>(0);
   const isInitialMountRef = useRef<boolean>(true);
-  const storyIdRef = useRef<string | number>(initialStory?.id);
+  const storyIdRef = useRef<string | number | undefined>(initialStory?.id);
   const storageKey = `scroll-pos-${initialStory?.id || 'preview'}`;
 
   // Fetch global components client-side (only once)
@@ -42,7 +36,7 @@ export default function StoryClient({
     if (savedPosition) {
       const position = parseInt(savedPosition, 10);
       scrollPositionRef.current = position;
-      
+
       // Restore scroll position after a short delay to ensure DOM is ready
       const restoreScroll = () => {
         if (position > 0) {
@@ -51,7 +45,7 @@ export default function StoryClient({
             left: 0,
             behavior: 'instant',
           });
-          
+
           // Also handle Lenis smooth scroll if present
           const lenisInstance = (window as any).__lenis__;
           if (lenisInstance) {
@@ -74,7 +68,7 @@ export default function StoryClient({
     const saveScrollPosition = () => {
       const position = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
       scrollPositionRef.current = position;
-      
+
       // Save to sessionStorage for persistence across reloads
       if (typeof window !== 'undefined') {
         sessionStorage.setItem(storageKey, position.toString());
@@ -94,7 +88,7 @@ export default function StoryClient({
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
+
     // Save initial scroll position
     saveScrollPosition();
 
@@ -117,7 +111,7 @@ export default function StoryClient({
 
     // Only restore if it's the same story (content update, not navigation)
     if (story?.id !== storyIdRef.current) {
-      storyIdRef.current = story?.id || '';
+      storyIdRef.current = story?.id;
       // Clear scroll position on story change (new page)
       scrollPositionRef.current = 0;
       if (typeof window !== 'undefined') {
@@ -135,7 +129,7 @@ export default function StoryClient({
           left: 0,
           behavior: 'instant',
         });
-        
+
         // Also handle Lenis smooth scroll if present
         if (typeof window !== 'undefined') {
           const lenisInstance = (window as any).__lenis__;
@@ -156,10 +150,13 @@ export default function StoryClient({
 
   // Render content without keys that would cause remounts
   // Use DataContextProvider directly instead of CoreLayout (which is Server Component)
+  if (!story?.content) {
+    return null;
+  }
+
   return (
     <DataContextProvider globalComponentsStories={globalComponents} allResolvedLinks={links || []}>
       <StoryblokComponent blok={story.content} />
     </DataContextProvider>
   );
 }
-
