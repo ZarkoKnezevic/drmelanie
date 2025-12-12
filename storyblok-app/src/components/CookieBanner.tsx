@@ -32,7 +32,7 @@ export function CookieBanner() {
   }
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 animate-in slide-in-from-bottom duration-300">
+    <div className="fixed bottom-0 left-0 right-0 z-50 duration-300 animate-in slide-in-from-bottom">
       <div className="container mx-auto px-4 pb-4">
         <div className="rounded-lg border bg-background p-4 shadow-lg md:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -41,21 +41,12 @@ export function CookieBanner() {
                 Diese Website verwendet Cookies, um Ihnen die bestmögliche Erfahrung zu bieten.
                 Durch die Nutzung unserer Website stimmen Sie der Verwendung von Cookies zu. Weitere
                 Informationen finden Sie in unserer{' '}
-                <a
-                  href="/datenschutz"
-                  className="underline hover:text-primary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Datenschutzerklärung
-                </a>
-                .
               </p>
             </div>
             <div className="flex items-center gap-2 md:ml-4">
               <Button
                 onClick={handleAccept}
-                className="whitespace-nowrap bg-primary text-primary-foreground hover:bg-primary/90"
+                className="hover:bg-primary/90 whitespace-nowrap bg-primary text-primary-foreground"
               >
                 OK, ALLE COOKIES
               </Button>
@@ -66,4 +57,3 @@ export function CookieBanner() {
     </div>
   );
 }
-
