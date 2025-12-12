@@ -152,7 +152,11 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
                 ref={svgRef}
                 viewBox="0 0 100 100"
                 id="babyProgression"
-                className="h-full w-full"
+                width="100%"
+                height="80%"
+                preserveAspectRatio="xMidYMid meet"
+                className="w-full xl:h-[90%]"
+                style={{ height: '80%' }}
               >
                 <defs>
                   {/* Womb gradient - pastel orange/pink */}
