@@ -158,7 +158,7 @@ body.is-inner-page .header-storyblok {
     font-weight: var(--font-weight-heading);
     word-break: break-word;
     overflow-wrap: break-word;
-    hyphens: auto;
+    hyphens: none;
   }
 
   h1:last-child,
