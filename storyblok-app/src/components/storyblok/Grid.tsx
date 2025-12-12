@@ -392,7 +392,7 @@ export default function Grid({ blok }: GridProps) {
 
                   {/* Card Back */}
                   <div
-                    className="card-back absolute flex h-full w-full flex-col items-center justify-center gap-4 overflow-hidden p-8 text-center"
+                    className="card-back absolute flex h-full w-full flex-col items-center justify-center gap-2 overflow-hidden p-8 text-center"
                     style={{
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
@@ -422,7 +422,7 @@ export default function Grid({ blok }: GridProps) {
                     )}
                     {name && (
                       <p
-                        className="text-body-md font-semibold"
+                        className="mb-0 text-body-md font-semibold"
                         style={{
                           color: index === 0 ? '#8A6D7B' : '#ffffff',
                         }}
@@ -432,7 +432,7 @@ export default function Grid({ blok }: GridProps) {
                     )}
                     {description && (
                       <p
-                        className="text-body-sm"
+                        className="text-body-sm lg:text-[13px] xl:text-[13px]"
                         style={{
                           color: index === 0 ? '#8A6D7B' : 'rgba(255, 255, 255, 0.9)',
                         }}
