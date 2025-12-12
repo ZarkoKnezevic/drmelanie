@@ -41,6 +41,7 @@ export function HeroMediaVideo({
   const [isMobile, setIsMobile] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [imagesReady, setImagesReady] = useState(false);
+  const [animationReady, setAnimationReady] = useState(false);
 
   useEffect(() => {
     // Detect mobile and tablet (treat tablets same as mobile)
@@ -112,14 +113,49 @@ export function HeroMediaVideo({
   useEffect(() => {
     if (!useImages || isMobile || typeof window === 'undefined') return;
 
-    // Images will be loaded by Next.js Image component, so we'll set ready after a short delay
-    // In production, you might want to use onLoad callbacks
-    setTimeout(() => {
-      setImagesReady(true);
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
+    const loadImages = async () => {
+      const promises = babyImages.map((src) => {
+        return new Promise<void>((resolve, reject) => {
+          const img = new window.Image();
+          img.src = src;
+          img.onload = () => resolve();
+          img.onerror = () => {
+            console.error(`[HeroMediaVideo] Failed to load baby image: ${src}`);
+            reject();
+          };
+        });
+      });
+
+      // Also load background image if provided
+      if (backgroundImage) {
+        const bgPromise = new Promise<void>((resolve, reject) => {
+          const img = new window.Image();
+          img.src = backgroundImage;
+          img.onload = () => resolve();
+          img.onerror = () => {
+            console.error(`[HeroMediaVideo] Failed to load background image: ${backgroundImage}`);
+            reject();
+          };
+        });
+        promises.push(bgPromise);
       }
-    }, 500);
+
+      try {
+        await Promise.all(promises);
+        setImagesReady(true);
+        setAnimationReady(true);
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
+        }
+      } catch (error) {
+        console.error('[HeroMediaVideo] Error loading one or more images:', error);
+        // Still set ready to prevent infinite loading
+        setImagesReady(true);
+        setAnimationReady(true);
+      }
+    };
+
+    loadImages();
   }, [useImages, isMobile, babyImages, backgroundImage]);
 
   // Handle video ready state (for video-based approach)
@@ -136,6 +172,7 @@ export function HeroMediaVideo({
     const handleCanPlay = () => {
       console.log('[HeroMediaVideo] Video can play');
       setVideoReady(true);
+      setAnimationReady(true);
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent(ANIMATION_READY_EVENT));
       }
@@ -530,6 +567,20 @@ export function HeroMediaVideo({
       }
     };
   }, [videoReady, isMobile, scrubSmoothness, useImages]);
+
+  // Show loading state until animation is ready (desktop only)
+  if (!isMobile && !animationReady) {
+    return (
+      <div
+        className="hero relative h-screen w-screen overflow-hidden bg-background"
+        style={{ margin: 0, padding: 0, left: 0, right: 0, width: '100vw', height: '100vh' }}
+      >
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="h-12 w-12 animate-spin rounded-full border-b-2 border-white"></div>
+        </div>
+      </div>
+    );
+  }
 
   // On mobile, show baby image with heading on top
   if (isMobile) {
