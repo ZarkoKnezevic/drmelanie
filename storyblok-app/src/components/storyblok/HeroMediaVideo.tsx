@@ -53,61 +53,16 @@ export function HeroMediaVideo({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Initialize Lenis smooth scroll (only on desktop, not mobile/tablet)
+  // Use global Lenis instance from SmoothScrollProvider (don't create a new one)
   useEffect(() => {
     if (typeof window === 'undefined' || isMobile) return;
-    if (lenisRef.current) return;
-
-    const initLenis = () => {
-      gsap.registerPlugin(ScrollTrigger);
-
-      const lenis = new Lenis({
-        duration: lenisDuration, // Fine-tunable scroll duration
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Smooth easing
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: wheelMultiplier, // Fine-tunable scroll sensitivity
-        touchMultiplier: 2.0, // Increased for better touch response
-        infinite: false,
-        syncTouch: true, // Enable for smoother touch
-        lerp: 0.1, // Lower = smoother interpolation (0.05-0.2)
-      });
-
+    
+    // Get Lenis from global instance (initialized by SmoothScrollProvider)
+    const lenis = (window as Window & { __lenis__?: Lenis }).__lenis__;
+    if (lenis) {
       lenisRef.current = lenis;
-      // Store Lenis instance globally for PageTransition to access
-      if (typeof window !== 'undefined') {
-        (window as Window & { __lenis__?: Lenis }).__lenis__ = lenis;
-      }
-
-      function raf(time: number) {
-        lenis.raf(time);
-        ScrollTrigger.update();
-        requestAnimationFrame(raf);
-      }
-
-      requestAnimationFrame(raf);
-      // Fine-tuned lag smoothing for smoother performance
-      gsap.ticker.lagSmoothing(500, 33); // Increased threshold for smoother feel
-    };
-
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(initLenis, { timeout: 100 });
-    } else {
-      setTimeout(initLenis, 0);
     }
-
-    return () => {
-      if (lenisRef.current) {
-        lenisRef.current.scrollTo(0, { immediate: true });
-        lenisRef.current.destroy();
-        lenisRef.current = null;
-        if (typeof window !== 'undefined') {
-          delete (window as Window & { __lenis__?: Lenis }).__lenis__;
-        }
-      }
-    };
-  }, [isMobile, lenisDuration, wheelMultiplier]);
+  }, [isMobile]);
 
   // Handle image loading (for image-based approach)
   useEffect(() => {

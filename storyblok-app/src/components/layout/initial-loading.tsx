@@ -1,19 +1,46 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import { LottieAnimation } from '@/components/ui/components/lottie-animation';
 import { getLottiePath } from '@/lib/lottie/animations';
 import { useLoading } from '@/contexts/loading-context';
 import { cn } from '@/utils';
 
 export function InitialLoading() {
+  const pathname = usePathname();
+  const isLivePreview = pathname?.startsWith('/live-preview');
+  
+  // Always start with loading true to avoid hydration mismatch
+  // We'll check sessionStorage in useEffect after mount
   const [isLoading, setIsLoading] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
-  const [startTime] = useState(Date.now());
+  const [startTime] = useState(() => Date.now());
+  const hasCheckedStorageRef = useRef(false);
   const { setInitialLoadingComplete } = useLoading();
   const MIN_DISPLAY_TIME = 2500; // Minimum 2.5 seconds to see the animation
 
+  // Check if initial load has already happened (client-side only, after mount)
   useEffect(() => {
+    if (typeof window === 'undefined' || hasCheckedStorageRef.current) return;
+    hasCheckedStorageRef.current = true;
+    
+    const hasInitialLoaded = sessionStorage.getItem('initial-load-complete') === 'true';
+    
+    // If already loaded, skip the loading screen entirely
+    if (hasInitialLoaded) {
+      setIsLoading(false);
+      setInitialLoadingComplete();
+    }
+  }, [setInitialLoadingComplete]);
+
+  useEffect(() => {
+    // Skip if not loading (already handled by first effect)
+    if (!isLoading) return;
+    
+    // Skip if we haven't checked storage yet (wait for first effect to run)
+    if (!hasCheckedStorageRef.current) return;
+    
     let animationReady = false;
     let pageLoaded = false;
     let animationTimeout: NodeJS.Timeout | null = null;
@@ -33,14 +60,23 @@ export function InitialLoading() {
       const remainingTime = Math.max(0, MIN_DISPLAY_TIME - elapsed);
 
       setTimeout(() => {
-        // Force scroll to top before showing content
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
+        // Only reset scroll to top if NOT on live preview page
+        // Live preview pages should preserve scroll position
+        if (!isLivePreview) {
+          // Force scroll to top before showing content
+          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          document.documentElement.scrollTop = 0;
+          document.body.scrollTop = 0;
 
-        // Reset Lenis if it exists
-        if (typeof window !== 'undefined' && (window as any).__lenis__) {
-          (window as any).__lenis__.scrollTo(0, { immediate: true });
+          // Reset Lenis if it exists
+          if (typeof window !== 'undefined' && (window as any).__lenis__) {
+            (window as any).__lenis__.scrollTo(0, { immediate: true });
+          }
+        }
+
+        // Mark initial load as complete in sessionStorage
+        if (typeof window !== 'undefined') {
+          sessionStorage.setItem('initial-load-complete', 'true');
         }
 
         // Notify that initial loading is complete (so Banner can start animating)
@@ -50,8 +86,10 @@ export function InitialLoading() {
         // Remove from DOM after fade-out completes
         setTimeout(() => {
           setIsLoading(false);
-          // Ensure scroll is still at top after loading screen is gone
-          window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          // Only ensure scroll is at top if NOT on live preview page
+          if (!isLivePreview) {
+            window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+          }
         }, 500); // Match transition duration
       }, remainingTime);
     };
@@ -131,7 +169,7 @@ export function InitialLoading() {
         };
       }
     }
-  }, [startTime, setInitialLoadingComplete]);
+  }, [startTime, setInitialLoadingComplete, isLivePreview]);
 
   if (!isLoading) {
     return null;

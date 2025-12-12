@@ -13,8 +13,11 @@ export function PageTransition({ children }: PageTransitionProps) {
   const prevPathnameRef = useRef<string | null>(null);
 
   useEffect(() => {
+    const isLivePreview = pathname?.startsWith('/live-preview');
+    
     // Only reset scroll if pathname actually changed (not on initial mount)
-    if (prevPathnameRef.current !== null && prevPathnameRef.current !== pathname) {
+    // AND we're NOT on a live preview page (live preview should preserve scroll)
+    if (prevPathnameRef.current !== null && prevPathnameRef.current !== pathname && !isLivePreview) {
       // Force scroll to top immediately on navigation
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       document.documentElement.scrollTop = 0;

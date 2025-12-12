@@ -14,6 +14,7 @@ import { PageTransition } from '@/components/layout/page-transition';
 import { LoadingProvider } from '@/contexts/loading-context';
 import { TooltipProvider } from '@/components/ui/components/tooltip';
 import { CookieBanner } from '@/components/CookieBanner';
+import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import '@/lib/storyblok-init'; // Initialize Storyblok for server components
 import { APP_CONFIG } from '@/constants';
 import { cn } from '@/utils';
@@ -104,29 +105,31 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" suppressHydrationWarning className={`${karla.variable} font-sans`}>
-      <body className={cn('min-h-screen bg-background font-karla antialiased')}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <TooltipProvider>
-            <StoryblokProvider>
-              <LoadingProvider>
-                <InitialLoading />
-                <PageTransition>
-                  <div className="relative flex min-h-screen flex-col">
-                    <ConditionalHeaderWrapper storyblokHeader={<StoryblokHeaderWrapper />} />
-                    <main className="flex-1">{children}</main>
-                    <ConditionalFooterWrapper>
-                      <Suspense fallback={<footer className="h-24 border-t bg-background" />}>
-                        <GlobalFooter />
-                      </Suspense>
-                    </ConditionalFooterWrapper>
-                  </div>
-                </PageTransition>
-                <Toaster />
-                <CookieBanner />
-              </LoadingProvider>
-            </StoryblokProvider>
-          </TooltipProvider>
-        </ThemeProvider>
+      <body className={cn('min-h-screen bg-background font-karla antialiased')} suppressHydrationWarning>
+        <SmoothScrollProvider>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+            <TooltipProvider>
+              <StoryblokProvider>
+                <LoadingProvider>
+                  <InitialLoading />
+                  <PageTransition>
+                    <div className="relative flex min-h-screen flex-col">
+                      <ConditionalHeaderWrapper storyblokHeader={<StoryblokHeaderWrapper />} />
+                      <main className="flex-1">{children}</main>
+                      <ConditionalFooterWrapper>
+                        <Suspense fallback={<footer className="h-24 border-t bg-background" />}>
+                          <GlobalFooter />
+                        </Suspense>
+                      </ConditionalFooterWrapper>
+                    </div>
+                  </PageTransition>
+                  <Toaster />
+                  <CookieBanner />
+                </LoadingProvider>
+              </StoryblokProvider>
+            </TooltipProvider>
+          </ThemeProvider>
+        </SmoothScrollProvider>
       </body>
     </html>
   );

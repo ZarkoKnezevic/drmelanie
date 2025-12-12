@@ -67,41 +67,15 @@ export default function Grid({ blok }: GridProps) {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, [isMounted]);
 
-  // Initialize Lenis smooth scroll (only once, client-side only)
+  // Use global Lenis instance from SmoothScrollProvider (don't create a new one)
   useEffect(() => {
     if (!isMounted || typeof window === 'undefined') return;
-    if (lenisRef.current) return; // Prevent multiple initializations
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    lenisRef.current = lenis;
-
-    // Animation frame loop
-    function raf(time: number) {
-      lenis.raf(time);
-      ScrollTrigger.update();
-      requestAnimationFrame(raf);
+    
+    // Get Lenis from global instance (initialized by SmoothScrollProvider)
+    const lenis = (window as Window & { __lenis__?: Lenis }).__lenis__;
+    if (lenis) {
+      lenisRef.current = lenis;
     }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      if (lenisRef.current) {
-        lenisRef.current.destroy();
-        lenisRef.current = null;
-      }
-    };
   }, [isMounted]);
 
   // Initialize GSAP ScrollTrigger animations
