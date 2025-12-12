@@ -39,8 +39,7 @@ export function CookieBanner() {
             <div className="flex-1">
               <p className="text-sm text-foreground md:text-base">
                 Diese Website verwendet Cookies, um Ihnen die bestmögliche Erfahrung zu bieten.
-                Durch die Nutzung unserer Website stimmen Sie der Verwendung von Cookies zu. Weitere
-                Informationen finden Sie in unserer{' '}
+                Durch die Nutzung unserer Website stimmen Sie der Verwendung von Cookies zu.
               </p>
             </div>
             <div className="flex items-center gap-2 md:ml-4">
