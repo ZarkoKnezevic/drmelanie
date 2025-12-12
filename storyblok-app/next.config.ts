@@ -1,7 +1,11 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  // Uncomment the line below to enable static export for world4you
+  // output: 'export',
   images: {
+    // Uncomment the line below if using static export
+    // unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -12,7 +16,7 @@ const nextConfig: NextConfig = {
         hostname: '**.storyblok.com',
       },
     ],
-    qualities: [100, 75],
+    qualities: [100, 90, 75],
   },
   // Enable React strict mode
   reactStrictMode: true,

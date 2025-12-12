@@ -13,6 +13,7 @@ import { InitialLoading } from '@/components/layout/initial-loading';
 import { PageTransition } from '@/components/layout/page-transition';
 import { LoadingProvider } from '@/contexts/loading-context';
 import { TooltipProvider } from '@/components/ui/components/tooltip';
+import { CookieBanner } from '@/components/CookieBanner';
 import '@/lib/storyblok-init'; // Initialize Storyblok for server components
 import { APP_CONFIG } from '@/constants';
 import { cn } from '@/utils';
@@ -121,6 +122,7 @@ export default function RootLayout({
                   </div>
                 </PageTransition>
                 <Toaster />
+                <CookieBanner />
               </LoadingProvider>
             </StoryblokProvider>
           </TooltipProvider>

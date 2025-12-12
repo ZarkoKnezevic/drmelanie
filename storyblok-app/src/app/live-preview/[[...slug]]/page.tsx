@@ -11,9 +11,20 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function LivePreviewPage(props: Props) {
   const params = await props.params;
+  
+  // Allow preview in Vercel preview deployments or when explicitly enabled
+  const isPreviewEnabled = 
+    process.env.NEXT_PUBLIC_IS_PREVIEW === 'true' ||
+    process.env.VERCEL_ENV === 'preview' ||
+    process.env.VERCEL_ENV === 'development';
+
+  if (!isPreviewEnabled) {
+    notFound();
+  }
+
   const { data } = await fetchStory('draft', params.slug);
 
-  if (!data?.story || process.env.NEXT_PUBLIC_IS_PREVIEW !== 'true') {
+  if (!data?.story) {
     notFound();
   }
 
