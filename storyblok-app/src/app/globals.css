@@ -39,7 +39,6 @@ body.is-inner-page .header-storyblok {
   html {
     font-size: var(--font-size-base-sm);
     line-height: var(--line-height-base-sm);
-    overflow-x: hidden;
   }
 
   body,
@@ -48,10 +47,6 @@ body.is-inner-page .header-storyblok {
     color: var(--foreground);
     font-size: var(--font-size-base-sm);
     line-height: var(--line-height-base-sm);
-    overflow-x: hidden;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
   }
 
   @media (min-width: 600px) {
@@ -129,8 +124,6 @@ body.is-inner-page .header-storyblok {
   p:last-child {
     margin-bottom: 0;
   }
-
-  /* Prevent horizontal scroll on all text elements */
   li,
   td,
   th,
