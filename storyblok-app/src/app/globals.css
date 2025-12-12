@@ -39,6 +39,7 @@ body.is-inner-page .header-storyblok {
   html {
     font-size: var(--font-size-base-sm);
     line-height: var(--line-height-base-sm);
+    overflow-x: hidden;
   }
 
   body,
@@ -47,6 +48,10 @@ body.is-inner-page .header-storyblok {
     color: var(--foreground);
     font-size: var(--font-size-base-sm);
     line-height: var(--line-height-base-sm);
+    overflow-x: hidden;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   @media (min-width: 600px) {
@@ -100,6 +105,9 @@ body.is-inner-page .header-storyblok {
     font-size: var(--font-size-base-sm);
     line-height: var(--line-height-base-sm);
     font-weight: var(--font-weight-body);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   @media (min-width: 600px) {
@@ -122,6 +130,18 @@ body.is-inner-page .header-storyblok {
     margin-bottom: 0;
   }
 
+  /* Prevent horizontal scroll on all text elements */
+  li,
+  td,
+  th,
+  label,
+  span,
+  a {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
   .button {
     font-size: var(--font-size-base-sm);
     line-height: var(--line-height-base-sm);
@@ -136,6 +156,9 @@ body.is-inner-page .header-storyblok {
   h6 {
     margin-bottom: 0.7em;
     font-weight: var(--font-weight-heading);
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
   }
 
   h1:last-child,
