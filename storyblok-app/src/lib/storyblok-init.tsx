@@ -21,19 +21,19 @@ function FallbackComponent({ blok }: { blok: any }) {
   }
 
   return (
-    <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg my-4">
-      <p className="text-yellow-800 font-semibold">
+    <div className="my-4 rounded-lg border border-yellow-200 bg-yellow-50 p-4">
+      <p className="font-semibold text-yellow-800">
         ⚠️ Component &quot;{componentName}&quot; not found
       </p>
-      <p className="text-yellow-700 text-sm mt-2">
+      <p className="mt-2 text-sm text-yellow-700">
         Make sure the component name in Storyblok matches one of these registered components:
       </p>
-      <ul className="list-disc list-inside text-yellow-700 text-sm mt-2">
+      <ul className="mt-2 list-inside list-disc text-sm text-yellow-700">
         {registeredKeys.map((name) => (
           <li key={name}>{name}</li>
         ))}
       </ul>
-      <p className="text-red-700 text-sm mt-2 font-semibold">
+      <p className="mt-2 text-sm font-semibold text-red-700">
         💡 Check the terminal console for detailed debugging information.
       </p>
     </div>
@@ -59,6 +59,8 @@ if (typeof window === 'undefined') {
         components: COMPONENTS,
         enableFallbackComponent: true,
         customFallbackComponent: FallbackComponent,
+        // Prevent Storyblok from reloading the page on content changes
+        bridge: typeof window !== 'undefined' && process.env.NEXT_PUBLIC_IS_PREVIEW === 'true',
       });
 
       // Debug: Log registered components
@@ -68,4 +70,3 @@ if (typeof window === 'undefined') {
     }
   }
 }
-

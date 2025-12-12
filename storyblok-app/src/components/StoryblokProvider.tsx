@@ -9,6 +9,9 @@ interface StoryblokProviderProps {
 
 const SCROLL_POSITION_KEY = 'storyblok-scroll-position';
 
+// Global scroll restoration function that can be called from anywhere
+let globalScrollRestore: (() => void) | null = null;
+
 /**
  * Client-side provider for Storyblok
  * Handles client-side initialization for visual editor support
@@ -20,6 +23,60 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
   const observerRef = useRef<MutationObserver | null>(null);
 
   useEffect(() => {
+    // Aggressive scroll restoration function
+    const restoreScrollPosition = (position?: number) => {
+      const targetPosition = position ?? scrollPositionRef.current;
+      if (targetPosition > 0) {
+        isRestoringRef.current = true;
+
+        const restore = () => {
+          try {
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'instant',
+            });
+            document.documentElement.scrollTop = targetPosition;
+            if (document.body) {
+              document.body.scrollTop = targetPosition;
+            }
+          } catch (e) {
+            // Ignore errors
+          }
+        };
+
+        // Immediate restoration
+        restore();
+
+        // Multiple attempts with different timings
+        requestAnimationFrame(() => {
+          restore();
+          requestAnimationFrame(() => {
+            restore();
+            requestAnimationFrame(() => {
+              restore();
+            });
+          });
+        });
+
+        // Delayed attempts
+        setTimeout(restore, 0);
+        setTimeout(restore, 10);
+        setTimeout(restore, 50);
+        setTimeout(restore, 100);
+        setTimeout(restore, 200);
+        setTimeout(restore, 300);
+        setTimeout(restore, 500);
+        setTimeout(restore, 1000);
+
+        setTimeout(() => {
+          isRestoringRef.current = false;
+        }, 1200);
+      }
+    };
+
+    // Set global restore function
+    globalScrollRestore = restoreScrollPosition;
+
     // Restore scroll position from sessionStorage on mount (survives page reloads)
     const restoreFromStorage = () => {
       try {
@@ -28,34 +85,7 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
           const position = parseInt(saved, 10);
           if (position > 0) {
             scrollPositionRef.current = position;
-            isRestoringRef.current = true;
-
-            // Restore immediately and multiple times
-            const restore = () => {
-              window.scrollTo({
-                top: position,
-                behavior: 'instant',
-              });
-              document.documentElement.scrollTop = position;
-              if (document.body) {
-                document.body.scrollTop = position;
-              }
-            };
-
-            restore();
-            requestAnimationFrame(() => {
-              restore();
-              requestAnimationFrame(() => {
-                restore();
-              });
-            });
-            setTimeout(restore, 0);
-            setTimeout(restore, 50);
-            setTimeout(restore, 100);
-
-            setTimeout(() => {
-              isRestoringRef.current = false;
-            }, 200);
+            restoreScrollPosition(position);
           }
         }
       } catch (e) {
@@ -63,8 +93,11 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
       }
     };
 
-    // Restore on mount
+    // Restore on mount - multiple times to catch different load states
     restoreFromStorage();
+    setTimeout(restoreFromStorage, 0);
+    setTimeout(restoreFromStorage, 100);
+    setTimeout(restoreFromStorage, 500);
 
     // Initialize Storyblok bridge for visual editor
     if (typeof window !== 'undefined') {
@@ -82,48 +115,6 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
         }
       };
 
-      // Restore scroll position aggressively
-      const restoreScrollPosition = () => {
-        const savedPosition = scrollPositionRef.current;
-        if (savedPosition > 0) {
-          isRestoringRef.current = true;
-
-          const restore = () => {
-            try {
-              window.scrollTo({
-                top: savedPosition,
-                behavior: 'instant',
-              });
-              document.documentElement.scrollTop = savedPosition;
-              if (document.body) {
-                document.body.scrollTop = savedPosition;
-              }
-            } catch (e) {
-              // Ignore errors
-            }
-          };
-
-          // Multiple restoration attempts
-          restore();
-          requestAnimationFrame(() => {
-            restore();
-            requestAnimationFrame(() => {
-              restore();
-            });
-          });
-          setTimeout(restore, 0);
-          setTimeout(restore, 10);
-          setTimeout(restore, 50);
-          setTimeout(restore, 100);
-          setTimeout(restore, 200);
-          setTimeout(restore, 300);
-
-          setTimeout(() => {
-            isRestoringRef.current = false;
-          }, 400);
-        }
-      };
-
       // Wait for Storyblok bridge to be available
       const initBridge = () => {
         if ((window as any).storyblok) {
@@ -132,19 +123,46 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
           // Save scroll position before content changes
           storyblok.on(['input', 'change'], saveScrollPosition);
 
+          // Prevent Storyblok from reloading the page
+          // Try to intercept navigation/reload events
+          const originalReload = window.location.reload;
+          window.location.reload = function () {
+            saveScrollPosition();
+            return originalReload.apply(this, arguments as any);
+          };
+
+          // Intercept pushState/replaceState to prevent navigation
+          const originalPushState = history.pushState;
+          const originalReplaceState = history.replaceState;
+
+          history.pushState = function (...args) {
+            saveScrollPosition();
+            const result = originalPushState.apply(this, args);
+            setTimeout(() => restoreScrollPosition(), 0);
+            return result;
+          };
+
+          history.replaceState = function (...args) {
+            saveScrollPosition();
+            const result = originalReplaceState.apply(this, args);
+            setTimeout(() => restoreScrollPosition(), 0);
+            return result;
+          };
+
           // Restore scroll position after content updates
           storyblok.on(['input', 'change'], () => {
-            setTimeout(restoreScrollPosition, 0);
-            setTimeout(restoreScrollPosition, 50);
-            setTimeout(restoreScrollPosition, 100);
-            setTimeout(restoreScrollPosition, 200);
+            setTimeout(() => restoreScrollPosition(), 0);
+            setTimeout(() => restoreScrollPosition(), 50);
+            setTimeout(() => restoreScrollPosition(), 100);
+            setTimeout(() => restoreScrollPosition(), 200);
+            setTimeout(() => restoreScrollPosition(), 500);
           });
 
           // Listen for bridge ready
           storyblok.on(['bridge:ready'], () => {
             console.log('[Storyblok] Bridge ready, scroll preservation enabled');
             // Restore scroll when bridge is ready
-            restoreScrollPosition();
+            setTimeout(() => restoreScrollPosition(), 0);
           });
         }
       };
@@ -158,17 +176,25 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
       const timer3 = setTimeout(initBridge, 2000);
 
       // Use MutationObserver to detect DOM changes and restore scroll
-      observerRef.current = new MutationObserver(() => {
+      observerRef.current = new MutationObserver((mutations) => {
+        // Only restore if we have a saved position and not currently restoring
         if (scrollPositionRef.current > 0 && !isRestoringRef.current) {
-          setTimeout(() => {
-            const savedPosition = scrollPositionRef.current;
-            if (savedPosition > 0) {
-              window.scrollTo({
-                top: savedPosition,
-                behavior: 'instant',
-              });
-            }
-          }, 0);
+          // Check if mutations are significant (not just attribute changes)
+          const hasSignificantChanges = mutations.some(
+            (mutation) => mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0
+          );
+
+          if (hasSignificantChanges) {
+            setTimeout(() => {
+              restoreScrollPosition();
+            }, 0);
+            setTimeout(() => {
+              restoreScrollPosition();
+            }, 50);
+            setTimeout(() => {
+              restoreScrollPosition();
+            }, 100);
+          }
         }
       });
 
@@ -195,7 +221,18 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
       window.addEventListener('pagehide', saveScrollPosition);
 
       // Also restore scroll on focus (in case iframe refocuses)
-      window.addEventListener('focus', restoreScrollPosition);
+      window.addEventListener('focus', () => {
+        setTimeout(() => restoreScrollPosition(), 0);
+      });
+
+      // Restore scroll on every possible event that might cause scroll reset
+      const events = ['load', 'DOMContentLoaded', 'pageshow', 'focus', 'visibilitychange'];
+      events.forEach((event) => {
+        window.addEventListener(event, () => {
+          setTimeout(() => restoreScrollPosition(), 0);
+          setTimeout(() => restoreScrollPosition(), 100);
+        });
+      });
 
       return () => {
         clearTimeout(timer1);

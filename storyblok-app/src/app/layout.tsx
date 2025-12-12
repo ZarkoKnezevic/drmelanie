@@ -104,6 +104,49 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="de" suppressHydrationWarning className={`${karla.variable} font-sans`}>
+      <head>
+        {/* Restore scroll position immediately before React hydrates */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = sessionStorage.getItem('storyblok-scroll-position');
+                  if (saved) {
+                    var position = parseInt(saved, 10);
+                    if (position > 0) {
+                      // Restore immediately
+                      window.scrollTo(0, position);
+                      document.documentElement.scrollTop = position;
+                      if (document.body) {
+                        document.body.scrollTop = position;
+                      }
+                      // Also restore after page loads
+                      window.addEventListener('load', function() {
+                        window.scrollTo(0, position);
+                        document.documentElement.scrollTop = position;
+                        if (document.body) {
+                          document.body.scrollTop = position;
+                        }
+                      }, { once: true });
+                      // And after DOM is ready
+                      if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', function() {
+                          window.scrollTo(0, position);
+                          document.documentElement.scrollTop = position;
+                          if (document.body) {
+                            document.body.scrollTop = position;
+                          }
+                        }, { once: true });
+                      }
+                    }
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className={cn('min-h-screen bg-background font-karla antialiased')}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           <TooltipProvider>
