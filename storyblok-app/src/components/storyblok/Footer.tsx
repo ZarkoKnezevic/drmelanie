@@ -123,7 +123,7 @@ export default function Footer({ blok }: FooterProps) {
             </h3>
             <ul className="flex flex-col gap-2">
               {WORKING_HOURS.map((hour, index) => (
-                <li key={index} className={cn('text-body-sm', bodyColorClass)}>
+                <li key={index} className="text-body-sm text-darkGray">
                   <span className="font-medium">{hour.day}:</span> {hour.time}
                 </li>
               ))}
@@ -197,7 +197,7 @@ export default function Footer({ blok }: FooterProps) {
                     src={mapImageProps.src}
                     alt={mapImageProps.alt || 'Map'}
                     fill
-                    className="object-contain object-left"
+                    className="object-contain object-left-top"
                     sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 </Link>

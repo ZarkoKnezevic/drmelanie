@@ -111,6 +111,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
       {/* MOBILE: Static Gallery (below md) */}
       {!isDesktop && (
         <section
+          id="bildergalerie-ansehen"
           {...storyblokEditable(blok)}
           className={cn('image-gallery relative md:hidden', 'bg-background-secondary')}
         >
@@ -150,6 +151,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
 
       {/* DESKTOP: Animated Parallax Gallery (md and above) */}
       <section
+        id="bildergalerie-ansehen"
         {...storyblokEditable(blok)}
         ref={containerRef}
         className={cn(
