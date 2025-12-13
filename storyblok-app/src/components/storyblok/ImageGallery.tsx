@@ -27,14 +27,14 @@ interface ImageGalleryProps {
     bottom_image: StoryblokImageAsset;
     bottom_left_image: StoryblokImageAsset;
     bottom_right_image: StoryblokImageAsset;
-    background?: string;
+    background_color?: string | { slug?: string };
   };
 }
 
 export default function ImageGallery({ blok }: ImageGalleryProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isDesktop, setIsDesktop] = useState(false);
-  const backgroundClass = getBackgroundClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
 
   // Check if screen is md or above (600px)
   useEffect(() => {
@@ -112,7 +112,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
       {!isDesktop && (
         <section
           {...storyblokEditable(blok)}
-          className={cn('image-gallery relative md:hidden', backgroundClass || 'bg-background')}
+          className={cn('image-gallery relative md:hidden', 'bg-background-secondary')}
         >
           <div className="spacing overflow-x-hidden">
             <div className="relative -ml-[25.6vw] w-full" style={{ minHeight: '128.5333333334vw' }}>
@@ -154,7 +154,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
         ref={containerRef}
         className={cn(
           'image-gallery relative hidden h-[300vh] md:block',
-          backgroundClass || 'bg-background'
+          backgroundClass || 'bg-background-tertiary'
         )}
       >
         <div className="sticky top-0 h-screen overflow-hidden">

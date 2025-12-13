@@ -27,7 +27,7 @@ interface GridProps {
     columns?: StoryblokBlok[];
     columns_content?: StoryblokBlok[];
     content?: StoryblokBlok[];
-    background?: string;
+    background_color?: string | { slug?: string };
   };
 }
 
@@ -39,7 +39,7 @@ export default function Grid({ blok }: GridProps) {
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
-  const backgroundClass = getBackgroundClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
 
   // Get items from various possible field names
   const items =
@@ -70,7 +70,7 @@ export default function Grid({ blok }: GridProps) {
   // Use global Lenis instance from SmoothScrollProvider (don't create a new one)
   useEffect(() => {
     if (!isMounted || typeof window === 'undefined') return;
-    
+
     // Get Lenis from global instance (initialized by SmoothScrollProvider)
     const lenis = (window as Window & { __lenis__?: Lenis }).__lenis__;
     if (lenis) {

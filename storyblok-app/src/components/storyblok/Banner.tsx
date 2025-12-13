@@ -2,7 +2,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import Link from 'next/link';
 import { Button } from '@/components/ui/components/button';
 import { BannerAnimated } from './banner-animated';
-import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
+import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import { prepareLinkProps } from '@/lib/adapters/prepareLinkProps';
 import type { StoryblokBlok } from '@/types';
 
@@ -11,19 +11,24 @@ interface BannerProps {
     topline?: string;
     headline: string;
     button?: StoryblokBlok | StoryblokBlok[];
-    background?: string;
+    background_color?: string | { slug?: string };
     torn_paper_edges?: boolean;
   };
 }
 
 export default function Banner({ blok }: BannerProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
-  const textColorClass = getTextColorClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
+  const headingColorClass = getHeadingColorClass(blok.background_color);
+  const bodyColorClass = getBodyColorClass(blok.background_color);
   const hasTornEdges = blok.torn_paper_edges;
   const buttonBlok = Array.isArray(blok.button) ? blok.button[0] : blok.button;
   const buttonText = buttonBlok?.text || 'Button';
-  const buttonVariant = (buttonBlok?.variant || buttonBlok?.variants || 'primary') as 'primary' | 'secondary' | 'tertiary' | 'quaternary';
-  
+  const buttonVariant = (buttonBlok?.variant || buttonBlok?.variants || 'primary') as
+    | 'primary'
+    | 'secondary'
+    | 'tertiary'
+    | 'quaternary';
+
   let buttonHref: string | null = null;
   if (buttonBlok?.link) {
     if (typeof buttonBlok.link === 'string') {
@@ -47,29 +52,25 @@ export default function Banner({ blok }: BannerProps) {
         backgroundClass || 'bg-background'
       )}
     >
-      <div className={cn(
-        'relative z-10 flex flex-1 flex-col items-center justify-center pt-8 pb-12 md:pt-0 md:pb-0',
-        backgroundClass || 'bg-background'
-      )}>
+      <div
+        className={cn(
+          'relative z-10 flex flex-1 flex-col items-center justify-center pb-12 pt-8 md:pb-0 md:pt-0',
+          backgroundClass || 'bg-background'
+        )}
+      >
         <div className="container md:py-12 lg:py-20">
-          <div className="flex flex-col md:flex-row gap-8 w-full md:justify-between">
+          <div className="flex w-full flex-col gap-8 md:flex-row md:justify-between">
             {/* Topline and Headline */}
             <div className="flex flex-col">
               {blok.topline && (
                 <BannerAnimated delay={100} animationType="fade-up">
-                  <p className={cn('text-body font-bold', textColorClass)}>
-                    {blok.topline}
-                  </p>
+                  <p className={cn('text-body font-bold', bodyColorClass)}>{blok.topline}</p>
                 </BannerAnimated>
               )}
 
               <BannerAnimated delay={250} animationType="fade-up">
-                <h1 className={cn('h1', textColorClass)}>
-                  {blok.headline}
-                </h1>
+                <h2 className={cn('h2', headingColorClass)}>{blok.headline}</h2>
               </BannerAnimated>
-
-       
             </div>
 
             {/* Button */}
@@ -77,14 +78,10 @@ export default function Banner({ blok }: BannerProps) {
               <BannerAnimated delay={400} animationType="fade-down">
                 {buttonHref ? (
                   <Button asChild variant={buttonVariant}>
-                    <Link href={buttonHref}>
-                      {buttonText}
-                    </Link>
+                    <Link href={buttonHref}>{buttonText}</Link>
                   </Button>
                 ) : (
-                  <Button variant={buttonVariant}>
-                    {buttonText}
-                  </Button>
+                  <Button variant={buttonVariant}>{buttonText}</Button>
                 )}
               </BannerAnimated>
             )}
@@ -94,4 +91,3 @@ export default function Banner({ blok }: BannerProps) {
     </section>
   );
 }
-

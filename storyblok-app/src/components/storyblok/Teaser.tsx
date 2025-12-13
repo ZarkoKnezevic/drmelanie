@@ -1,19 +1,20 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import * as motion from 'motion/react-client';
-import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
+import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface TeaserProps {
   blok: StoryblokBlok & {
     headline: string;
-    background?: string;
+    background_color?: string | { slug?: string };
     torn_paper_edges?: boolean;
   };
 }
 
 export default function Teaser({ blok }: TeaserProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
-  const textColorClass = getTextColorClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
+  const headingColorClass = getHeadingColorClass(blok.background_color);
+  const bodyColorClass = getBodyColorClass(blok.background_color);
   const hasTornEdges = blok.torn_paper_edges === true;
 
   return (
@@ -27,7 +28,11 @@ export default function Teaser({ blok }: TeaserProps) {
     >
       <div className="spacing container">
         <motion.div
-          className={cn('flex flex-col items-center justify-center text-center', textColorClass)}
+          className={cn(
+            'flex flex-col items-center justify-center text-center',
+            headingColorClass,
+            bodyColorClass
+          )}
           initial={{ opacity: 0, y: -24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}

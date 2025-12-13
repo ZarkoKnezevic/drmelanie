@@ -3,7 +3,7 @@ import Image from 'next/image';
 import * as motion from 'motion/react-client';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
-import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
+import { cn, getBackgroundClass, getBodyColorClass, getHeadingColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface TextImageProps {
@@ -18,15 +18,16 @@ interface TextImageProps {
       };
     };
     image_position?: string;
-    background?: string;
+    background_color?: string | { slug?: string }; // Storyblok data source field
     torn_paper_edges?: boolean;
   };
 }
 
 export default function TextImage({ blok }: TextImageProps) {
   const imageOnLeft = blok.image_position?.toLowerCase() === 'left';
-  const backgroundClass = getBackgroundClass(blok.background);
-  const textColorClass = getTextColorClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
+  const headingColorClass = getHeadingColorClass(blok.background_color);
+  const bodyColorClass = getBodyColorClass(blok.background_color);
   const hasTornEdges = blok.torn_paper_edges === true;
 
   return (
@@ -50,7 +51,8 @@ export default function TextImage({ blok }: TextImageProps) {
             <motion.div
               className={cn(
                 'prose prose-lg dark:prose-invert flex max-w-none flex-1 flex-col items-start justify-center',
-                textColorClass
+                headingColorClass,
+                bodyColorClass
               )}
               initial={{ opacity: 0, y: -24 }}
               whileInView={{ opacity: 1, y: 0 }}

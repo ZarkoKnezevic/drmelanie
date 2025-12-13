@@ -1,19 +1,18 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import { StoryblokServerComponent } from '@storyblok/react/rsc';
-import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
+import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface TeamProps {
   blok: StoryblokBlok & {
-    background?: string;
+    background_color?: string | { slug?: string };
     torn_paper_edges?: boolean;
     members?: StoryblokBlok[];
   };
 }
 
 export default function Team({ blok }: TeamProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
-  const textColorClass = getTextColorClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
   const hasTornEdges = blok.torn_paper_edges === true;
   const members = blok.members || [];
 

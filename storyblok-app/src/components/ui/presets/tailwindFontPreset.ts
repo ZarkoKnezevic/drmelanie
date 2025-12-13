@@ -15,7 +15,7 @@ const tailwindFontPreset: Partial<Config> = {
   theme: {
     extend: {
       fontFamily: {
-        karla: [fontStylePreset.fontFamily.karla, 'sans-serif'],
+        montserrat: [fontStylePreset.fontFamily.montserrat, 'sans-serif'],
       },
       fontSize,
       lineHeight: fontStylePreset.lineHeight,
@@ -25,4 +25,3 @@ const tailwindFontPreset: Partial<Config> = {
 };
 
 export default tailwindFontPreset;
-

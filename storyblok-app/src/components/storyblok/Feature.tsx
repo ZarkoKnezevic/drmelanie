@@ -21,12 +21,12 @@ interface FeatureProps {
     description?: string;
     image?: StoryblokImageAsset;
     icon?: StoryblokImageAsset;
-    background?: string;
+    background_color?: string | { slug?: string };
   };
 }
 
 export default function Feature({ blok }: FeatureProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
   const imageProps = blok.image ? prepareImageProps(blok.image) : null;
   const iconProps = blok.icon ? prepareImageProps(blok.icon) : null;
 

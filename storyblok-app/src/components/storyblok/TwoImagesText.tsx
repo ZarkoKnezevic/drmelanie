@@ -3,7 +3,7 @@ import Image from 'next/image';
 import * as motion from 'motion/react-client';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
-import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
+import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface StoryblokImageAsset {
@@ -24,14 +24,15 @@ interface TwoImagesTextProps {
     items?: StoryblokBlok[];
     columns_content?: StoryblokBlok[];
     content?: StoryblokBlok[];
-    background?: string;
+    background_color?: string | { slug?: string };
     torn_paper_edges?: boolean;
   };
 }
 
 export default function TwoImagesText({ blok }: TwoImagesTextProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
-  const textColorClass = getTextColorClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
+  const headingColorClass = getHeadingColorClass(blok.background_color);
+  const bodyColorClass = getBodyColorClass(blok.background_color);
   const hasTornEdges = blok.torn_paper_edges === true;
 
   // Get nested items/columns from various possible field names
@@ -98,7 +99,8 @@ export default function TwoImagesText({ blok }: TwoImagesTextProps) {
                 <motion.div
                   className={cn(
                     'prose prose-lg dark:prose-invert mx-auto max-w-none',
-                    textColorClass
+                    headingColorClass,
+                    bodyColorClass
                   )}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}

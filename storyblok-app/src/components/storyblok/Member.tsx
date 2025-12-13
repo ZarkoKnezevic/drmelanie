@@ -53,9 +53,7 @@ export default function Member({ blok }: MemberProps) {
           </div>
         )}
         {blok.name_and_title && (
-          <h3 className="mt-auto text-h3 font-bold" style={{ color: '#8a6d7b' }}>
-            {blok.name_and_title}
-          </h3>
+          <h3 className="mt-auto text-h3 font-bold">{blok.name_and_title}</h3>
         )}
       </div>
     </div>

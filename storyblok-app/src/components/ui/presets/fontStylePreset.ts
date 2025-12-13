@@ -6,7 +6,7 @@
 export const fontStylePreset = {
   // Font Family - CSS Variable
   fontFamily: {
-    karla: 'var(--font-karla)',
+    montserrat: 'var(--font-montserrat)',
   },
 
   // Font Sizes - CSS Variables (using Tailwind tuple format)
@@ -163,4 +163,3 @@ export const fontStylePreset = {
 } as const;
 
 export type FontStylePreset = typeof fontStylePreset;
-

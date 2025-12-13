@@ -14,12 +14,12 @@ interface ServicesProps {
     columns_content?: StoryblokBlok[];
     content?: StoryblokBlok[];
     button?: StoryblokBlok | StoryblokBlok[];
-    background?: string;
+    background_color?: string | { slug?: string };
   };
 }
 
 export default function Services({ blok }: ServicesProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
 
   // Get services from various possible field names
   const services =

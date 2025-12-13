@@ -12,10 +12,10 @@ export default {
   ],
   safelist: [
     {
-      pattern: /bg-background-(primary|secondary|tertiary|quaternary)/,
+      pattern: /bg-background-(primary|secondary|tertiary|quaternary|quinary)/,
     },
     {
-      pattern: /text-(primary|secondary|tertiary|quaternary)-foreground/,
+      pattern: /text-(primary|secondary|tertiary|quaternary|quinary)-foreground/,
     },
   ],
   theme: {

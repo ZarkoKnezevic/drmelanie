@@ -5,7 +5,7 @@ import type { StoryblokBlok } from '@/types';
 interface PageProps {
   blok: StoryblokBlok & {
     body?: StoryblokBlok[];
-    background?: string;
+    background_color?: string | { slug?: string };
   };
 }
 
@@ -18,7 +18,7 @@ export default function Page({ blok }: PageProps) {
     });
   }
 
-  const backgroundClass = getBackgroundClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
 
   return (
     <div {...storyblokEditable(blok)} className={cn(backgroundClass)}>

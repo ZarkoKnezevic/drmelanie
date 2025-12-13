@@ -21,12 +21,12 @@ interface HeroMediaProps {
     video?: boolean;
     // Number of frames for frame-based animation
     frame_count?: number;
-    background?: string;
+    background_color?: string | { slug?: string };
   };
 }
 
 export default function HeroMedia({ blok }: HeroMediaProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
 
   // Check if video boolean is enabled (for frame-based animation)
   const useVideo = blok.video === true;

@@ -25,6 +25,7 @@ export const colorPreset = {
     secondary: 'var(--background-secondary)',
     tertiary: 'var(--background-tertiary)',
     quaternary: 'var(--background-quaternary)',
+    quinary: 'var(--background-quinary)',
   },
 
   // Button Colors - CSS Variables

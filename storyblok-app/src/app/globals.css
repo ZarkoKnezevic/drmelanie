@@ -344,4 +344,166 @@ body.is-inner-page .header-storyblok {
   .lenis.lenis-smooth iframe {
     pointer-events: none;
   }
+
+  /* Background Colors - Gynecology Clinic */
+  .bg-background-primary {
+    background-color: var(--background-primary);
+  }
+
+  .bg-background-secondary {
+    background-color: var(--background-secondary);
+  }
+
+  .bg-background-tertiary {
+    background-color: var(--background-tertiary);
+  }
+
+  .bg-background-quaternary {
+    background-color: var(--background-quaternary);
+  }
+
+  .bg-background-quinary {
+    background-color: var(--background-quinary);
+  }
+
+  /* Button Overrides for Primary Background - Tertiary buttons get white border and text */
+  .bg-background-primary .button.border-2,
+  .bg-background-primary button.border-2 {
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+  }
+
+  .bg-background-primary .button.border-2:hover,
+  .bg-background-primary button.border-2:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: #ffffff !important;
+    color: #ffffff !important;
+  }
+
+  /* Text Colors for Backgrounds - Gynecology Clinic */
+  /* PRIMARY Background Text Colors */
+  .bg-background-primary .text-heading,
+  .bg-background-primary h1,
+  .bg-background-primary h2,
+  .bg-background-primary h3,
+  .bg-background-primary h4,
+  .bg-background-primary h5,
+  .bg-background-primary h6 {
+    color: var(--background-primary-heading);
+    font-weight: 600; /* SemiBold */
+  }
+
+  .bg-background h1 {
+    color: var(--magenta);
+  }
+
+  .bg-background-primary .text-body,
+  .bg-background-primary p {
+    color: var(--background-primary-body);
+    font-weight: 400; /* Regular */
+  }
+
+  .bg-background-primary .text-subtle {
+    color: var(--background-primary-subtle);
+  }
+
+  .bg-background-primary .text-accent {
+    color: var(--background-primary-accent);
+  }
+
+  /* SECONDARY Background Text Colors */
+  .bg-background-secondary .text-heading,
+  .bg-background-secondary h1,
+  .bg-background-secondary h2,
+  .bg-background-secondary h3,
+  .bg-background-secondary h4,
+  .bg-background-secondary h5,
+  .bg-background-secondary h6 {
+    color: var(--background-secondary-heading);
+  }
+
+  .bg-background-secondary .text-body,
+  .bg-background-secondary p {
+    color: var(--background-secondary-body);
+  }
+
+  .bg-background-secondary .text-subtle {
+    color: var(--background-secondary-subtle);
+  }
+
+  .bg-background-secondary .text-accent {
+    color: var(--background-secondary-accent);
+  }
+
+  /* TERTIARY Background Text Colors */
+  .bg-background-tertiary .text-heading,
+  .bg-background-tertiary h1,
+  .bg-background-tertiary h2,
+  .bg-background-tertiary h3,
+  .bg-background-tertiary h4,
+  .bg-background-tertiary h5,
+  .bg-background-tertiary h6 {
+    color: var(--background-tertiary-heading);
+  }
+
+  .bg-background-tertiary .text-body,
+  .bg-background-tertiary p {
+    color: var(--background-tertiary-body);
+  }
+
+  .bg-background-tertiary .text-subtle {
+    color: var(--background-tertiary-subtle);
+  }
+
+  .bg-background-tertiary .text-accent {
+    color: var(--background-tertiary-accent);
+  }
+
+  /* QUATERNARY Background Text Colors */
+  .bg-background-quaternary .text-heading,
+  .bg-background-quaternary h1,
+  .bg-background-quaternary h2,
+  .bg-background-quaternary h3,
+  .bg-background-quaternary h4,
+  .bg-background-quaternary h5,
+  .bg-background-quaternary h6 {
+    color: var(--background-quaternary-heading);
+  }
+
+  .bg-background-quaternary .text-body,
+  .bg-background-quaternary p {
+    color: var(--background-quaternary-body);
+  }
+
+  .bg-background-quaternary .text-subtle {
+    color: var(--background-quaternary-subtle);
+  }
+
+  .bg-background-quaternary .text-accent {
+    color: var(--background-quaternary-accent);
+  }
+
+  /* QUINARY Background Text Colors - Mint-Teal Blend */
+  .bg-background-quinary .text-heading,
+  .bg-background-quinary h1,
+  .bg-background-quinary h2,
+  .bg-background-quinary h3,
+  .bg-background-quinary h4,
+  .bg-background-quinary h5,
+  .bg-background-quinary h6 {
+    color: var(--background-quinary-heading);
+  }
+
+  .bg-background-quinary .text-body,
+  .bg-background-quinary p {
+    color: var(--background-quinary-body);
+  }
+
+  .bg-background-quinary .text-subtle {
+    color: var(--background-quinary-subtle);
+  }
+
+  .bg-background-quinary .text-accent {
+    color: var(--background-quinary-accent);
+  }
 }

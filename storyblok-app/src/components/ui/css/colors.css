@@ -1,43 +1,94 @@
 :root {
   /* Base Colors */
   --white: #ffffff;
-  --mauve: #8a6d7b;
+  --mauve: #8b5f65;
   --magenta: #c7017f;
   --lavander: #9e7e91;
   --gray: #6c6a66;
-  --teal: #008080;
+  --teal: #cdebea;
   --warm-beige: #bfa9a0;
   --light-gray: #f5f5f5;
   --dark-gray: #2b2b2b;
   --soft-sand: #f0efed;
   --brand-text: #303030;
   --brand-background: #f0efed;
+  --soft-rosa: #f7dadf;
+  --warm-pink: #efa3b3;
+  --deep-pink: #d46a84;
+  --light-teal: #cdebea;
+  --black: #1f1f1f;
 
-  /* Background Colors */
+  /* Background Colors - Gynecology Clinic Optimized */
   --background: var(--light-gray);
   --foreground: var(--mauve);
-  --background-primary: var(--white);
-  --background-secondary: var(--mauve);
-  --background-tertiary: var(--light-gray);
-  --background-quaternary: var(--teal);
 
-  /* Button Colors */
-  --button-primary: var(--lavander);
-  --button-primary-foreground: var(--white);
-  --button-primary-hover: #7a5d6b;
-  --button-secondary: var(--magenta);
-  --button-secondary-foreground: var(--white);
-  --button-secondary-hover: #b7016f;
-  --button-tertiary: var(--warm-beige);
-  --button-tertiary-foreground: var(--white);
-  --button-tertiary-hover: #af9990;
-  --button-quaternary: var(--teal);
-  --button-quaternary-foreground: var(--white);
-  --button-quaternary-hover: #006666;
+  /* PRIMARY: "Rosewood Smoke" - #8B5F65 - Soft, muted rose-taupe - warm, feminine, elegant, medical-friendly */
+  --background-primary: #8b5f65;
+  --background-primary-heading: #ffffff;
+  --background-primary-body: #ffffff;
+  --background-primary-subtle: rgba(255, 255, 255, 0.85);
+  --background-primary-accent: #cdebea;
+
+  /* SECONDARY: "Ebb" - #e6e0e0 - Calm gray with feminine warmth */
+  --background-secondary: #e6e0e0;
+  --background-secondary-heading: #8b5f65;
+  --background-secondary-body: #8b5f65;
+  --background-secondary-subtle: #4a4d4f;
+  --background-secondary-accent: #2f6f73;
+
+  /* TERTIARY: "Cinderella" - #fcd4d5 - Soft blush for women's health */
+  --background-tertiary: #fcd4d5;
+  --background-tertiary-heading: #8b5f65;
+  --background-tertiary-body: #8b5f65;
+  --background-tertiary-subtle: #a84a62;
+  --background-tertiary-accent: #2f6f73;
+
+  /* QUATERNARY: "Mandy's Pink" - #f4b3bc - Warm, expressive pink */
+  --background-quaternary: #f4b3bc;
+  --background-quaternary-heading: #ffffff;
+  --background-quaternary-heading-alt: #2f6f73;
+  --background-quaternary-body: #ffffff;
+  --background-quaternary-subtle: rgba(255, 255, 255, 0.8);
+  --background-quaternary-accent: #2f6f73;
+
+  /* QUINARY: Mint-Teal Blend - Ultra soft mint-teal background */
+  --background-quinary: #cdebea;
+  --background-quinary-heading: #2f6f73;
+  --background-quinary-heading-alt: #3a3a3a;
+  --background-quinary-body: #2f6f73;
+  --background-quinary-body-alt: #3a3a3a;
+  --background-quinary-subtle: #4a4d4f;
+  --background-quinary-accent: #2f6f73;
+
+  /* Button Colors - Gynecology Clinic Optimized */
+  /* PRIMARY: Care Teal - Deep Teal #2F6F73 */
+  --button-primary: #2f6f73;
+  --button-primary-foreground: #ffffff;
+  --button-primary-hover: #3c8589;
+  --button-primary-text: #ffffff;
+
+  /* SECONDARY: Gentle Rose - Blush Rose #F4B3BC */
+  --button-secondary: #f4b3bc;
+  --button-secondary-foreground: #8b5f65;
+  --button-secondary-hover: #e79aa6;
+  --button-secondary-text: #8b5f65;
+
+  /* TERTIARY: Calm Outline - Transparent with Teal border */
+  --button-tertiary: transparent;
+  --button-tertiary-foreground: #8b5f65;
+  --button-tertiary-hover: rgba(47, 111, 115, 0.1);
+  --button-tertiary-text: #8b5f65;
+  --button-tertiary-border: #8b5f65;
+
+  /* QUATERNARY: Rosewood Edition - #E6E0E0 */
+  --button-quaternary: #8b5f65;
+  --button-quaternary-foreground: #8b5f65;
+  --button-quaternary-hover: #805a5f;
+  --button-quaternary-text: #ffffff;
 
   /* Semantic Colors */
   --primary: var(--white);
-  --primary-foreground: var(--mauve);
+  --primary-foreground: var(--black);
   --secondary: var(--mauve);
   --secondary-foreground: var(--white);
   --tertiary: var(--dark-gray);

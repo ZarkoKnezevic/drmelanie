@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Karla } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
 import './globals.css';
 import StoryblokProvider from '@/components/StoryblokProvider';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -19,9 +19,9 @@ import '@/lib/storyblok-init'; // Initialize Storyblok for server components
 import { APP_CONFIG } from '@/constants';
 import { cn } from '@/utils';
 
-const karla = Karla({
+const montserrat = Montserrat({
   subsets: ['latin'],
-  variable: '--font-karla',
+  variable: '--font-montserrat',
   display: 'swap',
 });
 
@@ -104,8 +104,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" suppressHydrationWarning className={`${karla.variable} font-sans`}>
-      <body className={cn('min-h-screen bg-background font-karla antialiased')} suppressHydrationWarning>
+    <html lang="de" suppressHydrationWarning className={`${montserrat.variable} font-sans`}>
+      <body
+        className={cn('font-montserrat min-h-screen bg-background antialiased')}
+        suppressHydrationWarning
+      >
         <SmoothScrollProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             <TooltipProvider>

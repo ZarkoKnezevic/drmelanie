@@ -18,12 +18,12 @@ interface HeroProps {
     };
     cta_text?: string;
     cta_link?: string;
-    background?: string;
+    background_color?: string | { slug?: string };
   };
 }
 
 export default function Hero({ blok }: HeroProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
 
   return (
     <section

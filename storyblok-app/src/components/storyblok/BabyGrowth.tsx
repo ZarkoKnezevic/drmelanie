@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { storyblokEditable } from '@storyblok/react/rsc';
-import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
+import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 import * as motion from 'motion/react-client';
 
@@ -16,7 +16,7 @@ interface BabyGrowthProps {
     thirty_two_weeks_text?: string;
     thirty_six_weeks_text?: string;
     forty_weeks_text?: string;
-    background?: string;
+    background_color?: string | { slug?: string };
   };
 }
 
@@ -49,8 +49,9 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
   const [hasEnteredView, setHasEnteredView] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const backgroundClass = getBackgroundClass(blok.background);
-  const textColorClass = getTextColorClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
+  const headingColorClass = getHeadingColorClass(blok.background_color);
+  const bodyColorClass = getBodyColorClass(blok.background_color);
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -139,7 +140,8 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
     <section
       {...storyblokEditable(blok)}
       className={cn(
-        'baby-growth torn-edge torn-edge-top torn-edge-bottom relative mb-4 min-h-screen bg-white'
+        'baby-growth torn-edge torn-edge-top torn-edge-bottom relative mb-4 min-h-screen',
+        backgroundClass || 'bg-white'
       )}
     >
       <div className="spacing container">
@@ -287,7 +289,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
           {/* Right Column: Text Content */}
           <motion.div
             ref={textRef}
-            className={cn('flex flex-col justify-center', textColorClass)}
+            className={cn('flex flex-col justify-center', headingColorClass, bodyColorClass)}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}

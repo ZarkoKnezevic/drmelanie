@@ -33,6 +33,32 @@
     pointer-events: none;
 }
 
+/* Torn edges inherit background from parent background classes */
+.bg-background-primary .torn-edge::before,
+.bg-background-primary .torn-edge::after {
+    background-color: var(--background-primary);
+}
+
+.bg-background-secondary .torn-edge::before,
+.bg-background-secondary .torn-edge::after {
+    background-color: var(--background-secondary);
+}
+
+.bg-background-tertiary .torn-edge::before,
+.bg-background-tertiary .torn-edge::after {
+    background-color: var(--background-tertiary);
+}
+
+.bg-background-quaternary .torn-edge::before,
+.bg-background-quaternary .torn-edge::after {
+    background-color: var(--background-quaternary);
+}
+
+.bg-background-quinary .torn-edge::before,
+.bg-background-quinary .torn-edge::after {
+    background-color: var(--background-quinary);
+}
+
 /* Top Torn Edge */
 .torn-edge-top::before {
     top: calc(var(--torn-edge-offset) - var(--torn-edge-width));
@@ -69,16 +95,37 @@
     clip-path: var(--torn-right-clip-path);
 }
 
-/* Right Torn Edge Reversed - appears on left side with white background */
+/* Right Torn Edge Reversed - appears on left side, inherits from parent */
 .torn-edge-right-reverse::before {
     left: calc(var(--torn-edge-offset-reverse) - var(--torn-edge-width));
     top: 0;
     bottom: 0;
     width: var(--torn-edge-width);
     clip-path: var(--torn-right-clip-path);
-    background-color: var(--background-tertiary);
+    background-color: inherit;
     transform: scaleX(-1);
     transform-origin: center;
+}
+
+/* Right reverse torn edge inherits from parent background classes */
+.bg-background-primary .torn-edge-right-reverse::before {
+    background-color: var(--background-primary);
+}
+
+.bg-background-secondary .torn-edge-right-reverse::before {
+    background-color: var(--background-secondary);
+}
+
+.bg-background-tertiary .torn-edge-right-reverse::before {
+    background-color: var(--background-tertiary);
+}
+
+.bg-background-quaternary .torn-edge-right-reverse::before {
+    background-color: var(--background-quaternary);
+}
+
+.bg-background-quinary .torn-edge-right-reverse::before {
+    background-color: var(--background-quinary);
 }
 
 /* Responsive torn edges: top on mobile, right on desktop */

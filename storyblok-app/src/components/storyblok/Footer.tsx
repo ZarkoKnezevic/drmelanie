@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
 import { prepareLinkProps } from '@/lib/adapters/prepareLinkProps';
-import { cn, getBackgroundClass, getTextColorClass } from '@/utils';
+import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface FooterProps {
@@ -25,12 +25,14 @@ interface FooterProps {
       };
     };
     map_link?: string | { linktype?: 'story' | 'url' | 'email'; url?: string; cached_url?: string };
+    background_color?: string | { slug?: string };
   };
 }
 
 export default function Footer({ blok }: FooterProps) {
-  const backgroundClass = getBackgroundClass(blok.background);
-  const textColorClass = getTextColorClass(blok.background);
+  const backgroundClass = getBackgroundClass(blok.background_color);
+  const headingColorClass = getHeadingColorClass(blok.background_color);
+  const bodyColorClass = getBodyColorClass(blok.background_color);
   const mapImageProps = blok.map_image ? prepareImageProps(blok.map_image) : null;
 
   // Get email link and display text
@@ -74,13 +76,16 @@ export default function Footer({ blok }: FooterProps) {
   }
 
   return (
-    <footer {...storyblokEditable(blok)} className={cn(backgroundClass || 'bg-background')}>
+    <footer
+      {...storyblokEditable(blok)}
+      className={cn('torn-edge torn-edge-top relative', backgroundClass || 'bg-background')}
+    >
       <div className="container flex flex-col gap-8 py-10 md:py-12">
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {/* Contact Information */}
           <div className="flex flex-col">
-            <h3 className={cn('mb-5 text-left text-body-md font-semibold', textColorClass)}>
+            <h3 className={cn('mb-5 text-left text-body-md font-semibold', headingColorClass)}>
               Kontaktieren Sie mich
             </h3>
             {blok.name && <p className="text-body-sm text-darkGray">{blok.name}</p>}
@@ -106,7 +111,7 @@ export default function Footer({ blok }: FooterProps) {
           {/* Navigation */}
           {blok.navigation && blok.navigation.length > 0 && (
             <div className="flex flex-col">
-              <h3 className={cn('mb-5 text-left text-body-md font-semibold', textColorClass)}>
+              <h3 className={cn('mb-5 text-left text-body-md font-semibold', headingColorClass)}>
                 Schnellzugriff
               </h3>
               <ul className="flex flex-col gap-2">
@@ -158,7 +163,7 @@ export default function Footer({ blok }: FooterProps) {
           {/* Map */}
           {mapImageProps?.src && (
             <div className="flex flex-col gap-4">
-              <h3 className={cn('mb-5 text-left text-body-md font-semibold', textColorClass)}>
+              <h3 className={cn('mb-5 text-left text-body-md font-semibold', headingColorClass)}>
                 Hier finden Sie uns
               </h3>
               {mapHref !== '#' ? (
@@ -192,7 +197,7 @@ export default function Footer({ blok }: FooterProps) {
         {/* Copyright */}
         {blok.name && (
           <div className="flex flex-col gap-4 pt-8 md:flex-row md:items-center md:justify-between">
-            <p className={cn('text-left text-sm text-muted-foreground', textColorClass)}>
+            <p className={cn('text-left text-sm text-muted-foreground', bodyColorClass)}>
               ©{new Date().getFullYear()} {blok.name}
             </p>
           </div>
