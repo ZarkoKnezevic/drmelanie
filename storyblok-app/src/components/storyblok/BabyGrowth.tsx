@@ -144,7 +144,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
       className={cn(
         'baby-growth relative mb-4 min-h-screen',
         hasTornEdges && 'torn-edge torn-edge-top torn-edge-bottom',
-        backgroundClass || 'bg-white'
+        backgroundClass || 'bg-background'
       )}
     >
       <div className="spacing container">

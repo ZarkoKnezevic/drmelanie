@@ -113,10 +113,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
         <section
           id="bildergalerie-ansehen"
           {...storyblokEditable(blok)}
-          className={cn(
-            'image-gallery relative md:hidden',
-            backgroundClass || 'bg-background-secondary'
-          )}
+          className={cn('image-gallery relative md:hidden', backgroundClass || 'bg-background')}
         >
           <div className="spacing overflow-x-hidden">
             <div className="relative -ml-[25.6vw] w-full" style={{ minHeight: '128.5333333334vw' }}>
@@ -159,7 +156,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
         ref={containerRef}
         className={cn(
           'image-gallery relative hidden h-[300vh] md:block',
-          backgroundClass || 'bg-background-tertiary'
+          backgroundClass || 'bg-background'
         )}
       >
         <div className="sticky top-0 h-screen overflow-hidden">
