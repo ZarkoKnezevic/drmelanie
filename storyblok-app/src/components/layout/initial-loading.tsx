@@ -10,7 +10,7 @@ import { cn } from '@/utils';
 export function InitialLoading() {
   const pathname = usePathname();
   const isLivePreview = pathname?.startsWith('/live-preview');
-  
+
   // Always start with loading true to avoid hydration mismatch
   // We'll check sessionStorage in useEffect after mount
   const [isLoading, setIsLoading] = useState(true);
@@ -24,9 +24,9 @@ export function InitialLoading() {
   useEffect(() => {
     if (typeof window === 'undefined' || hasCheckedStorageRef.current) return;
     hasCheckedStorageRef.current = true;
-    
+
     const hasInitialLoaded = sessionStorage.getItem('initial-load-complete') === 'true';
-    
+
     // If already loaded, skip the loading screen entirely
     if (hasInitialLoaded) {
       setIsLoading(false);
@@ -37,10 +37,10 @@ export function InitialLoading() {
   useEffect(() => {
     // Skip if not loading (already handled by first effect)
     if (!isLoading) return;
-    
+
     // Skip if we haven't checked storage yet (wait for first effect to run)
     if (!hasCheckedStorageRef.current) return;
-    
+
     let animationReady = false;
     let pageLoaded = false;
     let animationTimeout: NodeJS.Timeout | null = null;

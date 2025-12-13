@@ -5,19 +5,18 @@ import { getLottiePath } from '@/lib/lottie/animations';
 
 export default function NotFound() {
   return (
-    <div data-not-found className="relative flex min-h-screen flex-col items-center justify-center bg-background z-[51]">
-      <div className="w-64 h-64 mb-8">
-        <LottieAnimation
-          src={getLottiePath('baby')}
-          className="w-full h-full"
-        />
+    <div
+      data-not-found
+      className="relative z-[51] flex min-h-screen flex-col items-center justify-center bg-background"
+    >
+      <div className="mb-8 h-64 w-64">
+        <LottieAnimation src={getLottiePath('baby')} className="h-full w-full" />
       </div>
       <h1 className="text-4xl font-bold">404</h1>
       <p className="mt-4 text-lg text-muted-foreground">Seite nicht gefunden</p>
-      <Button asChild variant="primary" className="mt-6">
+      <Button asChild variant="quaternary" className="mt-6">
         <Link href="/">Zur Startseite</Link>
       </Button>
     </div>
   );
 }
-

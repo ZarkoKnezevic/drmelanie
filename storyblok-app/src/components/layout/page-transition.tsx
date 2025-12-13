@@ -14,15 +14,19 @@ export function PageTransition({ children }: PageTransitionProps) {
 
   useEffect(() => {
     const isLivePreview = pathname?.startsWith('/live-preview');
-    
+
     // Only reset scroll if pathname actually changed (not on initial mount)
     // AND we're NOT on a live preview page (live preview should preserve scroll)
-    if (prevPathnameRef.current !== null && prevPathnameRef.current !== pathname && !isLivePreview) {
+    if (
+      prevPathnameRef.current !== null &&
+      prevPathnameRef.current !== pathname &&
+      !isLivePreview
+    ) {
       // Force scroll to top immediately on navigation
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
-      
+
       // Reset Lenis scroll if it exists
       if (typeof window !== 'undefined') {
         // Try to find Lenis instance from HeroMediaVideo
@@ -39,7 +43,7 @@ export function PageTransition({ children }: PageTransitionProps) {
         });
       }
     }
-    
+
     prevPathnameRef.current = pathname;
 
     // Small delay to ensure smooth fade-in after loading
@@ -60,4 +64,3 @@ export function PageTransition({ children }: PageTransitionProps) {
     </div>
   );
 }
-
