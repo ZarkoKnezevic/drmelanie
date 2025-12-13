@@ -29,6 +29,13 @@ interface FooterProps {
   };
 }
 
+const WORKING_HOURS = [
+  { day: 'Montag', time: '13:00-18:00' },
+  { day: 'Dienstag', time: '08:00-13:00' },
+  { day: 'Mittwoch', time: '08:00-13:00' },
+  { day: 'Donnerstag', time: '08:00-13:00' },
+] as const;
+
 export default function Footer({ blok }: FooterProps) {
   const backgroundClass = getBackgroundClass(blok.background_color);
   const headingColorClass = getHeadingColorClass(blok.background_color);
@@ -77,12 +84,13 @@ export default function Footer({ blok }: FooterProps) {
 
   return (
     <footer
+      id="termin_buchen"
       {...storyblokEditable(blok)}
       className={cn('torn-edge torn-edge-top relative', backgroundClass || 'bg-background')}
     >
       <div className="container flex flex-col gap-8 py-10 md:py-12">
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Contact Information */}
           <div className="flex flex-col">
             <h3 className={cn('mb-5 text-left text-body-md font-semibold', headingColorClass)}>
@@ -106,6 +114,20 @@ export default function Footer({ blok }: FooterProps) {
               </a>
             )}
             {blok.phone && <p className="text-body-sm text-darkGray">{blok.phone}</p>}
+          </div>
+
+          {/* Working Hours */}
+          <div className="flex flex-col">
+            <h3 className={cn('mb-5 text-left text-body-md font-semibold', headingColorClass)}>
+              Ordinationszeiten:
+            </h3>
+            <ul className="flex flex-col gap-2">
+              {WORKING_HOURS.map((hour, index) => (
+                <li key={index} className={cn('text-body-sm', bodyColorClass)}>
+                  <span className="font-medium">{hour.day}:</span> {hour.time}
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Navigation */}

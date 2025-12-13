@@ -64,7 +64,7 @@ export default function Banner({ blok }: BannerProps) {
             <div className="flex flex-col">
               {blok.topline && (
                 <BannerAnimated delay={100} animationType="fade-up">
-                  <p className={cn('text-body font-bold', bodyColorClass)}>{blok.topline}</p>
+                  <p className={cn('text-body', bodyColorClass)}>{blok.topline}</p>
                 </BannerAnimated>
               )}
 

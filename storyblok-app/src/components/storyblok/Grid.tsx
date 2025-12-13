@@ -7,7 +7,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
-import { cn, getBackgroundClass } from '@/utils';
+import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 import Feature from './Feature';
 
@@ -40,6 +40,8 @@ export default function Grid({ blok }: GridProps) {
   const [isDesktop, setIsDesktop] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const backgroundClass = getBackgroundClass(blok.background_color);
+  const headingColorClass = getHeadingColorClass(blok.background_color);
+  const bodyColorClass = getBodyColorClass(blok.background_color);
 
   // Get items from various possible field names
   const items =
@@ -449,7 +451,9 @@ export default function Grid({ blok }: GridProps) {
       >
         {blok.title && (
           <div className="container mx-auto px-6 pt-12 text-center">
-            <h2 className="mb-12 text-3xl font-bold md:text-4xl">{blok.title}</h2>
+            <h2 className={cn('mb-12 text-3xl font-bold md:text-4xl', headingColorClass)}>
+              {blok.title}
+            </h2>
           </div>
         )}
         <div className="spacing container mx-auto px-6 pb-12">

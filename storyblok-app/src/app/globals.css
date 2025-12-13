@@ -393,10 +393,6 @@ body.is-inner-page .header-storyblok {
     font-weight: 600; /* SemiBold */
   }
 
-  .bg-background h1 {
-    color: var(--magenta);
-  }
-
   .bg-background-primary .text-body,
   .bg-background-primary p {
     color: var(--background-primary-body);
