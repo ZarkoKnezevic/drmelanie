@@ -17,6 +17,7 @@ interface BabyGrowthProps {
     thirty_six_weeks_text?: string;
     forty_weeks_text?: string;
     background_color?: string | { slug?: string };
+    torn_paper_edges?: boolean;
   };
 }
 
@@ -52,6 +53,7 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
   const backgroundClass = getBackgroundClass(blok.background_color);
   const headingColorClass = getHeadingColorClass(blok.background_color);
   const bodyColorClass = getBodyColorClass(blok.background_color);
+  const hasTornEdges = blok.torn_paper_edges === true;
 
   useEffect(() => {
     if (!svgRef.current) return;
@@ -140,7 +142,8 @@ export default function BabyGrowth({ blok }: BabyGrowthProps) {
     <section
       {...storyblokEditable(blok)}
       className={cn(
-        'baby-growth torn-edge torn-edge-top torn-edge-bottom relative mb-4 min-h-screen',
+        'baby-growth relative mb-4 min-h-screen',
+        hasTornEdges && 'torn-edge torn-edge-top torn-edge-bottom',
         backgroundClass || 'bg-white'
       )}
     >

@@ -1,6 +1,5 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
-import { StoryblokServerComponent } from '@storyblok/react/rsc';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
 import { cn } from '@/utils';
