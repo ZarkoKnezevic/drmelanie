@@ -81,10 +81,12 @@ export function InteractiveGoogleMap({
   height = '500px',
 }: InteractiveGoogleMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  // Check API key from both env utility and process.env (for client-side)
+  // Check API key - NEXT_PUBLIC_ variables are embedded at build time
+  // For Vercel: Make sure to add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in Environment Variables
+  // and redeploy after adding it
   const apiKey =
-    env.googleMaps.apiKey ||
-    (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY : '');
+    (typeof window !== 'undefined' ? process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY : '') ||
+    env.googleMaps.apiKey;
 
   useEffect(() => {
     if (typeof window === 'undefined' || !apiKey || !mapRef.current) return;

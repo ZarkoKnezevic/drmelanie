@@ -112,7 +112,7 @@ export default function Hero({ blok }: HeroProps) {
       {/* Right Section - Image (extends to edge, desktop only - flex-row) */}
       {blok.image?.filename && (
         <div className="absolute right-0 top-0 z-10 hidden h-full w-[50%] md:block">
-          <div className="torn-edge torn-edge-right-reverse relative h-full w-full">
+          <div className="torn-edge torn-edge-right-reverse relative h-full w-full bg-background">
             <Image
               src={blok.image.filename}
               alt={blok.image.alt || blok.headline}

@@ -70,7 +70,7 @@ export default function Footer({ blok }: FooterProps) {
     <footer
       id="termin_buchen"
       {...storyblokEditable(blok)}
-      className={cn('relative', backgroundClass || 'bg-background')}
+      className={cn('relative -mt-[14px]', backgroundClass || 'bg-background')}
     >
       {/* Map Section - Above all footer info */}
       <div className="relative w-full overflow-hidden">

@@ -115,7 +115,7 @@
 
   /* SENARY: "Golden Petal" */
   --background-senary: var(--color-bg-golden-petal);
-  --background-senary-heading: var(--color-magenta);
+  --background-senary-heading: var(--color-dark-gray);
   --background-senary-body: var(--color-dark-gray);
   --background-senary-subtle: var(--color-warm-taupe);
   --background-senary-accent: var(--color-teal-deep);

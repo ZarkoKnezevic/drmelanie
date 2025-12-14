@@ -22,6 +22,7 @@ import HeroMedia from '@/components/storyblok/HeroMedia';
 import BabyGrowth from '@/components/storyblok/BabyGrowth';
 import Team from '@/components/storyblok/Team';
 import Member from '@/components/storyblok/Member';
+import Gallery from '@/components/storyblok/Gallery';
 
 // Register components with multiple name variations to handle case differences
 export const COMPONENTS = {
@@ -49,6 +50,7 @@ export const COMPONENTS = {
   team: Team,
   team_member: Member,
   member: Member, // Keep for backward compatibility
+  gallery: Gallery,
   imageGallery: ImageGallery,
   imageGalery: ImageGallery, // Handle typo variation
   // Capitalized (in case Storyblok sends it this way)
@@ -72,4 +74,5 @@ export const COMPONENTS = {
   Team: Team,
   TeamMember: Member,
   Member: Member,
+  Gallery: Gallery,
 } as const;
