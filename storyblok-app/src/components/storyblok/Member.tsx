@@ -2,7 +2,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
-import { cn } from '@/utils';
+import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface MemberProps {
@@ -15,12 +15,16 @@ interface MemberProps {
         alt?: string;
       };
     };
-    richtext?: any; // ISbRichtext
+    richtext?: Record<string, unknown>; // ISbRichtext from Storyblok
     name_and_title?: string;
+    background_color?: string | { slug?: string };
+    torn_paper_edges?: boolean;
   };
+  isFirst?: boolean;
+  isLast?: boolean;
 }
 
-export default function Member({ blok }: MemberProps) {
+export default function Member({ blok, isFirst = false, isLast = false }: MemberProps) {
   const imageProps = blok.image
     ? prepareImageProps({
         filename: blok.image.asset?.filename || blok.image.filename,
@@ -28,16 +32,38 @@ export default function Member({ blok }: MemberProps) {
       })
     : null;
 
+  const backgroundClass = getBackgroundClass(blok.background_color);
+  const headingColorClass = getHeadingColorClass(blok.background_color);
+  const bodyColorClass = getBodyColorClass(blok.background_color);
+  const hasTornEdges = blok.torn_paper_edges === true;
+
+  // First child: torn edge on top
+  // All in between: torn edge on bottom only
+  // Last child: torn edge on bottom
+  const tornEdgeClasses = hasTornEdges
+    ? cn(
+        'torn-edge',
+        isFirst && !isLast && 'torn-edge-top', // First (but not last): top only
+        !isFirst && 'torn-edge-bottom', // Middle and last: bottom
+        isFirst && isLast && 'torn-edge-top torn-edge-bottom' // Single member: both
+      )
+    : '';
+
   return (
     <div
       {...storyblokEditable(blok)}
-      className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+      className={cn(
+        'container grid grid-cols-1 gap-6 py-12 md:grid-cols-2 lg:grid-cols-3',
+        tornEdgeClasses,
+        backgroundClass || 'bg-background'
+      )}
     >
       {/* Image - Mobile: 1 col, Tablet: 1/2, LG+: 1/3 */}
-      {imageProps && (
+      {imageProps && imageProps.src && (
         <div className="relative aspect-square w-full overflow-hidden md:col-span-1 lg:col-span-1">
           <Image
             {...imageProps}
+            alt={imageProps.alt || blok.name_and_title || 'Team member image'}
             className="h-full w-full object-cover"
             sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
@@ -47,12 +73,14 @@ export default function Member({ blok }: MemberProps) {
       {/* Text Content - Mobile: 1 col, Tablet: 1/2, LG+: 2/3 */}
       <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
         {blok.richtext && (
-          <div className="mb-4 max-w-none text-body-sm" style={{ color: '#2b2b2b' }}>
+          <div className={cn('mb-4 max-w-none text-body-sm', bodyColorClass)}>
             {renderRichText(blok.richtext)}
           </div>
         )}
         {blok.name_and_title && (
-          <h3 className="mt-auto text-h3 font-bold">{blok.name_and_title}</h3>
+          <h3 className={cn('mt-auto text-h3 font-bold', headingColorClass)}>
+            {blok.name_and_title}
+          </h3>
         )}
       </div>
     </div>
