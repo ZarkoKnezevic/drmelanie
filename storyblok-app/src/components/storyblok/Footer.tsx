@@ -1,9 +1,8 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Link from 'next/link';
-import Image from 'next/image';
-import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
-import { prepareLinkProps } from '@/lib/adapters/prepareLinkProps';
+import { Suspense } from 'react';
 import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
+import { MapContent } from '@/components/layout/map-section';
 import type { StoryblokBlok } from '@/types';
 
 interface FooterProps {
@@ -40,7 +39,6 @@ export default function Footer({ blok }: FooterProps) {
   const backgroundClass = getBackgroundClass(blok.background_color);
   const headingColorClass = getHeadingColorClass(blok.background_color);
   const bodyColorClass = getBodyColorClass(blok.background_color);
-  const mapImageProps = blok.map_image ? prepareImageProps(blok.map_image) : null;
 
   // Get email link and display text
   let emailHref = '';
@@ -68,26 +66,25 @@ export default function Footer({ blok }: FooterProps) {
     }
   }
 
-  // Get map link
-  let mapHref = '#';
-  if (blok.map_link) {
-    if (typeof blok.map_link === 'string') {
-      mapHref = blok.map_link;
-    } else {
-      const linkProps = prepareLinkProps({
-        link: blok.map_link,
-        text: '',
-      });
-      mapHref = linkProps.href !== '#' ? linkProps.href : '#';
-    }
-  }
-
   return (
     <footer
       id="termin_buchen"
       {...storyblokEditable(blok)}
-      className={cn('torn-edge torn-edge-top relative', backgroundClass || 'bg-background')}
+      className={cn('relative', backgroundClass || 'bg-background')}
     >
+      {/* Map Section - Above all footer info */}
+      <div className="relative w-full overflow-hidden">
+        <Suspense
+          fallback={
+            <div className="flex h-[500px] items-center justify-center bg-gray-100 md:h-[600px] lg:h-[700px]">
+              <p className="text-sm text-gray-500">Karte wird geladen...</p>
+            </div>
+          }
+        >
+          <MapContent />
+        </Suspense>
+      </div>
+
       <div className="container flex flex-col gap-8 py-10 md:py-12">
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
@@ -179,39 +176,6 @@ export default function Footer({ blok }: FooterProps) {
                   );
                 })}
               </ul>
-            </div>
-          )}
-
-          {/* Map */}
-          {mapImageProps?.src && (
-            <div className="flex flex-col gap-4">
-              <h3 className={cn('mb-5 text-left text-body-md font-semibold', headingColorClass)}>
-                Hier finden Sie uns
-              </h3>
-              {mapHref !== '#' ? (
-                <Link
-                  href={mapHref}
-                  className="relative h-48 w-full overflow-hidden md:h-64 xl:h-96"
-                >
-                  <Image
-                    src={mapImageProps.src}
-                    alt={mapImageProps.alt || 'Map'}
-                    fill
-                    className="object-contain object-left-top"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </Link>
-              ) : (
-                <div className="relative aspect-video w-full overflow-hidden">
-                  <Image
-                    src={mapImageProps.src}
-                    alt={mapImageProps.alt || 'Map'}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
-                </div>
-              )}
             </div>
           )}
         </div>

@@ -9,6 +9,7 @@ interface EnvConfig {
   STORYBLOK_VERSION: 'draft' | 'published';
   NEXT_PUBLIC_APP_URL: string;
   NEXT_PUBLIC_DOMAIN: string;
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: string;
   NODE_ENV: 'development' | 'production' | 'test';
 }
 
@@ -20,6 +21,12 @@ function getEnvVar(key: keyof EnvConfig, defaultValue?: string): string {
       console.warn(
         `⚠️ ${key} is not set. Please create a .env.local file with your Storyblok access token.`
       );
+    }
+  }
+
+  if (!value && key === 'NEXT_PUBLIC_GOOGLE_MAPS_API_KEY') {
+    if (typeof window === 'undefined') {
+      console.warn(`⚠️ ${key} is not set. Please add your Google Maps API key to .env.local file.`);
     }
   }
 
@@ -36,9 +43,11 @@ export const env = {
     url: getEnvVar('NEXT_PUBLIC_APP_URL', 'http://localhost:3000'),
     domain: getEnvVar('NEXT_PUBLIC_DOMAIN', 'http://localhost:3000'),
   },
+  googleMaps: {
+    apiKey: getEnvVar('NEXT_PUBLIC_GOOGLE_MAPS_API_KEY'),
+  },
   nodeEnv: (process.env.NODE_ENV || 'development') as EnvConfig['NODE_ENV'],
   isDevelopment: process.env.NODE_ENV === 'development',
   isProduction: process.env.NODE_ENV === 'production',
   isTest: process.env.NODE_ENV === 'test',
 } as const;
-
