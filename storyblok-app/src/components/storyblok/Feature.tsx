@@ -54,8 +54,8 @@ export default function Feature({ blok }: FeatureProps) {
         </div>
       )}
       <div className="flex w-full flex-col items-center p-6 text-center">
-        {blok.name && <h3 className="text-mauve mb-2 text-xl font-semibold">{blok.name}</h3>}
-        {blok.description && <p className="text-mauve">{blok.description}</p>}
+        {blok.name && <h3 className="mb-2 text-xl font-semibold ">{blok.name}</h3>}
+        {blok.description && <p className="text-[#3a3a3a]">{blok.description}</p>}
       </div>
     </div>
   );

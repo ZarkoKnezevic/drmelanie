@@ -366,6 +366,10 @@ body.is-inner-page .header-storyblok {
     background-color: var(--background-quinary);
   }
 
+  .bg-background-senary {
+    background-color: var(--background-senary);
+  }
+
   /* Button Overrides for Primary Background - Tertiary buttons get white border and text */
   .bg-background-primary .button.border-2,
   .bg-background-primary button.border-2 {
@@ -501,5 +505,29 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-quinary .text-accent {
     color: var(--background-quinary-accent);
+  }
+
+  /* SENARY Background Text Colors - Golden Petal */
+  .bg-background-senary .text-heading,
+  .bg-background-senary h1,
+  .bg-background-senary h2,
+  .bg-background-senary h3,
+  .bg-background-senary h4,
+  .bg-background-senary h5,
+  .bg-background-senary h6 {
+    color: var(--background-senary-heading);
+  }
+
+  .bg-background-senary .text-body,
+  .bg-background-senary p {
+    color: var(--background-senary-body);
+  }
+
+  .bg-background-senary .text-subtle {
+    color: var(--background-senary-subtle);
+  }
+
+  .bg-background-senary .text-accent {
+    color: var(--background-senary-accent);
   }
 }

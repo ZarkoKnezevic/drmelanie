@@ -32,7 +32,15 @@ export function getBackgroundClass(background?: string | { slug?: string }): str
     tertiary: 'bg-background-tertiary',
     quaternary: 'bg-background-quaternary',
     quinary: 'bg-background-quinary',
-    // Also support slug variations
+    senary: 'bg-background-senary',
+    // New slug variations
+    'rose-canvas': 'bg-background-primary',
+    'petal-blush': 'bg-background-secondary',
+    'hummingbird-teal': 'bg-background-tertiary',
+    'baby-teal-mist': 'bg-background-quaternary',
+    'stone-bloom': 'bg-background-quinary',
+    'golden-petal': 'bg-background-senary',
+    // Legacy support
     'hint-of-red': 'bg-background-primary',
     'rosewood-smoke': 'bg-background-primary',
     ebb: 'bg-background-secondary',
@@ -102,17 +110,26 @@ export function getHeadingColorClass(background?: string | { slug?: string }): s
 
   const normalized = bgValue.toLowerCase().trim().replace(/\s+/g, '-');
   const headingMap: Record<string, string> = {
-    primary: 'text-white',
-    secondary: 'text-[#3a3a3a]',
-    tertiary: 'text-[#3a3a3a]',
-    quaternary: 'text-white',
-    quinary: 'text-[#2f6f73]',
-    'hint-of-red': 'text-white',
+    primary: 'text-[#c7017f]',
+    secondary: 'text-[#c7017f]',
+    tertiary: 'text-white',
+    quaternary: 'text-[#c7017f]',
+    quinary: 'text-[#c7017f]',
+    senary: 'text-[#c7017f]',
+    // Slug variations
+    'rose-canvas': 'text-[#c7017f]',
+    'petal-blush': 'text-[#c7017f]',
+    'hummingbird-teal': 'text-white',
+    'baby-teal-mist': 'text-[#c7017f]',
+    'stone-bloom': 'text-[#c7017f]',
+    'golden-petal': 'text-[#c7017f]',
+    // Legacy support
+    'hint-of-red': 'text-[#c7017f]',
     'rosewood-smoke': 'text-white',
-    ebb: 'text-[#3a3a3a]',
-    cinderella: 'text-[#3a3a3a]',
-    'mandys-pink': 'text-white',
-    'mint-teal': 'text-[#2f6f73]',
+    ebb: 'text-[#c7017f]',
+    cinderella: 'text-[#c7017f]',
+    'mandys-pink': 'text-[#c7017f]',
+    'mint-teal': 'text-white',
   };
 
   return headingMap[normalized] || headingMap[bgValue.toLowerCase()] || '';
@@ -137,12 +154,21 @@ export function getBodyColorClass(background?: string | { slug?: string }): stri
 
   const normalized = bgValue.toLowerCase().trim().replace(/\s+/g, '-');
   const bodyMap: Record<string, string> = {
-    primary: 'text-white',
+    primary: 'text-[#3a3a3a]',
     secondary: 'text-[#3a3a3a]',
-    tertiary: 'text-[#3a3a3a]',
-    quaternary: 'text-white',
-    quinary: 'text-[#2f6f73]',
-    'hint-of-red': 'text-white',
+    tertiary: 'text-white',
+    quaternary: 'text-[#2f6f73]',
+    quinary: 'text-[#3a3a3a]',
+    senary: 'text-[#3a3a3a]',
+    // Slug variations
+    'rose-canvas': 'text-[#3a3a3a]',
+    'petal-blush': 'text-[#3a3a3a]',
+    'hummingbird-teal': 'text-white',
+    'baby-teal-mist': 'text-[#2f6f73]',
+    'stone-bloom': 'text-[#3a3a3a]',
+    'golden-petal': 'text-[#3a3a3a]',
+    // Legacy support
+    'hint-of-red': 'text-[#3a3a3a]',
     'rosewood-smoke': 'text-white',
     ebb: 'text-[#3a3a3a]',
     cinderella: 'text-[#3a3a3a]',
@@ -172,17 +198,26 @@ export function getSubtleColorClass(background?: string | { slug?: string }): st
 
   const normalized = bgValue.toLowerCase().trim().replace(/\s+/g, '-');
   const subtleMap: Record<string, string> = {
-    primary: 'text-white/85',
-    secondary: 'text-[#4a4d4f]',
-    tertiary: 'text-[#a84a62]',
-    quaternary: 'text-white/80',
-    quinary: 'text-[#4a4d4f]',
-    'hint-of-red': 'text-white/85',
+    primary: 'text-[#6b6b6b]',
+    secondary: 'text-[#7a7a7a]',
+    tertiary: 'text-white/75',
+    quaternary: 'text-[#5f8f91]',
+    quinary: 'text-[#6f6f6f]',
+    senary: 'text-[#6b5a3f]',
+    // Slug variations
+    'rose-canvas': 'text-[#6b6b6b]',
+    'petal-blush': 'text-[#7a7a7a]',
+    'hummingbird-teal': 'text-white/75',
+    'baby-teal-mist': 'text-[#5f8f91]',
+    'stone-bloom': 'text-[#6f6f6f]',
+    'golden-petal': 'text-[#6b5a3f]',
+    // Legacy support
+    'hint-of-red': 'text-[#6b6b6b]',
     'rosewood-smoke': 'text-white/85',
-    ebb: 'text-[#4a4d4f]',
+    ebb: 'text-[#7a7a7a]',
     cinderella: 'text-[#a84a62]',
     'mandys-pink': 'text-white/80',
-    'mint-teal': 'text-[#4a4d4f]',
+    'mint-teal': 'text-[#5f8f91]',
   };
 
   return subtleMap[normalized] || subtleMap[bgValue.toLowerCase()] || '';
@@ -207,16 +242,25 @@ export function getAccentColorClass(background?: string | { slug?: string }): st
 
   const normalized = bgValue.toLowerCase().trim().replace(/\s+/g, '-');
   const accentMap: Record<string, string> = {
-    primary: 'text-[#cdebea]',
-    secondary: 'text-[#2f6f73]',
-    tertiary: 'text-[#2f6f73]',
-    quaternary: 'text-[#2f6f73]',
-    quinary: 'text-[#2f6f73]',
-    'hint-of-red': 'text-[#cdebea]',
-    'rosewood-smoke': 'text-[#cdebea]',
-    ebb: 'text-[#2f6f73]',
-    cinderella: 'text-[#2f6f73]',
-    'mandys-pink': 'text-[#2f6f73]',
+    primary: 'text-[#c7017f]',
+    secondary: 'text-[#c7017f]',
+    tertiary: 'text-[#c7017f]',
+    quaternary: 'text-[#c7017f]',
+    quinary: 'text-[#c7017f]',
+    senary: 'text-[#2f6f73]',
+    // Slug variations
+    'rose-canvas': 'text-[#c7017f]',
+    'petal-blush': 'text-[#c7017f]',
+    'hummingbird-teal': 'text-[#c7017f]',
+    'baby-teal-mist': 'text-[#c7017f]',
+    'stone-bloom': 'text-[#c7017f]',
+    'golden-petal': 'text-[#2f6f73]',
+    // Legacy support
+    'hint-of-red': 'text-[#c7017f]',
+    'rosewood-smoke': 'text-[#c7017f]',
+    ebb: 'text-[#c7017f]',
+    cinderella: 'text-[#c7017f]',
+    'mandys-pink': 'text-[#c7017f]',
     'mint-teal': 'text-[#2f6f73]',
   };
 

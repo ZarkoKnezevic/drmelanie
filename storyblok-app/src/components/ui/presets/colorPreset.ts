@@ -26,6 +26,7 @@ export const colorPreset = {
     tertiary: 'var(--background-tertiary)',
     quaternary: 'var(--background-quaternary)',
     quinary: 'var(--background-quinary)',
+    senary: 'var(--background-senary)',
   },
 
   // Button Colors - CSS Variables
@@ -50,6 +51,11 @@ export const colorPreset = {
       DEFAULT: 'var(--button-quaternary)',
       foreground: 'var(--button-quaternary-foreground)',
       hover: 'var(--button-quaternary-hover)',
+    },
+    quinary: {
+      DEFAULT: 'var(--button-quinary)',
+      foreground: 'var(--button-quinary-foreground)',
+      hover: 'var(--button-quinary-hover)',
     },
   },
 

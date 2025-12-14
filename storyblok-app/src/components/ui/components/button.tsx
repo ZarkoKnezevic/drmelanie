@@ -9,13 +9,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          'bg-[var(--button-primary)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] rounded-[10px] md:rounded-[12px] shadow-sm hover:shadow-md',
+          'bg-[var(--button-primary)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] disabled:bg-[var(--button-primary-disabled-bg)] disabled:text-[var(--button-primary-disabled-text)] rounded-[10px] md:rounded-[12px] shadow-sm hover:shadow-md',
         secondary:
-          'bg-[var(--button-secondary)] text-[var(--button-secondary-text)] hover:bg-[var(--button-secondary-hover)] rounded-[10px] md:rounded-[12px] shadow-sm hover:shadow-md',
+          'bg-[var(--button-secondary)] text-[var(--button-secondary-text)] hover:bg-[var(--button-secondary-hover)] disabled:bg-[var(--button-secondary-disabled-bg)] rounded-[10px] md:rounded-[12px] shadow-sm hover:shadow-md',
         tertiary:
-          'bg-[var(--button-tertiary)] text-[var(--button-tertiary-text)] border-2 border-[var(--button-tertiary-border)] hover:bg-[var(--button-tertiary-hover)] rounded-[10px]',
+          'bg-[var(--button-tertiary)] text-[var(--button-tertiary-text)] border border-[var(--button-tertiary-border)] hover:bg-[var(--button-tertiary-hover)] disabled:bg-[var(--button-tertiary-disabled-bg)] disabled:text-[var(--button-tertiary-disabled-text)] rounded-[10px]',
         quaternary:
-          'bg-[var(--button-quaternary)] text-[var(--button-quaternary-text)] hover:bg-[var(--button-quaternary-hover)] rounded-[12px] shadow-sm hover:shadow-md',
+          'bg-[var(--button-quaternary)] text-[var(--button-quaternary-text)] border-[1.5px] border-[var(--button-quaternary-border)] hover:bg-[var(--button-quaternary-hover)] hover:border-[var(--button-quaternary-hover-border)] disabled:text-[var(--button-quaternary-disabled-text)] disabled:border-[var(--button-quaternary-disabled-border)] rounded-[10px]',
+        quinary:
+          'bg-[var(--button-quinary)] text-[var(--button-quinary-text)] hover:bg-[var(--button-quinary-hover)] disabled:bg-[var(--button-quinary-disabled-bg)] disabled:text-[var(--button-quinary-disabled-text)] rounded-[10px] md:rounded-[12px] shadow-sm hover:shadow-md',
       },
     },
     defaultVariants: {

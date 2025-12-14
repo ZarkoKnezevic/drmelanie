@@ -13,7 +13,7 @@ export function HeaderButton({ ctaText, ctaLink }: HeaderButtonProps) {
 
   return (
     <div className="flex items-center justify-end">
-      <Button asChild variant="quaternary">
+      <Button asChild variant="primary">
         <Link href={ctaLink}>{ctaText}</Link>
       </Button>
     </div>

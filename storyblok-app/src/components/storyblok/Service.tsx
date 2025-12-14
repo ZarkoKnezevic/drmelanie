@@ -28,7 +28,7 @@ export default function Service({ blok }: ServiceProps) {
   return (
     <div
       {...storyblokEditable(blok)}
-      className="service flex flex-col items-center gap-4 bg-white p-6 text-center shadow-[0_2px_8px_rgba(0,0,0,0.1)]"
+      className="service flex flex-col items-center justify-center gap-4 bg-white p-6 text-center shadow-[0_2px_8px_rgba(0,0,0,0.1)] md:min-h-[190px] lg:min-h-[180px]"
     >
       {iconProps?.src && (
         <div className="relative h-16 w-16 shrink-0" role="img" aria-label={blok.name}>
@@ -41,10 +41,7 @@ export default function Service({ blok }: ServiceProps) {
           />
         </div>
       )}
-      {blok.name && (
-        <h3 className="text-body-md font-semibold text-mauve">{blok.name}</h3>
-      )}
+      {blok.name && <h3 className="text-body-md font-semibold !text-[#3a3a3a]">{blok.name}</h3>}
     </div>
   );
 }
-

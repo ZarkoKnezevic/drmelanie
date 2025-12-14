@@ -1,90 +1,170 @@
 :root {
-  /* Base Colors */
-  --white: #ffffff;
+  /* ============================================
+     BASE COLOR PALETTE - Define once, reuse everywhere
+     ============================================ */
+
+  /* Core Brand Colors */
+  --color-magenta: #c7017f;
+  --color-magenta-hover: #a80069;
+  --color-magenta-disabled: #e3a3c8;
+  --color-magenta-opacity-08: rgba(199, 1, 127, 0.08);
+  --color-magenta-opacity-25: rgba(199, 1, 127, 0.25);
+  --color-magenta-opacity-40: rgba(199, 1, 127, 0.4);
+  --color-magenta-opacity-60: rgba(199, 1, 127, 0.6);
+
+  /* Teal Colors */
+  --color-teal-deep: #2f6f73;
+  --color-teal-deep-hover: #3c8589;
+  --color-teal-light: #cdebea;
+  --color-teal-light-hover: #b9e3df;
+  --color-teal-medium: #5f8f91;
+  --color-teal-disabled: #9fb6b6;
+  --color-teal-light-disabled: #e3f4f3;
+  --color-teal-opacity-50: rgba(47, 111, 115, 0.5);
+
+  /* Neutral Colors */
+  --color-white: #ffffff;
+  --color-white-opacity-70: rgba(255, 255, 255, 0.7);
+  --color-white-opacity-75: rgba(255, 255, 255, 0.75);
+  --color-dark-gray: #3a3a3a;
+  --color-subtle-gray-1: #6b6b6b;
+  --color-subtle-gray-2: #7a7a7a;
+  --color-subtle-gray-3: #6f6f6f;
+  --color-light-gray: #f5f5f5;
+  --color-stone: #e6e0e0;
+
+  /* Background Colors */
+  --color-bg-rose-canvas: #f0c4d0;
+  --color-bg-petal-blush: #fbe9f1;
+  --color-bg-golden-petal: #e6c77a;
+
+  /* Golden/Copper Colors */
+  --color-golden-petal: #e6c77a;
+  --color-golden-petal-hover: #d8b862;
+  --color-golden-petal-disabled: #efe4c4;
+  --color-copper: #b87333;
+  --color-copper-hover: #a8652a;
+  --color-copper-disabled: #d4a574;
+  --color-warm-taupe: #6b5a3f;
+  --color-dark-gray-opacity-25: rgba(58, 58, 58, 0.25);
+  --color-dark-gray-opacity-20: rgba(58, 58, 58, 0.2);
+  --color-dark-gray-opacity-50: rgba(58, 58, 58, 0.5);
+
+  /* Legacy Base Colors (kept for compatibility) */
+  --white: var(--color-white);
   --mauve: #8b5f65;
-  --magenta: #c7017f;
+  --magenta: var(--color-magenta);
   --lavander: #9e7e91;
   --gray: #6c6a66;
-  --teal: #cdebea;
+  --teal: var(--color-teal-light);
   --warm-beige: #bfa9a0;
-  --light-gray: #f5f5f5;
-  --dark-gray: #2b2b2b;
+  --light-gray: var(--color-light-gray);
+  --dark-gray: var(--color-dark-gray);
   --soft-sand: #f0efed;
   --brand-text: #303030;
   --brand-background: #f0efed;
   --soft-rosa: #f7dadf;
   --warm-pink: #efa3b3;
   --deep-pink: #d46a84;
-  --light-teal: #cdebea;
+  --light-teal: var(--color-teal-light);
   --black: #1f1f1f;
 
-  /* Background Colors - Gynecology Clinic Optimized */
-  --background: var(--light-gray);
-  --foreground: var(--mauve);
+  /* ============================================
+     SECTION BACKGROUND SYSTEM
+     ============================================ */
+  --background: var(--color-light-gray);
+  --foreground: var(--color-magenta);
 
-  /* PRIMARY: "Rosewood Smoke" - #8B5F65 - Soft, muted rose-taupe - warm, feminine, elegant, medical-friendly */
-  --background-primary: #8b5f65;
-  --background-primary-heading: #ffffff;
-  --background-primary-body: #ffffff;
-  --background-primary-subtle: rgba(255, 255, 255, 0.85);
-  --background-primary-accent: #cdebea;
+  /* PRIMARY: "Rose Canvas" */
+  --background-primary: var(--color-bg-rose-canvas);
+  --background-primary-heading: var(--color-magenta);
+  --background-primary-body: var(--color-dark-gray);
+  --background-primary-subtle: var(--color-subtle-gray-1);
+  --background-primary-accent: var(--color-magenta);
 
-  /* SECONDARY: "Ebb" - #e6e0e0 - Calm gray with feminine warmth */
-  --background-secondary: #e6e0e0;
-  --background-secondary-heading: #8b5f65;
-  --background-secondary-body: #8b5f65;
-  --background-secondary-subtle: #4a4d4f;
-  --background-secondary-accent: #2f6f73;
+  /* SECONDARY: "Petal Blush" */
+  --background-secondary: var(--color-bg-petal-blush);
+  --background-secondary-heading: var(--color-magenta);
+  --background-secondary-body: var(--color-dark-gray);
+  --background-secondary-subtle: var(--color-subtle-gray-2);
+  --background-secondary-accent: var(--color-magenta);
 
-  /* TERTIARY: "Cinderella" - #fcd4d5 - Soft blush for women's health */
-  --background-tertiary: #fcd4d5;
-  --background-tertiary-heading: #8b5f65;
-  --background-tertiary-body: #8b5f65;
-  --background-tertiary-subtle: #a84a62;
-  --background-tertiary-accent: #2f6f73;
+  /* TERTIARY: "Hummingbird Teal" */
+  --background-tertiary: var(--color-teal-deep);
+  --background-tertiary-heading: var(--color-white);
+  --background-tertiary-body: var(--color-white);
+  --background-tertiary-subtle: var(--color-white-opacity-75);
+  --background-tertiary-accent: var(--color-magenta);
 
-  /* QUATERNARY: "Mandy's Pink" - #f4b3bc - Warm, expressive pink */
-  --background-quaternary: #f4b3bc;
-  --background-quaternary-heading: #ffffff;
-  --background-quaternary-heading-alt: #2f6f73;
-  --background-quaternary-body: #ffffff;
-  --background-quaternary-subtle: rgba(255, 255, 255, 0.8);
-  --background-quaternary-accent: #2f6f73;
+  /* QUATERNARY: "Baby Teal Mist" */
+  --background-quaternary: var(--color-teal-light);
+  --background-quaternary-heading: var(--color-magenta);
+  --background-quaternary-heading-alt: var(--color-teal-deep);
+  --background-quaternary-body: var(--color-teal-deep);
+  --background-quaternary-subtle: var(--color-teal-medium);
+  --background-quaternary-accent: var(--color-magenta);
 
-  /* QUINARY: Mint-Teal Blend - Ultra soft mint-teal background */
-  --background-quinary: #cdebea;
-  --background-quinary-heading: #2f6f73;
-  --background-quinary-heading-alt: #3a3a3a;
-  --background-quinary-body: #2f6f73;
-  --background-quinary-body-alt: #3a3a3a;
-  --background-quinary-subtle: #4a4d4f;
-  --background-quinary-accent: #2f6f73;
+  /* QUINARY: "Stone Bloom" */
+  --background-quinary: var(--color-stone);
+  --background-quinary-heading: var(--color-magenta);
+  --background-quinary-heading-alt: var(--color-dark-gray);
+  --background-quinary-body: var(--color-dark-gray);
+  --background-quinary-body-alt: var(--color-dark-gray);
+  --background-quinary-subtle: var(--color-subtle-gray-3);
+  --background-quinary-accent: var(--color-magenta);
 
-  /* Button Colors - Gynecology Clinic Optimized */
-  /* PRIMARY: Care Teal - Deep Teal #2F6F73 */
-  --button-primary: #2f6f73;
-  --button-primary-foreground: #ffffff;
-  --button-primary-hover: #3c8589;
-  --button-primary-text: #ffffff;
+  /* SENARY: "Golden Petal" */
+  --background-senary: var(--color-bg-golden-petal);
+  --background-senary-heading: var(--color-magenta);
+  --background-senary-body: var(--color-dark-gray);
+  --background-senary-subtle: var(--color-warm-taupe);
+  --background-senary-accent: var(--color-teal-deep);
 
-  /* SECONDARY: Gentle Rose - Blush Rose #F4B3BC */
-  --button-secondary: #f4b3bc;
-  --button-secondary-foreground: #8b5f65;
-  --button-secondary-hover: #e79aa6;
-  --button-secondary-text: #8b5f65;
+  /* ============================================
+     BUTTON SYSTEM
+     ============================================ */
 
-  /* TERTIARY: Calm Outline - Transparent with Teal border */
-  --button-tertiary: transparent;
-  --button-tertiary-foreground: #8b5f65;
-  --button-tertiary-hover: rgba(47, 111, 115, 0.1);
-  --button-tertiary-text: #8b5f65;
-  --button-tertiary-border: #8b5f65;
+  /* PRIMARY: "Magenta Bloom" */
+  --button-primary: var(--color-magenta);
+  --button-primary-foreground: var(--color-white);
+  --button-primary-hover: var(--color-magenta-hover);
+  --button-primary-text: var(--color-white);
+  --button-primary-disabled-bg: var(--color-magenta-disabled);
+  --button-primary-disabled-text: var(--color-white-opacity-70);
 
-  /* QUATERNARY: Rosewood Edition - #E6E0E0 */
-  --button-quaternary: #8b5f65;
-  --button-quaternary-foreground: #8b5f65;
-  --button-quaternary-hover: #805a5f;
-  --button-quaternary-text: #ffffff;
+  /* SECONDARY: "Deep Teal Calm" */
+  --button-secondary: var(--color-teal-deep);
+  --button-secondary-foreground: var(--color-white);
+  --button-secondary-hover: var(--color-teal-deep-hover);
+  --button-secondary-text: var(--color-white);
+  --button-secondary-disabled-bg: var(--color-teal-disabled);
+
+  /* TERTIARY: "Soft Baby Teal" */
+  --button-tertiary: var(--color-teal-light);
+  --button-tertiary-foreground: var(--color-teal-deep);
+  --button-tertiary-hover: var(--color-teal-light-hover);
+  --button-tertiary-text: var(--color-teal-deep);
+  --button-tertiary-border: var(--color-teal-deep);
+  --button-tertiary-disabled-bg: var(--color-teal-light-disabled);
+  --button-tertiary-disabled-text: var(--color-teal-opacity-50);
+
+  /* QUATERNARY: "Outline Calm / Magenta Edition" */
+  --button-quaternary: transparent;
+  --button-quaternary-foreground: var(--color-magenta);
+  --button-quaternary-hover: var(--color-magenta-opacity-08);
+  --button-quaternary-text: var(--color-magenta);
+  --button-quaternary-border: var(--color-magenta-opacity-60);
+  --button-quaternary-hover-border: var(--color-magenta);
+  --button-quaternary-disabled-text: var(--color-magenta-opacity-40);
+  --button-quaternary-disabled-border: var(--color-magenta-opacity-25);
+
+  /* QUINARY: "Copper Accent" */
+  --button-quinary: var(--color-copper);
+  --button-quinary-foreground: var(--color-white);
+  --button-quinary-hover: var(--color-copper-hover);
+  --button-quinary-text: var(--color-white);
+  --button-quinary-disabled-bg: var(--color-copper-disabled);
+  --button-quinary-disabled-text: var(--color-white-opacity-70);
 
   /* Semantic Colors */
   --primary: var(--white);
