@@ -3,6 +3,7 @@ import Image from 'next/image';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
 import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
+import { MemberImage, MemberText } from './MemberAnimated';
 import type { StoryblokBlok } from '@/types';
 
 interface MemberProps {
@@ -22,9 +23,10 @@ interface MemberProps {
   };
   isFirst?: boolean;
   isLast?: boolean;
+  index?: number;
 }
 
-export default function Member({ blok, isFirst = false, isLast = false }: MemberProps) {
+export default function Member({ blok, isFirst = false, isLast = false, index = 0 }: MemberProps) {
   const imageProps = blok.image
     ? prepareImageProps({
         filename: blok.image.asset?.filename || blok.image.filename,
@@ -55,31 +57,35 @@ export default function Member({ blok, isFirst = false, isLast = false }: Member
       className={cn('relative w-full', tornEdgeClasses, backgroundClass || 'bg-background')}
     >
       <div className="container grid grid-cols-1 gap-10 py-12 md:grid-cols-2 md:py-16 lg:grid-cols-3 xl:py-20">
-        {/* Image - Mobile: 1 col, Tablet: 1/2, LG+: 1/3 */}
+        {/* Image - Mobile: 1 col, Tablet: 1/2, Desktop: 1/3 of container */}
         {imageProps && imageProps.src && (
-          <div className="relative aspect-square w-full overflow-hidden md:col-span-1 lg:col-span-1">
-            <Image
-              {...imageProps}
-              alt={imageProps.alt || blok.name_and_title || 'Team member image'}
-              className="h-full w-full object-cover"
-              sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-          </div>
+          <MemberImage delay={0}>
+            <div className="relative aspect-square w-full overflow-hidden">
+              <Image
+                {...imageProps}
+                alt={imageProps.alt || blok.name_and_title || 'Team member image'}
+                className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
+                sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
+            </div>
+          </MemberImage>
         )}
 
-        {/* Text Content - Mobile: 1 col, Tablet: 1/2, LG+: 2/3 */}
-        <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
-          {blok.richtext && (
-            <div className={cn('mb-4 max-w-none text-body-sm', bodyColorClass)}>
-              {renderRichText(blok.richtext)}
-            </div>
-          )}
-          {blok.name_and_title && (
-            <h3 className={cn('mt-auto text-h3 font-bold', headingColorClass)}>
-              {blok.name_and_title}
-            </h3>
-          )}
-        </div>
+        {/* Text Content - Mobile: 1 col, Tablet: 1/2, Desktop: 2/3 of container */}
+        <MemberText delay={0} direction={index % 2 === 0 ? 'right' : 'left'}>
+          <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
+            {blok.richtext && (
+              <div className={cn('mb-4 max-w-none text-body-sm', bodyColorClass)}>
+                {renderRichText(blok.richtext)}
+              </div>
+            )}
+            {blok.name_and_title && (
+              <h3 className={cn('mt-auto text-h3 font-bold', headingColorClass)}>
+                {blok.name_and_title}
+              </h3>
+            )}
+          </div>
+        </MemberText>
       </div>
     </div>
   );
