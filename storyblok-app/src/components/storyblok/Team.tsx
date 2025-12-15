@@ -15,7 +15,7 @@ export default function Team({ blok }: TeamProps) {
   const members = blok.members || [];
 
   return (
-    <section {...storyblokEditable(blok)} className={cn('team relative', backgroundClass)}>
+    <section {...storyblokEditable(blok)} className={cn('team relative z-10', backgroundClass)}>
       <div className="flex flex-col">
         {members.map((memberBlok, index) => {
           const isFirst = index === 0;

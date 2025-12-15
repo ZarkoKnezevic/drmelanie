@@ -52,36 +52,34 @@ export default function Member({ blok, isFirst = false, isLast = false }: Member
   return (
     <div
       {...storyblokEditable(blok)}
-      className={cn(
-        'container grid grid-cols-1 gap-6 py-12 md:grid-cols-2 lg:grid-cols-3',
-        tornEdgeClasses,
-        backgroundClass || 'bg-background'
-      )}
+      className={cn('relative w-full', tornEdgeClasses, backgroundClass || 'bg-background')}
     >
-      {/* Image - Mobile: 1 col, Tablet: 1/2, LG+: 1/3 */}
-      {imageProps && imageProps.src && (
-        <div className="relative aspect-square w-full overflow-hidden md:col-span-1 lg:col-span-1">
-          <Image
-            {...imageProps}
-            alt={imageProps.alt || blok.name_and_title || 'Team member image'}
-            className="h-full w-full object-cover"
-            sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          />
-        </div>
-      )}
-
-      {/* Text Content - Mobile: 1 col, Tablet: 1/2, LG+: 2/3 */}
-      <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
-        {blok.richtext && (
-          <div className={cn('mb-4 max-w-none text-body-sm', bodyColorClass)}>
-            {renderRichText(blok.richtext)}
+      <div className="container grid grid-cols-1 gap-10 py-12 md:grid-cols-2 md:py-16 lg:grid-cols-3 xl:py-20">
+        {/* Image - Mobile: 1 col, Tablet: 1/2, LG+: 1/3 */}
+        {imageProps && imageProps.src && (
+          <div className="relative aspect-square w-full overflow-hidden md:col-span-1 lg:col-span-1">
+            <Image
+              {...imageProps}
+              alt={imageProps.alt || blok.name_and_title || 'Team member image'}
+              className="h-full w-full object-cover"
+              sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
           </div>
         )}
-        {blok.name_and_title && (
-          <h3 className={cn('mt-auto text-h3 font-bold', headingColorClass)}>
-            {blok.name_and_title}
-          </h3>
-        )}
+
+        {/* Text Content - Mobile: 1 col, Tablet: 1/2, LG+: 2/3 */}
+        <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
+          {blok.richtext && (
+            <div className={cn('mb-4 max-w-none text-body-sm', bodyColorClass)}>
+              {renderRichText(blok.richtext)}
+            </div>
+          )}
+          {blok.name_and_title && (
+            <h3 className={cn('mt-auto text-h3 font-bold', headingColorClass)}>
+              {blok.name_and_title}
+            </h3>
+          )}
+        </div>
       </div>
     </div>
   );
