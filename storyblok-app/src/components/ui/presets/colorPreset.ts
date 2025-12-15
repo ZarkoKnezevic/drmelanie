@@ -27,6 +27,10 @@ export const colorPreset = {
     quaternary: 'var(--background-quaternary)',
     quinary: 'var(--background-quinary)',
     senary: 'var(--background-senary)',
+    septenary: 'var(--background-septenary)',
+    octonary: 'var(--background-octonary)',
+    nonary: 'var(--background-nonary)',
+    decenary: 'var(--background-decenary)',
   },
 
   // Button Colors - CSS Variables
@@ -56,6 +60,16 @@ export const colorPreset = {
       DEFAULT: 'var(--button-quinary)',
       foreground: 'var(--button-quinary-foreground)',
       hover: 'var(--button-quinary-hover)',
+    },
+    senary: {
+      DEFAULT: 'var(--button-senary)',
+      foreground: 'var(--button-senary-foreground)',
+      hover: 'var(--button-senary-hover)',
+    },
+    septenary: {
+      DEFAULT: 'var(--button-septenary)',
+      foreground: 'var(--button-septenary-foreground)',
+      hover: 'var(--button-septenary-hover)',
     },
   },
 

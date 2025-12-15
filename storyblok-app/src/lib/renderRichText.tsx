@@ -81,7 +81,7 @@ export default function renderRichText(data: any) {
         const variants = props.variants as string | undefined;
         const rawVariant = (variants || props.variant || 'primary') as string;
         // Map unsupported variants to supported ones
-        const variantMap: Record<string, 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary'> = {
+        const variantMap: Record<string, 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'quinary' | 'senary' | 'septenary'> = {
           default: 'primary',
           destructive: 'secondary',
           outline: 'secondary',
@@ -92,6 +92,8 @@ export default function renderRichText(data: any) {
           tertiary: 'tertiary',
           quaternary: 'quaternary',
           quinary: 'quinary',
+          senary: 'senary',
+          septenary: 'septenary',
         };
         const variant = variantMap[rawVariant] || 'primary';
         const disabled = props.disabled as boolean | undefined;

@@ -33,10 +33,19 @@
   --color-light-gray: #f5f5f5;
   --color-stone: #e6e0e0;
 
-  /* Background Colors */
-  --color-bg-rose-canvas: #f0c4d0;
+  /* Background Colors - Pink Palette */
+  --color-bg-magenta-bloom: #c7017f;
+  --color-bg-rose-canvas: #f6d6e4;
   --color-bg-petal-blush: #fbe9f1;
+  --color-bg-deep-berry: #8e1e7a;
+  --color-bg-vivid-fuchsia: #b1127f;
+  --color-bg-soft-rose: #d04693;
+  --color-bg-baby-rose: #e79ac3;
+  --color-bg-rose-mist: #efc2d9;
   --color-bg-golden-petal: #e6c77a;
+
+  /* White opacity values for text on dark backgrounds */
+  --color-white-opacity-90: rgba(255, 255, 255, 0.9);
 
   /* Golden/Copper Colors */
   --color-golden-petal: #e6c77a;
@@ -70,55 +79,80 @@
   --black: #1f1f1f;
 
   /* ============================================
-     SECTION BACKGROUND SYSTEM
+     SECTION BACKGROUND SYSTEM (9 TOTAL)
      ============================================ */
   --background: var(--color-light-gray);
   --foreground: var(--color-magenta);
 
-  /* PRIMARY: "Rose Canvas" */
-  --background-primary: var(--color-bg-rose-canvas);
-  --background-primary-heading: var(--color-magenta);
-  --background-primary-body: var(--color-dark-gray);
-  --background-primary-subtle: var(--color-subtle-gray-1);
-  --background-primary-accent: var(--color-magenta);
+  /* PRIMARY: "Magenta Bloom" - Strong, emotional, brand-defining */
+  --background-primary: var(--color-bg-magenta-bloom);
+  --background-primary-heading: var(--color-white);
+  --background-primary-body: var(--color-white-opacity-90);
+  --background-primary-subtle: var(--color-white-opacity-70);
+  --background-primary-accent: var(--color-white);
 
-  /* SECONDARY: "Petal Blush" */
-  --background-secondary: var(--color-bg-petal-blush);
+  /* SECONDARY: "Rose Canvas" - Soft, warm pink (refined) */
+  --background-secondary: var(--color-bg-rose-canvas);
   --background-secondary-heading: var(--color-magenta);
   --background-secondary-body: var(--color-dark-gray);
-  --background-secondary-subtle: var(--color-subtle-gray-2);
+  --background-secondary-subtle: var(--color-subtle-gray-1);
   --background-secondary-accent: var(--color-magenta);
 
-  /* TERTIARY: "Hummingbird Teal" */
-  --background-tertiary: var(--color-teal-deep);
-  --background-tertiary-heading: var(--color-white);
-  --background-tertiary-body: var(--color-white);
-  --background-tertiary-subtle: var(--color-white-opacity-75);
+  /* TERTIARY: "Petal Blush" - Very light pink, content-friendly */
+  --background-tertiary: var(--color-bg-petal-blush);
+  --background-tertiary-heading: var(--color-magenta);
+  --background-tertiary-body: var(--color-dark-gray);
+  --background-tertiary-subtle: var(--color-subtle-gray-2);
   --background-tertiary-accent: var(--color-magenta);
 
-  /* QUATERNARY: "Baby Teal Mist" */
-  --background-quaternary: var(--color-teal-light);
-  --background-quaternary-heading: var(--color-magenta);
-  --background-quaternary-heading-alt: var(--color-teal-deep);
-  --background-quaternary-body: var(--color-teal-deep);
-  --background-quaternary-subtle: var(--color-teal-medium);
-  --background-quaternary-accent: var(--color-magenta);
+  /* QUATERNARY: "Deep Berry" - Darkest pink swatch */
+  --background-quaternary: var(--color-bg-deep-berry);
+  --background-quaternary-heading: var(--color-white);
+  --background-quaternary-body: var(--color-white-opacity-90);
+  --background-quaternary-subtle: var(--color-white-opacity-70);
+  --background-quaternary-accent: var(--color-white);
 
-  /* QUINARY: "Stone Bloom" */
-  --background-quinary: var(--color-stone);
-  --background-quinary-heading: var(--color-magenta);
-  --background-quinary-heading-alt: var(--color-dark-gray);
-  --background-quinary-body: var(--color-dark-gray);
-  --background-quinary-body-alt: var(--color-dark-gray);
-  --background-quinary-subtle: var(--color-subtle-gray-3);
-  --background-quinary-accent: var(--color-magenta);
+  /* QUINARY: "Vivid Fuchsia" - Bright pink block */
+  --background-quinary: var(--color-bg-vivid-fuchsia);
+  --background-quinary-heading: var(--color-white);
+  --background-quinary-body: var(--color-white-opacity-90);
+  --background-quinary-subtle: var(--color-white-opacity-75);
+  --background-quinary-accent: var(--color-white);
 
-  /* SENARY: "Golden Petal" */
-  --background-senary: var(--color-bg-golden-petal);
-  --background-senary-heading: var(--color-dark-gray);
-  --background-senary-body: var(--color-dark-gray);
-  --background-senary-subtle: var(--color-warm-taupe);
-  --background-senary-accent: var(--color-teal-deep);
+  /* SENARY: "Soft Rose" - Mid pastel pink */
+  --background-senary: var(--color-bg-soft-rose);
+  --background-senary-heading: var(--color-white);
+  --background-senary-body: var(--color-white-opacity-90);
+  --background-senary-subtle: var(--color-white-opacity-75);
+  --background-senary-accent: var(--color-white);
+
+  /* SEPTENARY: "Baby Rose" - Light pastel pink */
+  --background-septenary: var(--color-bg-baby-rose);
+  --background-septenary-heading: var(--color-magenta);
+  --background-septenary-body: var(--color-dark-gray);
+  --background-septenary-subtle: var(--color-subtle-gray-1);
+  --background-septenary-accent: var(--color-magenta);
+
+  /* OCTONARY: "Rose Mist" - Very soft background */
+  --background-octonary: var(--color-bg-rose-mist);
+  --background-octonary-heading: var(--color-magenta);
+  --background-octonary-body: var(--color-dark-gray);
+  --background-octonary-subtle: var(--color-subtle-gray-2);
+  --background-octonary-accent: var(--color-magenta);
+
+  /* NONARY: "Hummingbird Teal" - Teal balancer */
+  --background-nonary: var(--color-teal-deep);
+  --background-nonary-heading: var(--color-white);
+  --background-nonary-body: var(--color-white);
+  --background-nonary-subtle: var(--color-white-opacity-75);
+  --background-nonary-accent: var(--color-white);
+
+  /* DECENARY: "Baby Teal" - Light teal balancer */
+  --background-decenary: var(--color-teal-light);
+  --background-decenary-heading: var(--color-magenta);
+  --background-decenary-body: var(--color-teal-deep);
+  --background-decenary-subtle: var(--color-teal-medium);
+  --background-decenary-accent: var(--color-magenta);
 
   /* ============================================
      BUTTON SYSTEM
@@ -165,6 +199,27 @@
   --button-quinary-text: var(--color-white);
   --button-quinary-disabled-bg: var(--color-copper-disabled);
   --button-quinary-disabled-text: var(--color-white-opacity-70);
+
+  /* SENARY: "White Outline" - White border + white text */
+  --button-senary: transparent;
+  --button-senary-foreground: var(--color-white);
+  --button-senary-hover: rgba(255, 255, 255, 0.15);
+  --button-senary-text: var(--color-white);
+  --button-senary-border: var(--color-white);
+  --button-senary-hover-border: var(--color-white);
+  --button-senary-disabled-text: rgba(255, 255, 255, 0.5);
+  --button-senary-disabled-border: rgba(255, 255, 255, 0.3);
+
+  /* SEPTENARY: "Pink Solid" - Rose Mist background with white border */
+  --button-septenary: var(--color-bg-rose-mist);
+  --button-septenary-foreground: var(--color-white);
+  --button-septenary-hover: var(--color-bg-baby-rose);
+  --button-septenary-text: var(--color-magenta);
+  --button-septenary-border: var(--color-white);
+  --button-septenary-hover-border: var(--color-white);
+  --button-septenary-disabled-bg: var(--color-bg-rose-mist);
+  --button-septenary-disabled-text: rgba(199, 1, 127, 0.5);
+  --button-septenary-disabled-border: rgba(255, 255, 255, 0.5);
 
   /* Semantic Colors */
   --primary: var(--white);

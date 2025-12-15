@@ -18,6 +18,10 @@ const buttonVariants = cva(
           'bg-[var(--button-quaternary)] text-[var(--button-quaternary-text)] border-[1.5px] border-[var(--button-quaternary-border)] hover:bg-[var(--button-quaternary-hover)] hover:border-[var(--button-quaternary-hover-border)] disabled:text-[var(--button-quaternary-disabled-text)] disabled:border-[var(--button-quaternary-disabled-border)] rounded-[10px]',
         quinary:
           'bg-[var(--button-quinary)] text-[var(--button-quinary-text)] hover:bg-[var(--button-quinary-hover)] disabled:bg-[var(--button-quinary-disabled-bg)] disabled:text-[var(--button-quinary-disabled-text)] rounded-[10px] md:rounded-[12px] shadow-sm hover:shadow-md',
+        senary:
+          'bg-[var(--button-senary)] text-[var(--button-senary-text)] border-[1.5px] border-[var(--button-senary-border)] hover:bg-[var(--button-senary-hover)] hover:border-[var(--button-senary-hover-border)] disabled:text-[var(--button-senary-disabled-text)] disabled:border-[var(--button-senary-disabled-border)] rounded-[10px] md:rounded-[12px]',
+        septenary:
+          'bg-[var(--button-septenary)] text-[var(--button-septenary-text)] border-[1.5px] border-[var(--button-septenary-border)] hover:bg-[var(--button-septenary-hover)] hover:border-[var(--button-septenary-hover-border)] disabled:bg-[var(--button-septenary-disabled-bg)] disabled:text-[var(--button-septenary-disabled-text)] disabled:border-[var(--button-septenary-disabled-border)] rounded-[10px] md:rounded-[12px]',
       },
     },
     defaultVariants: {

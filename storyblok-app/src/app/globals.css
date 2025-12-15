@@ -370,6 +370,22 @@ body.is-inner-page .header-storyblok {
     background-color: var(--background-senary);
   }
 
+  .bg-background-septenary {
+    background-color: var(--background-septenary);
+  }
+
+  .bg-background-octonary {
+    background-color: var(--background-octonary);
+  }
+
+  .bg-background-nonary {
+    background-color: var(--background-nonary);
+  }
+
+  .bg-background-decenary {
+    background-color: var(--background-decenary);
+  }
+
   /* Button Overrides for Primary Background - Tertiary buttons get white border and text */
   .bg-background-primary .button.border-2,
   .bg-background-primary button.border-2 {
@@ -529,5 +545,101 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-senary .text-accent {
     color: var(--background-senary-accent);
+  }
+
+  /* SEPTENARY Background Text Colors - Baby Rose */
+  .bg-background-septenary .text-heading,
+  .bg-background-septenary h1,
+  .bg-background-septenary h2,
+  .bg-background-septenary h3,
+  .bg-background-septenary h4,
+  .bg-background-septenary h5,
+  .bg-background-septenary h6 {
+    color: var(--background-septenary-heading);
+  }
+
+  .bg-background-septenary .text-body,
+  .bg-background-septenary p {
+    color: var(--background-septenary-body);
+  }
+
+  .bg-background-septenary .text-subtle {
+    color: var(--background-septenary-subtle);
+  }
+
+  .bg-background-septenary .text-accent {
+    color: var(--background-septenary-accent);
+  }
+
+  /* OCTONARY Background Text Colors - Rose Mist */
+  .bg-background-octonary .text-heading,
+  .bg-background-octonary h1,
+  .bg-background-octonary h2,
+  .bg-background-octonary h3,
+  .bg-background-octonary h4,
+  .bg-background-octonary h5,
+  .bg-background-octonary h6 {
+    color: var(--background-octonary-heading);
+  }
+
+  .bg-background-octonary .text-body,
+  .bg-background-octonary p {
+    color: var(--background-octonary-body);
+  }
+
+  .bg-background-octonary .text-subtle {
+    color: var(--background-octonary-subtle);
+  }
+
+  .bg-background-octonary .text-accent {
+    color: var(--background-octonary-accent);
+  }
+
+  /* NONARY Background Text Colors - Hummingbird Teal */
+  .bg-background-nonary .text-heading,
+  .bg-background-nonary h1,
+  .bg-background-nonary h2,
+  .bg-background-nonary h3,
+  .bg-background-nonary h4,
+  .bg-background-nonary h5,
+  .bg-background-nonary h6 {
+    color: var(--background-nonary-heading);
+  }
+
+  .bg-background-nonary .text-body,
+  .bg-background-nonary p {
+    color: var(--background-nonary-body);
+  }
+
+  .bg-background-nonary .text-subtle {
+    color: var(--background-nonary-subtle);
+  }
+
+  .bg-background-nonary .text-accent {
+    color: var(--background-nonary-accent);
+  }
+
+  /* DECENARY Background Text Colors - Golden Petal */
+  .bg-background-decenary .text-heading,
+  .bg-background-decenary h1,
+  .bg-background-decenary h2,
+  .bg-background-decenary h3,
+  .bg-background-decenary h4,
+  .bg-background-decenary h5,
+  .bg-background-decenary h6 {
+    color: var(--background-decenary-heading);
+  }
+
+  .bg-background-decenary .text-body,
+  .bg-background-decenary p {
+    color: var(--background-decenary-body);
+  }
+
+  .bg-background-decenary .text-subtle {
+    color: var(--background-decenary-subtle);
+  }
+
+  .bg-background-decenary .text-accent {
+    color: var(--background-decenary-accent);
   }
 }

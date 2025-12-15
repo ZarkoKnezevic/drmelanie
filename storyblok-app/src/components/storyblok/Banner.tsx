@@ -28,7 +28,9 @@ export default function Banner({ blok }: BannerProps) {
     | 'secondary'
     | 'tertiary'
     | 'quaternary'
-    | 'quinary';
+    | 'quinary'
+    | 'senary'
+    | 'septenary';
 
   let buttonHref: string | null = null;
   if (buttonBlok?.link) {
