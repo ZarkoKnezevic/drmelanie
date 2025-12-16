@@ -23,7 +23,7 @@ export default function Team({ blok }: TeamProps) {
           return (
             <StoryblokServerComponent
               key={memberBlok._uid}
-              blok={{ ...memberBlok, isFirst, isLast, index } as StoryblokBlok}
+              blok={{ ...memberBlok, isFirst, isLast } as StoryblokBlok}
             />
           );
         })}

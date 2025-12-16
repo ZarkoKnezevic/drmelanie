@@ -23,10 +23,9 @@ interface MemberProps {
   };
   isFirst?: boolean;
   isLast?: boolean;
-  index?: number;
 }
 
-export default function Member({ blok, isFirst = false, isLast = false, index = 0 }: MemberProps) {
+export default function Member({ blok, isFirst = false, isLast = false }: MemberProps) {
   const imageProps = blok.image
     ? prepareImageProps({
         filename: blok.image.asset?.filename || blok.image.filename,
@@ -72,7 +71,7 @@ export default function Member({ blok, isFirst = false, isLast = false, index = 
         )}
 
         {/* Text Content - Mobile: 1 col, Tablet: 1/2, Desktop: 2/3 of container */}
-        <MemberText delay={0} direction={index % 2 === 0 ? 'right' : 'left'}>
+        <MemberText delay={0}>
           <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
             {blok.richtext && (
               <div className={cn('mb-4 max-w-none text-body-sm', bodyColorClass)}>
