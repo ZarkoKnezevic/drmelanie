@@ -71,8 +71,8 @@ export default function Member({ blok, isFirst = false, isLast = false }: Member
         )}
 
         {/* Text Content - Mobile: 1 col, Tablet: 1/2, Desktop: 2/3 of container */}
-        <MemberText delay={0}>
-          <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
+        <div className="flex flex-col justify-center md:col-span-1 lg:col-span-2">
+          <MemberText delay={0}>
             {blok.richtext && (
               <div className={cn('mb-4 max-w-none text-body-sm', bodyColorClass)}>
                 {renderRichText(blok.richtext)}
@@ -83,8 +83,8 @@ export default function Member({ blok, isFirst = false, isLast = false }: Member
                 {blok.name_and_title}
               </h3>
             )}
-          </div>
-        </MemberText>
+          </MemberText>
+        </div>
       </div>
     </div>
   );
