@@ -59,40 +59,40 @@ export default function Banner({ blok }: BannerProps) {
     >
       <div className="overflow-hidden">
         <CornerImage position={blok.corner_image_position} />
-        <div
-          className={cn(
-            'relative flex flex-1 flex-col items-center justify-center pb-12 pt-8 md:pb-0 md:pt-0',
-            backgroundClass || 'bg-background'
-          )}
-        >
-          <div className="z-2 container md:py-12 lg:py-20">
-            <div className="flex w-full flex-col gap-8 md:flex-row md:justify-between">
-              {/* Topline and Headline */}
-              <div className="flex flex-col">
-                {blok.topline && (
-                  <BannerAnimated delay={100} animationType="fade-up">
-                    <p className={cn('text-body', bodyColorClass)}>{blok.topline}</p>
-                  </BannerAnimated>
-                )}
-
-                <BannerAnimated delay={250} animationType="fade-up">
-                  <h2 className={cn('h2', headingColorClass)}>{blok.headline}</h2>
-                </BannerAnimated>
-              </div>
-
-              {/* Button */}
-              {buttonBlok && (
-                <BannerAnimated delay={400} animationType="fade-down">
-                  {buttonHref ? (
-                    <Button asChild variant={buttonVariant}>
-                      <Link href={buttonHref}>{buttonText}</Link>
-                    </Button>
-                  ) : (
-                    <Button variant={buttonVariant}>{buttonText}</Button>
-                  )}
+      </div>
+      <div
+        className={cn(
+          'relative flex flex-1 flex-col items-center justify-center pb-12 pt-8 md:pb-0 md:pt-0',
+          backgroundClass || 'bg-background'
+        )}
+      >
+        <div className="container z-[2] md:py-12 lg:py-20">
+          <div className="flex w-full flex-col gap-8 md:flex-row md:justify-between">
+            {/* Topline and Headline */}
+            <div className="flex flex-col">
+              {blok.topline && (
+                <BannerAnimated delay={100} animationType="fade-up">
+                  <p className={cn('text-body', bodyColorClass)}>{blok.topline}</p>
                 </BannerAnimated>
               )}
+
+              <BannerAnimated delay={250} animationType="fade-up">
+                <h2 className={cn('h2', headingColorClass)}>{blok.headline}</h2>
+              </BannerAnimated>
             </div>
+
+            {/* Button */}
+            {buttonBlok && (
+              <BannerAnimated delay={400} animationType="fade-down">
+                {buttonHref ? (
+                  <Button asChild variant={buttonVariant}>
+                    <Link href={buttonHref}>{buttonText}</Link>
+                  </Button>
+                ) : (
+                  <Button variant={buttonVariant}>{buttonText}</Button>
+                )}
+              </BannerAnimated>
+            )}
           </div>
         </div>
       </div>
