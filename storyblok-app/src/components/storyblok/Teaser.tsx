@@ -1,4 +1,5 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
+import { CornerImage } from '@/components/ui/CornerImage';
 import * as motion from 'motion/react-client';
 import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
@@ -8,6 +9,7 @@ interface TeaserProps {
     headline: string;
     background_color?: string | { slug?: string };
     torn_paper_edges?: boolean;
+    corner_image_position?: 'left_top' | 'left_bottom' | 'right_top' | 'right_bottom' | 'pattern';
   };
 }
 
@@ -26,7 +28,10 @@ export default function Teaser({ blok }: TeaserProps) {
         backgroundClass
       )}
     >
-      <div className="spacing container">
+      <div className="overflow-hidden">
+        <CornerImage position={blok.corner_image_position} />
+      </div>
+      <div className="spacing container relative z-[2]">
         <motion.div
           className={cn(
             'flex flex-col items-center justify-center text-center',

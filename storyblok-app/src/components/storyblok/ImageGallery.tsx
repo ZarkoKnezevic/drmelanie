@@ -6,6 +6,7 @@ import Image from 'next/image';
 import * as motion from 'motion/react-client';
 import { useScroll, useTransform } from 'motion/react';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
+import { CornerImage } from '@/components/ui/CornerImage';
 import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
@@ -28,6 +29,7 @@ interface ImageGalleryProps {
     bottom_left_image: StoryblokImageAsset;
     bottom_right_image: StoryblokImageAsset;
     background_color?: string | { slug?: string };
+    corner_image_position?: 'left_top' | 'left_bottom' | 'right_top' | 'right_bottom' | 'pattern';
   };
 }
 
@@ -115,7 +117,8 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
           {...storyblokEditable(blok)}
           className={cn('image-gallery relative md:hidden', backgroundClass || 'bg-background')}
         >
-          <div className="spacing overflow-x-hidden">
+          <CornerImage position={blok.corner_image_position} />
+          <div className="spacing relative z-[2] overflow-x-hidden">
             <div className="relative -ml-[25.6vw] w-full" style={{ minHeight: '128.5333333334vw' }}>
               {displayImages.map((image, index) => {
                 const imageProps = prepareImageProps(image);
@@ -159,7 +162,8 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
           backgroundClass || 'bg-background'
         )}
       >
-        <div className="sticky top-0 h-screen overflow-hidden">
+        <CornerImage position={blok.corner_image_position} />
+        <div className="relative sticky top-0 z-[2] h-screen overflow-hidden">
           {displayImages.map((image, index) => {
             const imageProps = prepareImageProps(image);
             if (!imageProps.src) return null;

@@ -2,6 +2,7 @@ import { storyblokEditable, StoryblokServerComponent } from '@storyblok/react/rs
 import Link from 'next/link';
 import * as motion from 'motion/react-client';
 import { Button } from '@/components/ui/components/button';
+import { CornerImage } from '@/components/ui/CornerImage';
 import { prepareLinkProps } from '@/lib/adapters/prepareLinkProps';
 import { cn, getBackgroundClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
@@ -15,6 +16,7 @@ interface ServicesProps {
     content?: StoryblokBlok[];
     button?: StoryblokBlok | StoryblokBlok[];
     background_color?: string | { slug?: string };
+    corner_image_position?: 'left_top' | 'left_bottom' | 'right_top' | 'right_bottom' | 'pattern';
   };
 }
 
@@ -74,9 +76,10 @@ export default function Services({ blok }: ServicesProps) {
   return (
     <section
       {...storyblokEditable(blok)}
-      className={cn('services-section', backgroundClass)}
+      className={cn('services-section relative overflow-hidden', backgroundClass)}
     >
-      <div className="spacing container">
+      <CornerImage position={blok.corner_image_position} />
+      <div className="spacing container relative z-[2]">
         {/* Services Grid */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {services.map((service: StoryblokBlok, index: number) => (

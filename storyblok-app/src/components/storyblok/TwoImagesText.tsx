@@ -3,6 +3,7 @@ import Image from 'next/image';
 import * as motion from 'motion/react-client';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
+import { CornerImage } from '@/components/ui/CornerImage';
 import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
@@ -26,6 +27,7 @@ interface TwoImagesTextProps {
     content?: StoryblokBlok[];
     background_color?: string | { slug?: string };
     torn_paper_edges?: boolean;
+    corner_image_position?: 'left_top' | 'left_bottom' | 'right_top' | 'right_bottom' | 'pattern';
   };
 }
 
@@ -50,7 +52,10 @@ export default function TwoImagesText({ blok }: TwoImagesTextProps) {
         backgroundClass
       )}
     >
-      <div className="spacing container">
+      <div className="overflow-hidden">
+        <CornerImage position={blok.corner_image_position} />
+      </div>
+      <div className="spacing container relative z-[2]">
         {/* Two Images */}
         {(image1Props?.src || image2Props?.src) && (
           <div className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">

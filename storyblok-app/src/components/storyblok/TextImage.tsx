@@ -3,6 +3,7 @@ import Image from 'next/image';
 import * as motion from 'motion/react-client';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
+import { CornerImage } from '@/components/ui/CornerImage';
 import { cn, getBackgroundClass, getBodyColorClass, getHeadingColorClass } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
@@ -20,6 +21,7 @@ interface TextImageProps {
     image_position?: string;
     background_color?: string | { slug?: string }; // Storyblok data source field
     torn_paper_edges?: boolean;
+    corner_image_position?: 'left_top' | 'left_bottom' | 'right_top' | 'right_bottom' | 'pattern';
   };
 }
 
@@ -39,7 +41,10 @@ export default function TextImage({ blok }: TextImageProps) {
         backgroundClass
       )}
     >
-      <div className="spacing container">
+      <div className="absolute inset-0 overflow-hidden">
+        <CornerImage position={blok.corner_image_position} />
+      </div>
+      <div className="spacing container relative z-[2]">
         <div
           className={cn(
             'flex flex-col gap-8 md:flex-row md:gap-12 lg:gap-16',

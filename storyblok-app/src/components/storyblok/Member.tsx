@@ -2,6 +2,7 @@ import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
 import renderRichText from '@/lib/renderRichText';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
+import { CornerImage } from '@/components/ui/CornerImage';
 import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import { MemberImage, MemberText } from './MemberAnimated';
 import type { StoryblokBlok } from '@/types';
@@ -20,6 +21,7 @@ interface MemberProps {
     name_and_title?: string;
     background_color?: string | { slug?: string };
     torn_paper_edges?: boolean;
+    corner_image_position?: 'left_top' | 'left_bottom' | 'right_top' | 'right_bottom' | 'pattern';
   };
   isFirst?: boolean;
   isLast?: boolean;
@@ -53,9 +55,16 @@ export default function Member({ blok, isFirst = false, isLast = false }: Member
   return (
     <div
       {...storyblokEditable(blok)}
-      className={cn('relative w-full', tornEdgeClasses, backgroundClass || 'bg-background')}
+      className={cn(
+        'relative w-full overflow-hidden',
+        tornEdgeClasses,
+        backgroundClass || 'bg-background'
+      )}
     >
-      <div className="container grid grid-cols-1 gap-10 py-12 md:grid-cols-2 md:py-16 lg:grid-cols-3 xl:py-20">
+      <div className="absolute inset-0 overflow-hidden">
+        <CornerImage position={blok.corner_image_position} />
+      </div>
+      <div className="container relative z-[2] grid grid-cols-1 gap-10 py-12 md:grid-cols-2 md:py-16 lg:grid-cols-3 xl:py-20">
         {/* Image - Mobile: 1 col, Tablet: 1/2, Desktop: 1/3 of container */}
         {imageProps && imageProps.src && (
           <MemberImage delay={0}>

@@ -1,6 +1,7 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { CornerImage } from '@/components/ui/CornerImage';
 import { cn, getBackgroundClass, getHeadingColorClass, getBodyColorClass } from '@/utils';
 import { MapContent } from '@/components/layout/map-section';
 import type { StoryblokBlok } from '@/types';
@@ -25,6 +26,7 @@ interface FooterProps {
     };
     map_link?: string | { linktype?: 'story' | 'url' | 'email'; url?: string; cached_url?: string };
     background_color?: string | { slug?: string };
+    corner_image_position?: 'left_top' | 'left_bottom' | 'right_top' | 'right_bottom' | 'pattern';
   };
 }
 
@@ -66,12 +68,16 @@ export default function Footer({ blok }: FooterProps) {
     }
   }
 
+  // Default to right_bottom for footer if not specified
+  const cornerPosition = blok.corner_image_position || 'right_bottom';
+
   return (
     <footer
       id="termin_buchen"
       {...storyblokEditable(blok)}
-      className={cn('relative', backgroundClass || 'bg-background')}
+      className={cn('relative overflow-hidden', backgroundClass || 'bg-background')}
     >
+      <CornerImage position={cornerPosition} />
       {/* Map Section - Above all footer info */}
       <div className="relative w-full overflow-hidden">
         <Suspense
@@ -85,7 +91,7 @@ export default function Footer({ blok }: FooterProps) {
         </Suspense>
       </div>
 
-      <div className="container flex flex-col gap-8 py-10 md:py-12">
+      <div className="container relative z-[2] flex flex-col gap-8 py-10 md:py-12">
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
           {/* Contact Information */}
