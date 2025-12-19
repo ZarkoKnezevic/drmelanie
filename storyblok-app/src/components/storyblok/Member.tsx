@@ -22,12 +22,17 @@ interface MemberProps {
     background_color?: string | { slug?: string };
     torn_paper_edges?: boolean;
     corner_image_position?: 'left_top' | 'left_bottom' | 'right_top' | 'right_bottom' | 'pattern';
+    isFirst?: boolean;
+    isLast?: boolean;
   };
   isFirst?: boolean;
   isLast?: boolean;
 }
 
-export default function Member({ blok, isFirst = false, isLast = false }: MemberProps) {
+export default function Member({ blok, isFirst: propIsFirst, isLast: propIsLast }: MemberProps) {
+  // Extract isFirst and isLast from blok if passed via StoryblokServerComponent, otherwise use props
+  const isFirst = blok.isFirst ?? propIsFirst ?? false;
+  const isLast = blok.isLast ?? propIsLast ?? false;
   const imageProps = blok.image
     ? prepareImageProps({
         filename: blok.image.asset?.filename || blok.image.filename,
@@ -55,11 +60,7 @@ export default function Member({ blok, isFirst = false, isLast = false }: Member
   return (
     <div
       {...storyblokEditable(blok)}
-      className={cn(
-        'relative w-full overflow-hidden',
-        tornEdgeClasses,
-        backgroundClass || 'bg-background'
-      )}
+      className={cn('relative w-full', tornEdgeClasses, backgroundClass || 'bg-background')}
     >
       <div className="absolute inset-0 overflow-hidden">
         <CornerImage position={blok.corner_image_position} />
