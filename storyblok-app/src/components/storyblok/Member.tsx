@@ -45,13 +45,13 @@ export default function Member({ blok, isFirst: propIsFirst, isLast: propIsLast 
   const bodyColorClass = getBodyColorClass(blok.background_color);
   const hasTornEdges = blok.torn_paper_edges === true;
 
-  // First child: torn edge on top
+  // First child: torn edge on top and bottom (connects to next)
   // All in between: torn edge on bottom only
   // Last child: torn edge on bottom
   const tornEdgeClasses = hasTornEdges
     ? cn(
         'torn-edge',
-        isFirst && !isLast && 'torn-edge-top', // First (but not last): top only
+        isFirst && !isLast && 'torn-edge-top torn-edge-bottom', // First (but not last): top and bottom
         !isFirst && 'torn-edge-bottom', // Middle and last: bottom
         isFirst && isLast && 'torn-edge-top torn-edge-bottom' // Single member: both
       )

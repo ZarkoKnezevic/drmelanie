@@ -339,50 +339,63 @@
 
 /* Top Torn Edge */
 .torn-edge-top::before {
-  top: calc(var(--torn-edge-offset) - var(--torn-edge-width));
+  top: calc(var(--torn-edge-offset) - 9px);
   left: 0;
   right: 0;
-  height: var(--torn-edge-width);
+  height: 9px;
   clip-path: var(--torn-top-clip-path);
+  /* Force hardware acceleration to prevent blur */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Bottom Torn Edge */
 .torn-edge-bottom::after {
-  bottom: calc(var(--torn-edge-offset) - var(--torn-edge-width));
+  bottom: calc(var(--torn-edge-offset) - 9px);
   left: 0;
   right: 0;
-  height: var(--torn-edge-width);
+  height: 9px;
   clip-path: var(--torn-bottom-clip-path);
+  /* Force hardware acceleration to prevent blur */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Left Torn Edge */
 .torn-edge-left::before {
-  left: calc(var(--torn-edge-offset) - var(--torn-edge-width));
+  left: calc(var(--torn-edge-offset) - 9px);
   top: 0;
   bottom: 0;
-  width: var(--torn-edge-width);
+  width: 9px;
   clip-path: var(--torn-left-clip-path);
+  /* Force hardware acceleration to prevent blur */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Right Torn Edge */
 .torn-edge-right::after {
-  right: calc(var(--torn-edge-offset) - var(--torn-edge-width));
+  right: calc(var(--torn-edge-offset) - 9px);
   top: 0;
   bottom: 0;
-  width: var(--torn-edge-width);
+  width: 9px;
   clip-path: var(--torn-right-clip-path);
+  /* Force hardware acceleration to prevent blur */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* Right Torn Edge Reversed - appears on left side, inherits from parent */
 .torn-edge-right-reverse::before {
-  left: calc(var(--torn-edge-offset-reverse) - var(--torn-edge-width));
+  left: calc(var(--torn-edge-offset-reverse) - 9px);
   top: 0;
   bottom: 0;
-  width: var(--torn-edge-width);
+  width: 9px;
   clip-path: var(--torn-right-clip-path);
   background-color: inherit;
-  transform: scaleX(-1);
+  transform: scaleX(-1) translateZ(0);
   transform-origin: center;
+  backface-visibility: hidden;
 }
 
 /* Right reverse torn edge inherits from parent background classes */
@@ -415,6 +428,34 @@
   display: none;
 }
 
+/* Make torn edges progressively more prominent on larger screens */
+@media (min-width: 600px) {
+  .torn-edge-top::before {
+    top: calc(var(--torn-edge-offset) - 11.25px);
+    height: 11.25px;
+  }
+
+  .torn-edge-bottom::after {
+    bottom: calc(var(--torn-edge-offset) - 11.25px);
+    height: 11.25px;
+  }
+
+  .torn-edge-left::before {
+    left: calc(var(--torn-edge-offset) - 11.25px);
+    width: 11.25px;
+  }
+
+  .torn-edge-right::after {
+    right: calc(var(--torn-edge-offset) - 11.25px);
+    width: 11.25px;
+  }
+
+  .torn-edge-right-reverse::before {
+    left: calc(var(--torn-edge-offset-reverse) - 11.25px);
+    width: 11.25px;
+  }
+}
+
 @media (min-width: 1024px) {
   .torn-edge-responsive.torn-edge-top::before {
     display: none;
@@ -426,5 +467,31 @@
 
   .torn-edge-top.md\:torn-edge-top-none::before {
     display: none;
+  }
+
+  /* Full size on desktop */
+  .torn-edge-top::before {
+    top: calc(var(--torn-edge-offset) - var(--torn-edge-width));
+    height: var(--torn-edge-width);
+  }
+
+  .torn-edge-bottom::after {
+    bottom: calc(var(--torn-edge-offset) - var(--torn-edge-width));
+    height: var(--torn-edge-width);
+  }
+
+  .torn-edge-left::before {
+    left: calc(var(--torn-edge-offset) - var(--torn-edge-width));
+    width: var(--torn-edge-width);
+  }
+
+  .torn-edge-right::after {
+    right: calc(var(--torn-edge-offset) - var(--torn-edge-width));
+    width: var(--torn-edge-width);
+  }
+
+  .torn-edge-right-reverse::before {
+    left: calc(var(--torn-edge-offset-reverse) - var(--torn-edge-width));
+    width: var(--torn-edge-width);
   }
 }
