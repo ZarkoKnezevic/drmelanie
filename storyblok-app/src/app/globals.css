@@ -386,6 +386,14 @@ body.is-inner-page .header-storyblok {
     background-color: var(--background-decenary);
   }
 
+  .bg-background-undenary {
+    background-color: var(--background-undenary);
+  }
+
+  .bg-background-duodenary {
+    background-color: var(--background-duodenary);
+  }
+
   /* Button Overrides for Primary Background - Tertiary buttons get white border and text */
   .bg-background-primary .button.border-2,
   .bg-background-primary button.border-2 {
@@ -641,5 +649,53 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-decenary .text-accent {
     color: var(--background-decenary-accent);
+  }
+
+  /* UNDENARY Background Text Colors - Soft Light Gray */
+  .bg-background-undenary .text-heading,
+  .bg-background-undenary h1,
+  .bg-background-undenary h2,
+  .bg-background-undenary h3,
+  .bg-background-undenary h4,
+  .bg-background-undenary h5,
+  .bg-background-undenary h6 {
+    color: var(--background-undenary-heading);
+  }
+
+  .bg-background-undenary .text-body,
+  .bg-background-undenary p {
+    color: var(--background-undenary-body);
+  }
+
+  .bg-background-undenary .text-subtle {
+    color: var(--background-undenary-subtle);
+  }
+
+  .bg-background-undenary .text-accent {
+    color: var(--background-undenary-accent);
+  }
+
+  /* DUODENARY Background Text Colors - Warm Linen Gold */
+  .bg-background-duodenary .text-heading,
+  .bg-background-duodenary h1,
+  .bg-background-duodenary h2,
+  .bg-background-duodenary h3,
+  .bg-background-duodenary h4,
+  .bg-background-duodenary h5,
+  .bg-background-duodenary h6 {
+    color: var(--background-duodenary-heading);
+  }
+
+  .bg-background-duodenary .text-body,
+  .bg-background-duodenary p {
+    color: var(--background-duodenary-body);
+  }
+
+  .bg-background-duodenary .text-subtle {
+    color: var(--background-duodenary-subtle);
+  }
+
+  .bg-background-duodenary .text-accent {
+    color: var(--background-duodenary-accent);
   }
 }

@@ -13,7 +13,7 @@ export default {
   safelist: [
     {
       pattern:
-        /bg-background-(primary|secondary|tertiary|quaternary|quinary|senary|septenary|octonary|nonary|decenary)/,
+        /bg-background-(primary|secondary|tertiary|quaternary|quinary|senary|septenary|octonary|nonary|decenary|undenary|duodenary)/,
     },
     {
       pattern:

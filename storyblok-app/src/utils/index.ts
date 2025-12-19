@@ -37,6 +37,8 @@ export function getBackgroundClass(background?: string | { slug?: string }): str
     octonary: 'bg-background-octonary',
     nonary: 'bg-background-nonary',
     decenary: 'bg-background-decenary',
+    undenary: 'bg-background-undenary',
+    duodenary: 'bg-background-duodenary',
     // Slug variations - new system
     'magenta-bloom': 'bg-background-primary',
     'rose-canvas': 'bg-background-secondary',
@@ -49,6 +51,8 @@ export function getBackgroundClass(background?: string | { slug?: string }): str
     'hummingbird-teal': 'bg-background-nonary',
     'baby-teal': 'bg-background-decenary',
     'golden-petal': 'bg-background-decenary', // Legacy support
+    'soft-light-gray': 'bg-background-undenary',
+    'warm-linen-gold': 'bg-background-duodenary',
     // Legacy support
     'hint-of-red': 'bg-background-secondary',
     'rosewood-smoke': 'bg-background-primary',
@@ -131,6 +135,8 @@ export function getHeadingColorClass(background?: string | { slug?: string }): s
     octonary: 'text-[#c7017f]',
     nonary: 'text-[#c7017f]',
     decenary: 'text-[#c7017f]',
+    undenary: 'text-[#3a3a3a]',
+    duodenary: 'text-[#c7017f]',
     // Slug variations - new system
     'magenta-bloom': 'text-white',
     'rose-canvas': 'text-[#c7017f]',
@@ -186,6 +192,8 @@ export function getBodyColorClass(background?: string | { slug?: string }): stri
     octonary: 'text-[#3a3a3a]',
     nonary: 'text-white',
     decenary: 'text-[#3a3a3a]',
+    undenary: 'text-[#3a3a3a]',
+    duodenary: 'text-[#3a3a3a]',
     // Slug variations - new system
     'magenta-bloom': 'text-white/90',
     'rose-canvas': 'text-[#3a3a3a]',
@@ -198,6 +206,8 @@ export function getBodyColorClass(background?: string | { slug?: string }): stri
     'hummingbird-teal': 'text-white',
     'baby-teal': 'text-[#2f6f73]',
     'golden-petal': 'text-[#2f6f73]', // Legacy support
+    'soft-light-gray': 'text-[#3a3a3a]',
+    'warm-linen-gold': 'text-[#3a3a3a]',
     // Legacy support
     'hint-of-red': 'text-[#3a3a3a]',
     'rosewood-smoke': 'text-white',
@@ -241,6 +251,8 @@ export function getSubtleColorClass(background?: string | { slug?: string }): st
     octonary: 'text-[#7a7a7a]',
     nonary: 'text-white/75',
     decenary: 'text-[#6b5a3f]',
+    undenary: 'text-[#6b6b6b]',
+    duodenary: 'text-[#6b6b6b]',
     // Slug variations - new system
     'magenta-bloom': 'text-white/70',
     'rose-canvas': 'text-[#6b6b6b]',
@@ -253,6 +265,8 @@ export function getSubtleColorClass(background?: string | { slug?: string }): st
     'hummingbird-teal': 'text-white/75',
     'baby-teal': 'text-[#5f8f91]',
     'golden-petal': 'text-[#5f8f91]', // Legacy support
+    'soft-light-gray': 'text-[#6b6b6b]',
+    'warm-linen-gold': 'text-[#6b6b6b]',
     // Legacy support
     'hint-of-red': 'text-[#6b6b6b]',
     'rosewood-smoke': 'text-white/85',
@@ -296,6 +310,8 @@ export function getAccentColorClass(background?: string | { slug?: string }): st
     octonary: 'text-[#c7017f]',
     nonary: 'text-[#c7017f]',
     decenary: 'text-[#2f6f73]',
+    undenary: 'text-[#3a3a3a]',
+    duodenary: 'text-[#2f6f73]',
     // Slug variations - new system
     'magenta-bloom': 'text-white',
     'rose-canvas': 'text-[#c7017f]',
@@ -308,6 +324,8 @@ export function getAccentColorClass(background?: string | { slug?: string }): st
     'hummingbird-teal': 'text-[#c7017f]',
     'baby-teal': 'text-[#c7017f]',
     'golden-petal': 'text-[#c7017f]', // Legacy support
+    'soft-light-gray': 'text-[#3a3a3a]',
+    'warm-linen-gold': 'text-[#2f6f73]',
     // Legacy support
     'hint-of-red': 'text-[#c7017f]',
     'rosewood-smoke': 'text-[#c7017f]',

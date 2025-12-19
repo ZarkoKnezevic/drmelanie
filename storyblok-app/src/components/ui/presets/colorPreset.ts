@@ -31,6 +31,8 @@ export const colorPreset = {
     octonary: 'var(--background-octonary)',
     nonary: 'var(--background-nonary)',
     decenary: 'var(--background-decenary)',
+    undenary: 'var(--background-undenary)',
+    duodenary: 'var(--background-duodenary)',
   },
 
   // Button Colors - CSS Variables
