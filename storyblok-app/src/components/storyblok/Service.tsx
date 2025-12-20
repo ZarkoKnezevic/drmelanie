@@ -31,7 +31,7 @@ export default function Service({ blok }: ServiceProps) {
       className="service flex flex-col items-center justify-center gap-4 bg-white p-6 text-center shadow-[0_2px_8px_rgba(0,0,0,0.1)] md:min-h-[190px] lg:min-h-[180px]"
     >
       {iconProps?.src && (
-        <div className="relative h-16 w-16 shrink-0" role="img" aria-label={blok.name}>
+        <div className="relative h-32 w-full shrink-0" role="img" aria-label={blok.name}>
           <Image
             src={iconProps.src}
             alt={iconProps.alt || blok.name || 'Service icon'}
