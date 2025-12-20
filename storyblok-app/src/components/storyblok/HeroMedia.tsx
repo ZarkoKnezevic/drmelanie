@@ -70,7 +70,7 @@ export default function HeroMedia({ blok }: HeroMediaProps) {
         <Image
           {...prepareImageProps(blok.media)}
           alt={mediaAlt}
-          className="object-cover"
+          className="lg:object-center-top object-cover object-left-top"
           sizes="100vw"
           priority
           quality={90}
