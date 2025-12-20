@@ -1,6 +1,15 @@
+@font-face {
+  font-family: 'Brother 1816 Book';
+  src: url('/fonts/brother_1816_book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Font Family */
-  --font-montserrat: var(--font-montserrat), sans-serif;
+  --font-brother-1816-book: 'Brother 1816 Book', sans-serif;
+  --font-montserrat: 'Brother 1816 Book', sans-serif; /* Keep for backward compatibility */
 
   /* Font Sizes - Responsive */
   /* Body font sizes */

@@ -15,7 +15,8 @@ const tailwindFontPreset: Partial<Config> = {
   theme: {
     extend: {
       fontFamily: {
-        montserrat: [fontStylePreset.fontFamily.montserrat, 'sans-serif'],
+        sans: ['var(--font-brother-1816-book)', 'sans-serif'],
+        montserrat: ['var(--font-brother-1816-book)', 'sans-serif'], // Keep for backward compatibility
       },
       fontSize,
       lineHeight: fontStylePreset.lineHeight,

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Montserrat } from 'next/font/google';
 import './globals.css';
 import StoryblokProvider from '@/components/StoryblokProvider';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -18,12 +17,6 @@ import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
 import '@/lib/storyblok-init'; // Initialize Storyblok for server components
 import { APP_CONFIG } from '@/constants';
 import { cn } from '@/utils';
-
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  variable: '--font-montserrat',
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: {
@@ -104,9 +97,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" suppressHydrationWarning className={`${montserrat.variable} font-sans`}>
+    <html
+      lang="de"
+      suppressHydrationWarning
+      className="font-sans"
+    >
       <body
-        className={cn('font-montserrat min-h-screen bg-background antialiased')}
+        className={cn('min-h-screen bg-background antialiased')}
         suppressHydrationWarning
       >
         <SmoothScrollProvider>

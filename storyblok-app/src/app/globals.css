@@ -47,6 +47,7 @@ body.is-inner-page .header-storyblok {
     color: var(--foreground);
     font-size: var(--font-size-base-sm);
     line-height: var(--line-height-base-sm);
+    font-family: var(--font-brother-1816-book);
   }
 
   @media (min-width: 600px) {
