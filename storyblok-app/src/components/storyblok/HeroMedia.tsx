@@ -73,6 +73,7 @@ export default function HeroMedia({ blok }: HeroMediaProps) {
           className="object-cover"
           sizes="100vw"
           priority
+          quality={90}
         />
       </div>
     </section>

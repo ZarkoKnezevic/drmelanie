@@ -122,6 +122,7 @@ export default function Header({ blok }: HeaderProps) {
                   fill
                   className="relative z-10 object-contain"
                   priority
+                  quality={90}
                 />
               </div>
             </div>

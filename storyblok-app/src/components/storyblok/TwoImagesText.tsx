@@ -73,7 +73,7 @@ export default function TwoImagesText({ blok }: TwoImagesTextProps) {
                   alt={image1Props.alt || 'Image 1'}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   quality={90}
                 />
               </motion.div>
@@ -92,7 +92,7 @@ export default function TwoImagesText({ blok }: TwoImagesTextProps) {
                   alt={image2Props.alt || 'Image 2'}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   quality={90}
                 />
               </motion.div>

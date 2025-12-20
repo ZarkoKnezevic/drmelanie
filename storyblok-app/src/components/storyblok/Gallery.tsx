@@ -88,7 +88,8 @@ export default function Gallery({ blok }: GalleryProps) {
                   alt={imageProps.alt || `Gallery image ${index + 1}`}
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                  quality={90}
                 />
               </div>
             );

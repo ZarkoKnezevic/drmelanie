@@ -80,7 +80,8 @@ export default function TextImage({ blok }: TextImageProps) {
               <Image
                 {...prepareImageProps(blok.image)}
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 50vw"
+                quality={90}
               />
             </motion.div>
           )}

@@ -29,7 +29,7 @@ export default function Hero({ blok }: HeroProps) {
     <section
       {...storyblokEditable(blok)}
       className={cn(
-        'hero relative flex flex-col overflow-hidden md:min-h-[60vh] md:flex-row lg:min-h-[80vh]',
+        'hero relative flex flex-col overflow-hidden md:min-h-[60vh] md:flex-row md:overflow-visible lg:min-h-[80vh]',
         backgroundClass || 'bg-background'
       )}
     >
@@ -43,6 +43,7 @@ export default function Hero({ blok }: HeroProps) {
             className="object-cover object-center md:object-center"
             priority
             sizes="100vw"
+            quality={90}
           />
           {/* Mobile Logo - Top Left on Image */}
           {blok.logo?.filename && (
@@ -67,6 +68,7 @@ export default function Hero({ blok }: HeroProps) {
                       fill
                       className="relative z-10 object-contain"
                       priority
+                      quality={90}
                     />
                   </div>
                 </div>
@@ -96,6 +98,7 @@ export default function Hero({ blok }: HeroProps) {
                     fill
                     className="object-contain object-left"
                     priority
+                    quality={90}
                   />
                 </div>
               </BannerAnimated>
@@ -119,7 +122,8 @@ export default function Hero({ blok }: HeroProps) {
               fill
               className="object-cover"
               priority
-              sizes="(max-width: 768px) 0vw, 50vw"
+              sizes="(max-width: 1024px) 70vw, 50vw"
+              quality={90}
             />
           </div>
         </div>

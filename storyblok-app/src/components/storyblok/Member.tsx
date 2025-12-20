@@ -74,7 +74,8 @@ export default function Member({ blok, isFirst: propIsFirst, isLast: propIsLast 
                 {...imageProps}
                 alt={imageProps.alt || blok.name_and_title || 'Team member image'}
                 className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                sizes="(max-width: 600px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 33vw"
+                quality={90}
               />
             </div>
           </MemberImage>

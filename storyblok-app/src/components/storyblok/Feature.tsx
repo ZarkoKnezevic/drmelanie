@@ -53,19 +53,28 @@ export default function Feature({ blok, isFirst = false, index = 0 }: FeaturePro
             fill
             className={cn(
               'object-cover transition-all duration-300',
+              // Images are in color on mobile, grayscale only on md and up for index 1 and 2
               isGrayscale && 'md:grayscale'
             )}
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 33vw"
+            quality={90}
           />
         </div>
       )}
       <div className="flex w-full flex-col items-center p-6 text-center">
         {blok.name && (
-          <h3 className={cn('mb-2 text-xl font-semibold', isFirst && 'text-[#3a3a3a]')}>
+          <h3
+            className={cn(
+              'mb-2 text-xl font-semibold text-[#c7017f]',
+              isFirst && 'md:text-[#3a3a3a]'
+            )}
+          >
             {blok.name}
           </h3>
         )}
-        {blok.description && <p className={cn(isFirst && 'text-[#3a3a3a]')}>{blok.description}</p>}
+        {blok.description && (
+          <p className={cn('text-[#c7017f]', isFirst && 'md:text-[#3a3a3a]')}>{blok.description}</p>
+        )}
       </div>
     </div>
   );

@@ -142,7 +142,8 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
                       alt={imageProps.alt}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 600px) 60vw, 25vw"
+                      sizes="(max-width: 768px) 60vw, (max-width: 1024px) 50vw, 25vw"
+                      quality={90}
                     />
                   </div>
                 );
@@ -195,7 +196,7 @@ export default function ImageGallery({ blok }: ImageGalleryProps) {
                     alt={imageProps.alt}
                     fill
                     className="object-cover"
-                    sizes="(min-width: 768px) 50vw, 25vw"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 25vw"
                     quality={100}
                   />
                 </div>

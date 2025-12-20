@@ -354,7 +354,7 @@ export default function Grid({ blok }: GridProps) {
                           alt={imageProps.alt || name}
                           fill
                           className="object-cover"
-                          sizes="(min-width: 1000px) 33vw, 100vw"
+                          sizes="(max-width: 1024px) 100vw, 33vw"
                           quality={100}
                           style={{ display: 'block', margin: '0', padding: '0', outline: 'none' }}
                         />

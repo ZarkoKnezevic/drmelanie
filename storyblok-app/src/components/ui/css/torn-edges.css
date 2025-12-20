@@ -8,7 +8,7 @@
   --torn-shadow-blur: 2px;
   --torn-edge-width: 15px;
   --torn-edge-offset: 1px;
-  --torn-edge-offset-reverse: 14px;
+  --torn-edge-offset-reverse: 10px;
   --torn-edge-z-index: 11;
 
   /* Torn Edge Clip Paths - Single line format */

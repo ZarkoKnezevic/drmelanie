@@ -12,6 +12,7 @@ interface HeroImageParallaxProps {
   containerClassName?: string;
   priority?: boolean;
   sizes?: string;
+  quality?: number;
   sectionRef?: React.RefObject<HTMLElement | null>;
 }
 
@@ -22,6 +23,7 @@ export function HeroImageParallax({
   containerClassName,
   priority = false,
   sizes,
+  quality = 90,
   sectionRef,
 }: HeroImageParallaxProps) {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -57,6 +59,7 @@ export function HeroImageParallax({
             className={className}
             priority={priority}
             sizes={sizes}
+            quality={quality}
           />
         </div>
       </div>
@@ -77,6 +80,7 @@ export function HeroImageParallax({
           className={className}
           priority={priority}
           sizes={sizes}
+          quality={quality}
         />
       </motion.div>
     </div>
