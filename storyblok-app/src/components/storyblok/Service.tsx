@@ -3,7 +3,6 @@
 import { storyblokEditable } from '@storyblok/react/rsc';
 import Image from 'next/image';
 import { prepareImageProps } from '@/lib/adapters/prepareImageProps';
-import { cn } from '@/utils';
 import type { StoryblokBlok } from '@/types';
 
 interface StoryblokImageAsset {
@@ -37,7 +36,9 @@ export default function Service({ blok }: ServiceProps) {
             alt={iconProps.alt || blok.name || 'Service icon'}
             fill
             className="object-contain"
-            sizes="64px"
+            sizes="(max-width: 768px) 256px, 320px"
+            quality={90}
+            priority={false}
           />
         </div>
       )}

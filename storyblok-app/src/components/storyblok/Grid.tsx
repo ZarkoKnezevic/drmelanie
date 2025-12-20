@@ -368,7 +368,7 @@ export default function Grid({ blok }: GridProps) {
 
                   {/* Card Back */}
                   <div
-                    className="card-back absolute flex h-full w-full flex-col items-center justify-between overflow-hidden p-5 text-center lg:p-6 xl:p-7"
+                    className="card-back absolute flex h-full w-full flex-col items-center justify-center gap-2 overflow-hidden p-5 text-center lg:p-3"
                     style={{
                       backfaceVisibility: 'hidden',
                       WebkitBackfaceVisibility: 'hidden',
@@ -386,21 +386,21 @@ export default function Grid({ blok }: GridProps) {
                     }}
                   >
                     {iconProps?.src && (
-                      <div className="relative h-16 w-16">
+                      <div className="relative h-12 w-16 shrink-0">
                         <Image
                           src={iconProps.src}
                           alt={iconProps.alt || name}
                           fill
-                          className="shrink-0 object-contain"
+                          className="object-contain"
                           sizes="64px"
                         />
                       </div>
                     )}
                     {name && (
                       <p
-                        className="mb-0 text-body-md font-semibold"
+                        className="mb-0 text-body-md font-semibold lg:text-[15px] xl:text-[17px]"
                         style={{
-                          color: index === 0 ? '#8A6D7B' : '#ffffff',
+                          color: index === 0 ? '#3a3a3a' : '#ffffff',
                         }}
                       >
                         {name}
@@ -408,9 +408,10 @@ export default function Grid({ blok }: GridProps) {
                     )}
                     {description && (
                       <p
-                        className="text-body-sm lg:text-[13px] xl:text-[15px]"
+                        className="text-body-sm lg:text-[12px] xl:text-[15px]"
                         style={{
-                          color: index === 0 ? '#8A6D7B' : 'rgba(255, 255, 255, 0.9)',
+                          color: index === 0 ? '#3a3a3a' : 'rgba(255, 255, 255, 0.9)',
+                          lineHeight: '1.2',
                         }}
                       >
                         {description}
@@ -458,10 +459,10 @@ export default function Grid({ blok }: GridProps) {
         )}
         <div className="spacing container mx-auto px-6 pb-12">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {items.map((item: StoryblokBlok) => {
+            {items.map((item: StoryblokBlok, index: number) => {
               // Render Feature components directly since Grid is a client component
               if (item.component === 'feature' || item.component === 'Feature') {
-                return <Feature key={item._uid} blok={item} />;
+                return <Feature key={item._uid} blok={item} isFirst={index === 0} index={index} />;
               }
               // Fallback to StoryblokServerComponent for other component types
               return <StoryblokServerComponent key={item._uid} blok={item} />;
@@ -478,9 +479,17 @@ export default function Grid({ blok }: GridProps) {
         >
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {items.slice(3).map((item: StoryblokBlok) => {
+              {items.slice(3).map((item: StoryblokBlok, sliceIndex: number) => {
+                const actualIndex = sliceIndex + 3;
                 if (item.component === 'feature' || item.component === 'Feature') {
-                  return <Feature key={item._uid} blok={item} />;
+                  return (
+                    <Feature
+                      key={item._uid}
+                      blok={item}
+                      isFirst={actualIndex === 0}
+                      index={actualIndex}
+                    />
+                  );
                 }
                 return <StoryblokServerComponent key={item._uid} blok={item} />;
               })}

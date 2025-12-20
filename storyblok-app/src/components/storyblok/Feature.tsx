@@ -23,12 +23,15 @@ interface FeatureProps {
     icon?: StoryblokImageAsset;
     background_color?: string | { slug?: string };
   };
+  isFirst?: boolean;
+  index?: number;
 }
 
-export default function Feature({ blok }: FeatureProps) {
+export default function Feature({ blok, isFirst = false, index = 0 }: FeatureProps) {
   const backgroundClass = getBackgroundClass(blok.background_color);
   const imageProps = blok.image ? prepareImageProps(blok.image) : null;
-  const iconProps = blok.icon ? prepareImageProps(blok.icon) : null;
+  // Apply grayscale filter to second and third cards (index 1 and 2)
+  const isGrayscale = index === 1 || index === 2;
 
   return (
     <div
@@ -48,14 +51,21 @@ export default function Feature({ blok }: FeatureProps) {
             src={imageProps.src}
             alt={imageProps.alt || blok.name || 'Feature image'}
             fill
-            className="object-cover"
+            className={cn(
+              'object-cover transition-all duration-300',
+              isGrayscale && 'md:grayscale'
+            )}
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           />
         </div>
       )}
       <div className="flex w-full flex-col items-center p-6 text-center">
-        {blok.name && <h3 className="mb-2 text-xl font-semibold ">{blok.name}</h3>}
-        {blok.description && <p className="text-[#3a3a3a]">{blok.description}</p>}
+        {blok.name && (
+          <h3 className={cn('mb-2 text-xl font-semibold', isFirst && 'text-[#3a3a3a]')}>
+            {blok.name}
+          </h3>
+        )}
+        {blok.description && <p className={cn(isFirst && 'text-[#3a3a3a]')}>{blok.description}</p>}
       </div>
     </div>
   );
