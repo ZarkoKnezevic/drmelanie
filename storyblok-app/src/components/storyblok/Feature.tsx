@@ -27,11 +27,9 @@ interface FeatureProps {
   index?: number;
 }
 
-export default function Feature({ blok, isFirst = false, index = 0 }: FeatureProps) {
+export default function Feature({ blok }: FeatureProps) {
   const backgroundClass = getBackgroundClass(blok.background_color);
   const imageProps = blok.image ? prepareImageProps(blok.image) : null;
-  // Apply grayscale filter to second and third cards (index 1 and 2)
-  const isGrayscale = index === 1 || index === 2;
 
   return (
     <div
@@ -51,11 +49,7 @@ export default function Feature({ blok, isFirst = false, index = 0 }: FeaturePro
             src={imageProps.src}
             alt={imageProps.alt || blok.name || 'Feature image'}
             fill
-            className={cn(
-              'object-cover transition-all duration-300',
-              // Images are in color on mobile, grayscale only on md and up for index 1 and 2
-              isGrayscale && 'md:grayscale'
-            )}
+            className={cn('object-cover transition-all duration-300')}
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 70vw, 33vw"
             quality={90}
           />
@@ -63,18 +57,9 @@ export default function Feature({ blok, isFirst = false, index = 0 }: FeaturePro
       )}
       <div className="flex w-full flex-col items-center p-6 text-center">
         {blok.name && (
-          <h3
-            className={cn(
-              'mb-2 text-xl font-semibold text-[#c7017f]',
-              isFirst && 'md:text-[#3a3a3a]'
-            )}
-          >
-            {blok.name}
-          </h3>
+          <h3 className={cn('mb-2 text-xl font-semibold text-[#c7017f]')}>{blok.name}</h3>
         )}
-        {blok.description && (
-          <p className={cn('text-[#c7017f]', isFirst && 'md:text-[#3a3a3a]')}>{blok.description}</p>
-        )}
+        {blok.description && <p className={cn('text-[#c7017f]')}>{blok.description}</p>}
       </div>
     </div>
   );

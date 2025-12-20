@@ -386,7 +386,7 @@ export default function Grid({ blok }: GridProps) {
                     }}
                   >
                     {iconProps?.src && (
-                      <div className="relative h-12 w-16 shrink-0">
+                      <div className="relative mb-4 h-12 w-16 shrink-0 xl:mb-8 xl:h-24 xl:w-20">
                         <Image
                           src={iconProps.src}
                           alt={iconProps.alt || name}
