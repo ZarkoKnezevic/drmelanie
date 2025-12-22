@@ -101,14 +101,13 @@ export default function Footer({ blok }: FooterProps) {
             </h3>
             {blok.name && <p className="text-body-sm text-darkGray">{blok.name}</p>}
             {blok.practice && <p className="text-body-sm text-darkGray">{blok.practice}</p>}
-            {(blok.address || blok.postal_code) && (
-              <p className="text-body-sm text-darkGray">{blok.address}</p>
-            )}
-            {(blok.city || blok.postal_code) && (
+            {(blok.postal_code || blok.city || blok.address) && (
               <p className="text-body-sm text-darkGray">
                 {blok.postal_code}
                 {blok.postal_code && blok.city && ' '}
                 {blok.city}
+                {((blok.postal_code || blok.city) && blok.address) && ', '}
+                {blok.address}
               </p>
             )}
             {blok.email && emailDisplay && (
