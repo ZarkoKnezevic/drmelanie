@@ -45,50 +45,32 @@ export default function Gallery({ blok }: GalleryProps) {
         backgroundClass || 'bg-background'
       )}
     >
-      <div className="container py-10 md:py-12">
+      <div className="spacing container py-10 md:py-12">
         {/* Headline */}
         {blok.headline && (
-          <h2
-            className={cn(
-              'mb-8 text-center text-h2 font-semibold md:mb-12',
-              headingColorClass
-            )}
-          >
+          <h2 className={cn('mb-8 text-center text-h2 font-semibold md:mb-12', headingColorClass)}>
             {blok.headline}
           </h2>
         )}
 
-        {/* Masonry Grid */}
-        <div className="gallery-grid grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        {/* Masonry Grid - Using CSS Columns for true masonry layout like WebKit article */}
+        <div className="gallery-grid columns-2 gap-2 md:columns-3 md:gap-4 lg:columns-4 lg:gap-6">
           {validImages.map((asset, index) => {
             const imageProps = prepareImageProps(asset);
             if (!imageProps?.src) return null;
 
-            // Vary image heights for masonry effect - creates natural masonry layout
-            const heightVariants = [
-              'h-48 md:h-64 lg:h-80',
-              'h-56 md:h-72 lg:h-96',
-              'h-44 md:h-60 lg:h-72',
-              'h-52 md:h-68 lg:h-88',
-              'h-50 md:h-66 lg:h-84',
-              'h-54 md:h-70 lg:h-92',
-            ];
-            const heightClass = heightVariants[index % heightVariants.length];
-
             return (
               <div
                 key={index}
-                className={cn(
-                  'gallery-item group relative overflow-hidden rounded-lg shadow-sm transition-shadow duration-300 hover:shadow-md',
-                  heightClass
-                )}
+                className="gallery-item group relative mb-2 break-inside-avoid overflow-hidden shadow-sm transition-shadow duration-300 hover:shadow-md md:mb-4 lg:mb-6"
               >
                 <Image
                   src={imageProps.src}
                   alt={imageProps.alt || `Gallery image ${index + 1}`}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 50vw, 25vw"
+                  width={800}
+                  height={600}
+                  className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   quality={90}
                 />
               </div>
@@ -99,4 +81,3 @@ export default function Gallery({ blok }: GalleryProps) {
     </section>
   );
 }
-
