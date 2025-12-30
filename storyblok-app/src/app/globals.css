@@ -125,32 +125,40 @@ body.is-inner-page .header-storyblok {
   p:last-child {
     margin-bottom: 0;
   }
-  /* Unordered Lists */
-  ul {
+  /* List Items - base styles for word breaking */
+  li {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  /* Unordered Lists - only in richtext/prose content */
+  .prose ul,
+  [class*='prose'] ul {
     list-style-type: disc;
     padding-left: 1em;
     margin-left: 0;
     margin-bottom: 1em;
   }
 
-  /* Ordered Lists */
-  ol {
+  /* Ordered Lists - only in richtext/prose content */
+  .prose ol,
+  [class*='prose'] ol {
     list-style-type: decimal;
     padding-left: 1em;
     margin-left: 0;
     margin-bottom: 1em;
   }
 
-  /* List Items */
-  li {
+  /* List Items - only in richtext/prose content */
+  .prose li,
+  [class*='prose'] li {
     margin-bottom: 0.4em;
     padding-left: 0.25em;
-    word-break: break-word;
-    overflow-wrap: break-word;
-    hyphens: auto;
   }
 
-  li:last-child {
+  .prose li:last-child,
+  [class*='prose'] li:last-child {
     margin-bottom: 0;
   }
 
@@ -464,20 +472,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-primary-accent);
   }
 
-  .bg-background-primary ul,
-  .bg-background-primary ol {
+  .bg-background-primary .prose ul,
+  .bg-background-primary .prose ol,
+  .bg-background-primary [class*='prose'] ul,
+  .bg-background-primary [class*='prose'] ol {
     color: var(--background-primary-body);
   }
 
-  .bg-background-primary li {
+  .bg-background-primary .prose li,
+  .bg-background-primary [class*='prose'] li {
     color: var(--background-primary-body);
   }
 
-  .bg-background-primary ul li::marker {
+  .bg-background-primary .prose ul li::marker,
+  .bg-background-primary [class*='prose'] ul li::marker {
     color: var(--background-primary-body);
   }
 
-  .bg-background-primary ol li::marker {
+  .bg-background-primary .prose ol li::marker,
+  .bg-background-primary [class*='prose'] ol li::marker {
     color: var(--background-primary-body);
   }
 
@@ -505,20 +518,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-secondary-accent);
   }
 
-  .bg-background-secondary ul,
-  .bg-background-secondary ol {
+  .bg-background-secondary .prose ul,
+  .bg-background-secondary .prose ol,
+  .bg-background-secondary [class*='prose'] ul,
+  .bg-background-secondary [class*='prose'] ol {
     color: var(--background-secondary-body);
   }
 
-  .bg-background-secondary li {
+  .bg-background-secondary .prose li,
+  .bg-background-secondary [class*='prose'] li {
     color: var(--background-secondary-body);
   }
 
-  .bg-background-secondary ul li::marker {
+  .bg-background-secondary .prose ul li::marker,
+  .bg-background-secondary [class*='prose'] ul li::marker {
     color: var(--background-secondary-body);
   }
 
-  .bg-background-secondary ol li::marker {
+  .bg-background-secondary .prose ol li::marker,
+  .bg-background-secondary [class*='prose'] ol li::marker {
     color: var(--background-secondary-body);
   }
 
@@ -546,20 +564,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-tertiary-accent);
   }
 
-  .bg-background-tertiary ul,
-  .bg-background-tertiary ol {
+  .bg-background-tertiary .prose ul,
+  .bg-background-tertiary .prose ol,
+  .bg-background-tertiary [class*='prose'] ul,
+  .bg-background-tertiary [class*='prose'] ol {
     color: var(--background-tertiary-body);
   }
 
-  .bg-background-tertiary li {
+  .bg-background-tertiary .prose li,
+  .bg-background-tertiary [class*='prose'] li {
     color: var(--background-tertiary-body);
   }
 
-  .bg-background-tertiary ul li::marker {
+  .bg-background-tertiary .prose ul li::marker,
+  .bg-background-tertiary [class*='prose'] ul li::marker {
     color: var(--background-tertiary-body);
   }
 
-  .bg-background-tertiary ol li::marker {
+  .bg-background-tertiary .prose ol li::marker,
+  .bg-background-tertiary [class*='prose'] ol li::marker {
     color: var(--background-tertiary-body);
   }
 
@@ -587,20 +610,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-quaternary-accent);
   }
 
-  .bg-background-quaternary ul,
-  .bg-background-quaternary ol {
+  .bg-background-quaternary .prose ul,
+  .bg-background-quaternary .prose ol,
+  .bg-background-quaternary [class*='prose'] ul,
+  .bg-background-quaternary [class*='prose'] ol {
     color: var(--background-quaternary-body);
   }
 
-  .bg-background-quaternary li {
+  .bg-background-quaternary .prose li,
+  .bg-background-quaternary [class*='prose'] li {
     color: var(--background-quaternary-body);
   }
 
-  .bg-background-quaternary ul li::marker {
+  .bg-background-quaternary .prose ul li::marker,
+  .bg-background-quaternary [class*='prose'] ul li::marker {
     color: var(--background-quaternary-body);
   }
 
-  .bg-background-quaternary ol li::marker {
+  .bg-background-quaternary .prose ol li::marker,
+  .bg-background-quaternary [class*='prose'] ol li::marker {
     color: var(--background-quaternary-body);
   }
 
@@ -628,20 +656,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-quinary-accent);
   }
 
-  .bg-background-quinary ul,
-  .bg-background-quinary ol {
+  .bg-background-quinary .prose ul,
+  .bg-background-quinary .prose ol,
+  .bg-background-quinary [class*='prose'] ul,
+  .bg-background-quinary [class*='prose'] ol {
     color: var(--background-quinary-body);
   }
 
-  .bg-background-quinary li {
+  .bg-background-quinary .prose li,
+  .bg-background-quinary [class*='prose'] li {
     color: var(--background-quinary-body);
   }
 
-  .bg-background-quinary ul li::marker {
+  .bg-background-quinary .prose ul li::marker,
+  .bg-background-quinary [class*='prose'] ul li::marker {
     color: var(--background-quinary-body);
   }
 
-  .bg-background-quinary ol li::marker {
+  .bg-background-quinary .prose ol li::marker,
+  .bg-background-quinary [class*='prose'] ol li::marker {
     color: var(--background-quinary-body);
   }
 
@@ -669,20 +702,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-senary-accent);
   }
 
-  .bg-background-senary ul,
-  .bg-background-senary ol {
+  .bg-background-senary .prose ul,
+  .bg-background-senary .prose ol,
+  .bg-background-senary [class*='prose'] ul,
+  .bg-background-senary [class*='prose'] ol {
     color: var(--background-senary-body);
   }
 
-  .bg-background-senary li {
+  .bg-background-senary .prose li,
+  .bg-background-senary [class*='prose'] li {
     color: var(--background-senary-body);
   }
 
-  .bg-background-senary ul li::marker {
+  .bg-background-senary .prose ul li::marker,
+  .bg-background-senary [class*='prose'] ul li::marker {
     color: var(--background-senary-body);
   }
 
-  .bg-background-senary ol li::marker {
+  .bg-background-senary .prose ol li::marker,
+  .bg-background-senary [class*='prose'] ol li::marker {
     color: var(--background-senary-body);
   }
 
@@ -710,20 +748,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-septenary-accent);
   }
 
-  .bg-background-septenary ul,
-  .bg-background-septenary ol {
+  .bg-background-septenary .prose ul,
+  .bg-background-septenary .prose ol,
+  .bg-background-septenary [class*='prose'] ul,
+  .bg-background-septenary [class*='prose'] ol {
     color: var(--background-septenary-body);
   }
 
-  .bg-background-septenary li {
+  .bg-background-septenary .prose li,
+  .bg-background-septenary [class*='prose'] li {
     color: var(--background-septenary-body);
   }
 
-  .bg-background-septenary ul li::marker {
+  .bg-background-septenary .prose ul li::marker,
+  .bg-background-septenary [class*='prose'] ul li::marker {
     color: var(--background-septenary-body);
   }
 
-  .bg-background-septenary ol li::marker {
+  .bg-background-septenary .prose ol li::marker,
+  .bg-background-septenary [class*='prose'] ol li::marker {
     color: var(--background-septenary-body);
   }
 
@@ -751,20 +794,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-octonary-accent);
   }
 
-  .bg-background-octonary ul,
-  .bg-background-octonary ol {
+  .bg-background-octonary .prose ul,
+  .bg-background-octonary .prose ol,
+  .bg-background-octonary [class*='prose'] ul,
+  .bg-background-octonary [class*='prose'] ol {
     color: var(--background-octonary-body);
   }
 
-  .bg-background-octonary li {
+  .bg-background-octonary .prose li,
+  .bg-background-octonary [class*='prose'] li {
     color: var(--background-octonary-body);
   }
 
-  .bg-background-octonary ul li::marker {
+  .bg-background-octonary .prose ul li::marker,
+  .bg-background-octonary [class*='prose'] ul li::marker {
     color: var(--background-octonary-body);
   }
 
-  .bg-background-octonary ol li::marker {
+  .bg-background-octonary .prose ol li::marker,
+  .bg-background-octonary [class*='prose'] ol li::marker {
     color: var(--background-octonary-body);
   }
 
@@ -792,20 +840,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-nonary-accent);
   }
 
-  .bg-background-nonary ul,
-  .bg-background-nonary ol {
+  .bg-background-nonary .prose ul,
+  .bg-background-nonary .prose ol,
+  .bg-background-nonary [class*='prose'] ul,
+  .bg-background-nonary [class*='prose'] ol {
     color: var(--background-nonary-body);
   }
 
-  .bg-background-nonary li {
+  .bg-background-nonary .prose li,
+  .bg-background-nonary [class*='prose'] li {
     color: var(--background-nonary-body);
   }
 
-  .bg-background-nonary ul li::marker {
+  .bg-background-nonary .prose ul li::marker,
+  .bg-background-nonary [class*='prose'] ul li::marker {
     color: var(--background-nonary-body);
   }
 
-  .bg-background-nonary ol li::marker {
+  .bg-background-nonary .prose ol li::marker,
+  .bg-background-nonary [class*='prose'] ol li::marker {
     color: var(--background-nonary-body);
   }
 
@@ -833,20 +886,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-decenary-accent);
   }
 
-  .bg-background-decenary ul,
-  .bg-background-decenary ol {
+  .bg-background-decenary .prose ul,
+  .bg-background-decenary .prose ol,
+  .bg-background-decenary [class*='prose'] ul,
+  .bg-background-decenary [class*='prose'] ol {
     color: var(--background-decenary-body);
   }
 
-  .bg-background-decenary li {
+  .bg-background-decenary .prose li,
+  .bg-background-decenary [class*='prose'] li {
     color: var(--background-decenary-body);
   }
 
-  .bg-background-decenary ul li::marker {
+  .bg-background-decenary .prose ul li::marker,
+  .bg-background-decenary [class*='prose'] ul li::marker {
     color: var(--background-decenary-body);
   }
 
-  .bg-background-decenary ol li::marker {
+  .bg-background-decenary .prose ol li::marker,
+  .bg-background-decenary [class*='prose'] ol li::marker {
     color: var(--background-decenary-body);
   }
 
@@ -874,20 +932,25 @@ body.is-inner-page .header-storyblok {
     color: var(--background-undenary-accent);
   }
 
-  .bg-background-undenary ul,
-  .bg-background-undenary ol {
+  .bg-background-undenary .prose ul,
+  .bg-background-undenary .prose ol,
+  .bg-background-undenary [class*='prose'] ul,
+  .bg-background-undenary [class*='prose'] ol {
     color: var(--background-undenary-body);
   }
 
-  .bg-background-undenary li {
+  .bg-background-undenary .prose li,
+  .bg-background-undenary [class*='prose'] li {
     color: var(--background-undenary-body);
   }
 
-  .bg-background-undenary ul li::marker {
+  .bg-background-undenary .prose ul li::marker,
+  .bg-background-undenary [class*='prose'] ul li::marker {
     color: var(--background-undenary-body);
   }
 
-  .bg-background-undenary ol li::marker {
+  .bg-background-undenary .prose ol li::marker,
+  .bg-background-undenary [class*='prose'] ol li::marker {
     color: var(--background-undenary-body);
   }
 
@@ -915,20 +978,60 @@ body.is-inner-page .header-storyblok {
     color: var(--background-duodenary-accent);
   }
 
-  .bg-background-duodenary ul,
-  .bg-background-duodenary ol {
+  .bg-background-duodenary .prose ul,
+  .bg-background-duodenary .prose ol,
+  .bg-background-duodenary [class*='prose'] ul,
+  .bg-background-duodenary [class*='prose'] ol {
     color: var(--background-duodenary-body);
   }
 
-  .bg-background-duodenary li {
+  .bg-background-duodenary .prose li,
+  .bg-background-duodenary [class*='prose'] li {
     color: var(--background-duodenary-body);
   }
 
-  .bg-background-duodenary ul li::marker {
+  .bg-background-duodenary .prose ul li::marker,
+  .bg-background-duodenary [class*='prose'] ul li::marker {
     color: var(--background-duodenary-body);
   }
 
-  .bg-background-duodenary ol li::marker {
+  .bg-background-duodenary .prose ol li::marker,
+  .bg-background-duodenary [class*='prose'] ol li::marker {
     color: var(--background-duodenary-body);
   }
+}
+
+/* Gallery Masonry Layout - iOS Safari Fixes */
+.gallery-grid {
+  column-gap: 0.75rem;
+  column-fill: balance;
+  -webkit-column-gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .gallery-grid {
+    column-gap: 1rem;
+    -webkit-column-gap: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .gallery-grid {
+    column-gap: 1.5rem;
+    -webkit-column-gap: 1.5rem;
+  }
+}
+
+.gallery-item {
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  page-break-inside: avoid;
+  display: inline-block;
+  width: 100%;
+}
+
+.gallery-item img {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }

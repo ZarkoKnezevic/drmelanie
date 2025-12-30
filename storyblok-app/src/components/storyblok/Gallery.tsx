@@ -54,7 +54,7 @@ export default function Gallery({ blok }: GalleryProps) {
         )}
 
         {/* Masonry Grid - Using CSS Columns for true masonry layout like WebKit article */}
-        <div className="gallery-grid columns-2 gap-2 md:columns-3 md:gap-4 lg:columns-4 lg:gap-6">
+        <div className="gallery-grid columns-2 gap-3 md:columns-3 md:gap-4 lg:columns-4 lg:gap-6">
           {validImages.map((asset, index) => {
             const imageProps = prepareImageProps(asset);
             if (!imageProps?.src) return null;
@@ -62,7 +62,7 @@ export default function Gallery({ blok }: GalleryProps) {
             return (
               <div
                 key={index}
-                className="gallery-item group relative mb-2 break-inside-avoid overflow-hidden shadow-sm transition-shadow duration-300 hover:shadow-md md:mb-4 lg:mb-6"
+                className="gallery-item group relative mb-3 break-inside-avoid overflow-hidden shadow-sm transition-shadow duration-300 hover:shadow-md md:mb-4 lg:mb-6"
               >
                 <Image
                   src={imageProps.src}

@@ -96,6 +96,15 @@ export function InteractiveGoogleMap({
       if (!mapRef.current || !googleWindow.google?.maps || typeof window === 'undefined') return;
 
       const googleMaps = googleWindow.google.maps;
+      
+      // Check if Geocoder is available
+      if (!googleMaps.Geocoder) {
+        console.warn('Google Maps Geocoder is not available yet. Retrying...');
+        // Retry after a short delay
+        setTimeout(() => initializeMap(), 100);
+        return;
+      }
+      
       const geocoder = new googleMaps.Geocoder();
       geocoder.geocode({ address }, (results, status) => {
         if (status === 'OK' && results[0] && mapRef.current) {
@@ -256,12 +265,15 @@ export function InteractiveGoogleMap({
 
     // Load Google Maps script
     const script = document.createElement('script');
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&loading=async`;
     script.async = true;
     script.defer = true;
 
     script.onload = () => {
-      initializeMap();
+      // Wait a bit for the API to fully initialize with loading=async
+      setTimeout(() => {
+        initializeMap();
+      }, 100);
     };
 
     script.onerror = () => {
