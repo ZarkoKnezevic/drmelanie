@@ -16,6 +16,7 @@ import Hero from '@/components/storyblok/Hero';
 import Banner from '@/components/storyblok/Banner';
 import Teaser from '@/components/storyblok/Teaser';
 import TextImage from '@/components/storyblok/TextImage';
+import Text from '@/components/storyblok/Text';
 import ImageGallery from '@/components/storyblok/ImageGallery';
 import TwoImagesText from '@/components/storyblok/TwoImagesText';
 import HeroMedia from '@/components/storyblok/HeroMedia';
@@ -38,6 +39,7 @@ export const COMPONENTS = {
   hero: Hero,
   banner: Banner,
   teaser: Teaser,
+  text: Text,
   text_image: TextImage,
   image_gallery: ImageGallery,
   image_galery: ImageGallery, // Handle typo variation
@@ -65,6 +67,7 @@ export const COMPONENTS = {
   Hero: Hero,
   Banner: Banner,
   Teaser: Teaser,
+  Text: Text,
   TextImage: TextImage,
   ImageGallery: ImageGallery,
   ImageGalery: ImageGallery, // Handle typo variation

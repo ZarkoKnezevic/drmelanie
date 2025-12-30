@@ -125,7 +125,35 @@ body.is-inner-page .header-storyblok {
   p:last-child {
     margin-bottom: 0;
   }
-  li,
+  /* Unordered Lists */
+  ul {
+    list-style-type: disc;
+    padding-left: 1em;
+    margin-left: 0;
+    margin-bottom: 1em;
+  }
+
+  /* Ordered Lists */
+  ol {
+    list-style-type: decimal;
+    padding-left: 1em;
+    margin-left: 0;
+    margin-bottom: 1em;
+  }
+
+  /* List Items */
+  li {
+    margin-bottom: 0.4em;
+    padding-left: 0.25em;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
   td,
   th,
   label,
@@ -436,6 +464,23 @@ body.is-inner-page .header-storyblok {
     color: var(--background-primary-accent);
   }
 
+  .bg-background-primary ul,
+  .bg-background-primary ol {
+    color: var(--background-primary-body);
+  }
+
+  .bg-background-primary li {
+    color: var(--background-primary-body);
+  }
+
+  .bg-background-primary ul li::marker {
+    color: var(--background-primary-body);
+  }
+
+  .bg-background-primary ol li::marker {
+    color: var(--background-primary-body);
+  }
+
   /* SECONDARY Background Text Colors */
   .bg-background-secondary .text-heading,
   .bg-background-secondary h1,
@@ -458,6 +503,23 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-secondary .text-accent {
     color: var(--background-secondary-accent);
+  }
+
+  .bg-background-secondary ul,
+  .bg-background-secondary ol {
+    color: var(--background-secondary-body);
+  }
+
+  .bg-background-secondary li {
+    color: var(--background-secondary-body);
+  }
+
+  .bg-background-secondary ul li::marker {
+    color: var(--background-secondary-body);
+  }
+
+  .bg-background-secondary ol li::marker {
+    color: var(--background-secondary-body);
   }
 
   /* TERTIARY Background Text Colors */
@@ -484,6 +546,23 @@ body.is-inner-page .header-storyblok {
     color: var(--background-tertiary-accent);
   }
 
+  .bg-background-tertiary ul,
+  .bg-background-tertiary ol {
+    color: var(--background-tertiary-body);
+  }
+
+  .bg-background-tertiary li {
+    color: var(--background-tertiary-body);
+  }
+
+  .bg-background-tertiary ul li::marker {
+    color: var(--background-tertiary-body);
+  }
+
+  .bg-background-tertiary ol li::marker {
+    color: var(--background-tertiary-body);
+  }
+
   /* QUATERNARY Background Text Colors */
   .bg-background-quaternary .text-heading,
   .bg-background-quaternary h1,
@@ -506,6 +585,23 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-quaternary .text-accent {
     color: var(--background-quaternary-accent);
+  }
+
+  .bg-background-quaternary ul,
+  .bg-background-quaternary ol {
+    color: var(--background-quaternary-body);
+  }
+
+  .bg-background-quaternary li {
+    color: var(--background-quaternary-body);
+  }
+
+  .bg-background-quaternary ul li::marker {
+    color: var(--background-quaternary-body);
+  }
+
+  .bg-background-quaternary ol li::marker {
+    color: var(--background-quaternary-body);
   }
 
   /* QUINARY Background Text Colors - Mint-Teal Blend */
@@ -532,6 +628,23 @@ body.is-inner-page .header-storyblok {
     color: var(--background-quinary-accent);
   }
 
+  .bg-background-quinary ul,
+  .bg-background-quinary ol {
+    color: var(--background-quinary-body);
+  }
+
+  .bg-background-quinary li {
+    color: var(--background-quinary-body);
+  }
+
+  .bg-background-quinary ul li::marker {
+    color: var(--background-quinary-body);
+  }
+
+  .bg-background-quinary ol li::marker {
+    color: var(--background-quinary-body);
+  }
+
   /* SENARY Background Text Colors - Golden Petal */
   .bg-background-senary .text-heading,
   .bg-background-senary h1,
@@ -554,6 +667,23 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-senary .text-accent {
     color: var(--background-senary-accent);
+  }
+
+  .bg-background-senary ul,
+  .bg-background-senary ol {
+    color: var(--background-senary-body);
+  }
+
+  .bg-background-senary li {
+    color: var(--background-senary-body);
+  }
+
+  .bg-background-senary ul li::marker {
+    color: var(--background-senary-body);
+  }
+
+  .bg-background-senary ol li::marker {
+    color: var(--background-senary-body);
   }
 
   /* SEPTENARY Background Text Colors - Baby Rose */
@@ -580,6 +710,23 @@ body.is-inner-page .header-storyblok {
     color: var(--background-septenary-accent);
   }
 
+  .bg-background-septenary ul,
+  .bg-background-septenary ol {
+    color: var(--background-septenary-body);
+  }
+
+  .bg-background-septenary li {
+    color: var(--background-septenary-body);
+  }
+
+  .bg-background-septenary ul li::marker {
+    color: var(--background-septenary-body);
+  }
+
+  .bg-background-septenary ol li::marker {
+    color: var(--background-septenary-body);
+  }
+
   /* OCTONARY Background Text Colors - Rose Mist */
   .bg-background-octonary .text-heading,
   .bg-background-octonary h1,
@@ -602,6 +749,23 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-octonary .text-accent {
     color: var(--background-octonary-accent);
+  }
+
+  .bg-background-octonary ul,
+  .bg-background-octonary ol {
+    color: var(--background-octonary-body);
+  }
+
+  .bg-background-octonary li {
+    color: var(--background-octonary-body);
+  }
+
+  .bg-background-octonary ul li::marker {
+    color: var(--background-octonary-body);
+  }
+
+  .bg-background-octonary ol li::marker {
+    color: var(--background-octonary-body);
   }
 
   /* NONARY Background Text Colors - Hummingbird Teal */
@@ -628,6 +792,23 @@ body.is-inner-page .header-storyblok {
     color: var(--background-nonary-accent);
   }
 
+  .bg-background-nonary ul,
+  .bg-background-nonary ol {
+    color: var(--background-nonary-body);
+  }
+
+  .bg-background-nonary li {
+    color: var(--background-nonary-body);
+  }
+
+  .bg-background-nonary ul li::marker {
+    color: var(--background-nonary-body);
+  }
+
+  .bg-background-nonary ol li::marker {
+    color: var(--background-nonary-body);
+  }
+
   /* DECENARY Background Text Colors - Golden Petal */
   .bg-background-decenary .text-heading,
   .bg-background-decenary h1,
@@ -650,6 +831,23 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-decenary .text-accent {
     color: var(--background-decenary-accent);
+  }
+
+  .bg-background-decenary ul,
+  .bg-background-decenary ol {
+    color: var(--background-decenary-body);
+  }
+
+  .bg-background-decenary li {
+    color: var(--background-decenary-body);
+  }
+
+  .bg-background-decenary ul li::marker {
+    color: var(--background-decenary-body);
+  }
+
+  .bg-background-decenary ol li::marker {
+    color: var(--background-decenary-body);
   }
 
   /* UNDENARY Background Text Colors - Soft Light Gray */
@@ -676,6 +874,23 @@ body.is-inner-page .header-storyblok {
     color: var(--background-undenary-accent);
   }
 
+  .bg-background-undenary ul,
+  .bg-background-undenary ol {
+    color: var(--background-undenary-body);
+  }
+
+  .bg-background-undenary li {
+    color: var(--background-undenary-body);
+  }
+
+  .bg-background-undenary ul li::marker {
+    color: var(--background-undenary-body);
+  }
+
+  .bg-background-undenary ol li::marker {
+    color: var(--background-undenary-body);
+  }
+
   /* DUODENARY Background Text Colors - Warm Linen Gold */
   .bg-background-duodenary .text-heading,
   .bg-background-duodenary h1,
@@ -698,5 +913,22 @@ body.is-inner-page .header-storyblok {
 
   .bg-background-duodenary .text-accent {
     color: var(--background-duodenary-accent);
+  }
+
+  .bg-background-duodenary ul,
+  .bg-background-duodenary ol {
+    color: var(--background-duodenary-body);
+  }
+
+  .bg-background-duodenary li {
+    color: var(--background-duodenary-body);
+  }
+
+  .bg-background-duodenary ul li::marker {
+    color: var(--background-duodenary-body);
+  }
+
+  .bg-background-duodenary ol li::marker {
+    color: var(--background-duodenary-body);
   }
 }
