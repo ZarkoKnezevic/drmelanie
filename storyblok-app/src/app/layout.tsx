@@ -14,6 +14,7 @@ import { LoadingProvider } from '@/contexts/loading-context';
 import { TooltipProvider } from '@/components/ui/components/tooltip';
 import { CookieBanner } from '@/components/CookieBanner';
 import { SmoothScrollProvider } from '@/components/SmoothScrollProvider';
+import { ScrollRestoration } from '@/components/ScrollRestoration';
 import '@/lib/storyblok-init'; // Initialize Storyblok for server components
 import { APP_CONFIG } from '@/constants';
 import { cn } from '@/utils';
@@ -97,15 +98,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="de"
-      suppressHydrationWarning
-      className="font-sans"
-    >
-      <body
-        className={cn('min-h-screen bg-background antialiased')}
-        suppressHydrationWarning
-      >
+    <html lang="de" suppressHydrationWarning className="font-sans">
+      <body className={cn('min-h-screen bg-background antialiased')} suppressHydrationWarning>
+        <ScrollRestoration />
         <SmoothScrollProvider>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
             <TooltipProvider>

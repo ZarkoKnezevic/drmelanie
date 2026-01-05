@@ -20,57 +20,85 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
   const observerRef = useRef<MutationObserver | null>(null);
 
   useEffect(() => {
-    // Restore scroll position from sessionStorage on mount (survives page reloads)
-    const restoreFromStorage = () => {
-      try {
-        const saved = sessionStorage.getItem(SCROLL_POSITION_KEY);
-        if (saved) {
-          const position = parseInt(saved, 10);
-          if (position > 0) {
-            scrollPositionRef.current = position;
-            isRestoringRef.current = true;
+    // Only restore scroll position in live preview mode (for Storyblok editor)
+    // On regular page refresh, scroll to top instead
+    const isLivePreview = window.location.pathname.startsWith('/live-preview');
+    
+    if (isLivePreview) {
+      // Restore scroll position from sessionStorage on mount (survives page reloads in preview)
+      const restoreFromStorage = () => {
+        try {
+          const saved = sessionStorage.getItem(SCROLL_POSITION_KEY);
+          if (saved) {
+            const position = parseInt(saved, 10);
+            if (position > 0) {
+              scrollPositionRef.current = position;
+              isRestoringRef.current = true;
 
-            // Restore immediately and multiple times
-            const restore = () => {
-              window.scrollTo({
-                top: position,
-                behavior: 'instant',
-              });
-              document.documentElement.scrollTop = position;
-              if (document.body) {
-                document.body.scrollTop = position;
-              }
-            };
+              // Restore immediately and multiple times
+              const restore = () => {
+                window.scrollTo({
+                  top: position,
+                  behavior: 'instant',
+                });
+                document.documentElement.scrollTop = position;
+                if (document.body) {
+                  document.body.scrollTop = position;
+                }
+              };
 
-            restore();
-            requestAnimationFrame(() => {
               restore();
               requestAnimationFrame(() => {
                 restore();
+                requestAnimationFrame(() => {
+                  restore();
+                });
               });
-            });
-            setTimeout(restore, 0);
-            setTimeout(restore, 50);
-            setTimeout(restore, 100);
+              setTimeout(restore, 0);
+              setTimeout(restore, 50);
+              setTimeout(restore, 100);
 
-            setTimeout(() => {
-              isRestoringRef.current = false;
-            }, 200);
+              setTimeout(() => {
+                isRestoringRef.current = false;
+              }, 200);
+            }
           }
+        } catch (e) {
+          // Ignore errors
         }
+      };
+
+      // Restore on mount (only in live preview)
+      restoreFromStorage();
+    } else {
+      // Regular page refresh - scroll to top and clear saved position
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      if (document.body) {
+        document.body.scrollTop = 0;
+      }
+      
+      // Clear saved scroll position
+      try {
+        sessionStorage.removeItem(SCROLL_POSITION_KEY);
+        scrollPositionRef.current = 0;
       } catch (e) {
         // Ignore errors
       }
-    };
 
-    // Restore on mount
-    restoreFromStorage();
+      // Also reset Lenis if it exists
+      const lenisInstance = (window as any).__lenis__;
+      if (lenisInstance) {
+        lenisInstance.scrollTo(0, { immediate: true });
+      }
+    }
 
     // Initialize Storyblok bridge for visual editor
     if (typeof window !== 'undefined') {
-      // Save scroll position (to both ref and sessionStorage)
+      // Save scroll position (to both ref and sessionStorage) - only in live preview
       const saveScrollPosition = () => {
-        if (!isRestoringRef.current) {
+        const isLivePreview = window.location.pathname.startsWith('/live-preview');
+        if (!isRestoringRef.current && isLivePreview) {
           const position =
             window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
           scrollPositionRef.current = position;
@@ -82,8 +110,11 @@ export default function StoryblokProvider({ children }: StoryblokProviderProps) 
         }
       };
 
-      // Restore scroll position aggressively
+      // Restore scroll position aggressively - only in live preview
       const restoreScrollPosition = () => {
+        const isLivePreview = window.location.pathname.startsWith('/live-preview');
+        if (!isLivePreview) return;
+        
         const savedPosition = scrollPositionRef.current;
         if (savedPosition > 0) {
           isRestoringRef.current = true;

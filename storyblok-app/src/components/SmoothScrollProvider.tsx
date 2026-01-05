@@ -54,7 +54,33 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     // Fine-tuned lag smoothing
     gsap.ticker.lagSmoothing(500, 33);
 
+    // Handle anchor links with smooth scroll
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const link = target.closest('a[href^="#"]');
+      
+      if (!link) return;
+      
+      const href = link.getAttribute('href');
+      if (!href || href === '#') return;
+
+      const targetId = href.slice(1); // Remove the '#'
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement && lenis) {
+        e.preventDefault();
+        lenis.scrollTo(targetElement, {
+          offset: 0,
+          duration: 1.2,
+        });
+      }
+    };
+
+    // Listen for anchor link clicks
+    document.addEventListener('click', handleAnchorClick);
+
     return () => {
+      document.removeEventListener('click', handleAnchorClick);
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }

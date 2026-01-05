@@ -28,6 +28,7 @@ export default function Service({ blok }: ServiceProps) {
     <div
       {...storyblokEditable(blok)}
       className="service flex min-h-[250px] flex-col items-center justify-center gap-4 bg-white p-6 text-center shadow-[0_2px_8px_rgba(0,0,0,0.1)] xl:min-h-[250px]"
+      id="services"
     >
       {iconProps?.src && (
         <div className="relative h-32 w-full shrink-0" role="img" aria-label={blok.name}>
