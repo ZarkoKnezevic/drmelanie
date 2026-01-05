@@ -91,7 +91,7 @@ export default function Hero({ blok }: HeroProps) {
             {/* Logo - Desktop only, animated */}
             {blok.logo?.filename && (
               <BannerAnimated delay={100} animationType="fade-up" immediate>
-                <div className="relative hidden h-24 w-full md:block md:h-40 lg:h-48 xxl:h-64">
+                <div className="relative hidden h-24 w-full md:block md:h-40 lg:h-80">
                   <Image
                     src={blok.logo.filename}
                     alt={blok.logo.alt || 'Logo'}

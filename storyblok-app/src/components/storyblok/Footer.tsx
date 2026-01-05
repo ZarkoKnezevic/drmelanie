@@ -97,7 +97,7 @@ export default function Footer({ blok }: FooterProps) {
           {/* Contact Information */}
           <div className="flex flex-col">
             <h3 className={cn('mb-5 text-left text-body-md font-semibold', headingColorClass)}>
-              Kontaktieren Sie mich
+              Ich freue mich auf Sie
             </h3>
             {blok.name && <p className="text-body-sm text-darkGray">{blok.name}</p>}
             {blok.practice && <p className="text-body-sm text-darkGray">{blok.practice}</p>}
@@ -106,7 +106,7 @@ export default function Footer({ blok }: FooterProps) {
                 {blok.postal_code}
                 {blok.postal_code && blok.city && ' '}
                 {blok.city}
-                {((blok.postal_code || blok.city) && blok.address) && ', '}
+                {(blok.postal_code || blok.city) && blok.address && ', '}
                 {blok.address}
               </p>
             )}
